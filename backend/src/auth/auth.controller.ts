@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto } from '../login/login.dto';
 import { FastifyReply } from 'fastify';
+import { UserDto } from '../user/user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -9,10 +9,10 @@ export class AuthController {
 
   @Post('login')
   public async login(
-    @Body() loginDto: LoginDto,
+    @Body() userDto: UserDto,
     @Res({ passthrough: true }) res: FastifyReply,
   ): Promise<any> {
-    return await this.authService.login(loginDto, res);
+    return await this.authService.login(userDto, res);
   }
 
   @Post('logout')

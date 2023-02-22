@@ -1,24 +1,24 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginService } from '../login/login.service';
 import { JwtPayload } from './jwt.strategy';
-import { LoginDto } from '../login/login.dto';
 import { FastifyReply } from 'fastify';
+import { UserService } from '../user/user.service';
+import { UserDto } from '../user/user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly loginService: LoginService,
+    private readonly userService: UserService,
   ) {}
 
-  async login(loginDto: LoginDto, res: FastifyReply): Promise<any> {
-    const user = await this.loginService.login(loginDto);
+  async login(userDto: UserDto, res: FastifyReply): Promise<any> {
+    const user = await this.userService.getUser(userDto);
     if (!user)
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
 
     // generate and sign token
-    const token = this._createToken(user);
+    const token = this._createToken(user._id);
     //const expireDate = new Date(process.env.EXPIRESIN)
 
     res.setCookie('auth-cookie', token, {
@@ -39,7 +39,7 @@ export class AuthService {
   }
 
   async validateUser(payload: JwtPayload): Promise<any> {
-    const user = await this.loginService.getLoginId(payload.id);
+    const user = await this.userService.getUserId(payload.id);
     if (!user) {
       throw new HttpException('Invalid Token', HttpStatus.UNAUTHORIZED);
     }

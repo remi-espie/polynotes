@@ -3,9 +3,9 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
-import { LoginService } from '../login/login.service';
 import { PassportModule } from '@nestjs/passport';
 import { PasswordProvider } from '../provider/password';
+import { UserService } from '../user/user.service';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { PasswordProvider } from '../provider/password';
   ],
   providers: [
     AuthService,
-    LoginService,
+    UserService,
     JwtStrategy,
     PassportModule,
     PasswordProvider,
