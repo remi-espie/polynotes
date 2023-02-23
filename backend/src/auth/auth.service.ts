@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt.strategy';
 import { FastifyReply } from 'fastify';
 import { UserService } from '../user/user.service';
-import { UserDto } from '../user/user.dto';
+import { UserDtoLogin } from '../user/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,13 +12,13 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async login(userDto: UserDto, res: FastifyReply): Promise<any> {
-    const user = await this.userService.getUser(userDto);
+  async login(userDto: UserDtoLogin, res: FastifyReply): Promise<any> {
+    const user = await this.userService.getUserLogin(userDto);
     if (!user)
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
 
     // generate and sign token
-    const token = this._createToken(user._id);
+    const token = this._createToken(user.id);
     //const expireDate = new Date(process.env.EXPIRESIN)
 
     res.setCookie('auth-cookie', token, {

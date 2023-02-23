@@ -3,14 +3,17 @@ import { AuthService } from './auth.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { FastifyRequest } from 'fastify';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly authService: AuthService) {
-    console.log(JwtStrategy.extractJWT);
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {
     super({
       ignoreExpiration: false,
-      secretOrKey: process.env.SECRETKEY,
+      secretOrKey: configService.get('SECRETKEY'),
       jwtFromRequest: JwtStrategy.extractJWT,
     });
   }

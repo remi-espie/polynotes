@@ -3,14 +3,23 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     MongooseModule.forRoot('mongodb://localhost/polynotes'),
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, UserModule],
+  providers: [AppService],
   exports: [],
 })
 export class AppModule {}
+
+console.log(process.env);
+console.log(process.env.SECRETKEY);

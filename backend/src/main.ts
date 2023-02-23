@@ -28,4 +28,8 @@ async function bootstrap() {
   await app.listen(3001);
 }
 
+import * as dotenv from 'dotenv';
+import { resolve } from 'path';
+dotenv.config({ path: resolve(__dirname, '../.env') });
+
 bootstrap();

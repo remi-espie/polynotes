@@ -27,3 +27,13 @@ export class UserDto {
   @IsOptional()
   validated?: boolean;
 }
+
+export class UserDtoLogin {
+  @IsString()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+}

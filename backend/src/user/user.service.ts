@@ -2,13 +2,15 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './user.schema';
 import { Model, Types } from 'mongoose';
-import { UserDto } from './user.dto';
+import { UserDto, UserDtoLogin } from './user.dto';
+import { PasswordProvider } from '../provider/password';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name)
     private readonly model: Model<UserDocument>,
+    private passwordProvider: PasswordProvider,
   ) {}
 
   async getAll(): Promise<User[]> {
@@ -25,16 +27,28 @@ export class UserService {
     } else throw new HttpException('Invalid ID', HttpStatus.BAD_REQUEST);
   }
 
-  async getUser(userDto: UserDto): Promise<UserDocument> {
-    const user = await this.model.findOne(userDto).exec();
+  async getUserLogin(userDto: UserDtoLogin): Promise<UserDocument> {
+    const user = await this.model.findOne({ email: userDto.email }).exec();
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    delete user.password;
-    return user;
+    if (
+      await this.passwordProvider.comparePassword(
+        userDto.password,
+        user.password,
+      )
+    ) {
+      delete user.password;
+      return user;
+    } else
+      throw new HttpException('Invalid credential', HttpStatus.UNAUTHORIZED);
   }
 
   async create(userDto: UserDto): Promise<UserDocument> {
+    const passwordHashed = await this.passwordProvider.hashPassword(
+      userDto.password,
+    );
     return await new this.model({
       ...userDto,
+      password: passwordHashed,
       createdAt: new Date(),
     }).save();
   }
