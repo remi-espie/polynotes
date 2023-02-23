@@ -1,4 +1,4 @@
-import { Container, FormGroup, TextField } from "@mui/material";
+import {Alert, AlertTitle, Container, FormGroup, Snackbar, TextField} from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ function SignIn() {
   const [open, setOpen] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -42,7 +42,7 @@ function SignIn() {
           id="outlined-basic"
           label="Email"
           variant="outlined"
-          ref={email}
+          inputRef={email}
           required
         />
         <TextField
@@ -50,15 +50,61 @@ function SignIn() {
           label="Password"
           variant="outlined"
           type="password"
-          ref={password}
+          inputRef={password}
           required
         />
-        <LoadingButton loading={loadingLogin} variant="contained">
+        <LoadingButton
+          loading={loadingLogin}
+          onClick={signin}
+          variant="contained"
+        >
           Log in
         </LoadingButton>
       </FormGroup>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert variant="filled" severity="error" onClose={handleClose}>
+          <AlertTitle>Error</AlertTitle>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
+
+  function signin() {
+    setLoadingLogin(true);
+
+    const id = {
+      "email": email.current.value,
+      "password": password.current.value,
+    };
+    console.log(id)
+
+    fetch("http://localhost:3001/api/auth/login", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(id),
+      credentials: "same-origin",
+    })
+      .catch((err) => {
+        console.error(err);
+      })
+      .then(async (resp) => {
+        if (resp?.status === 401) {
+          setErrorMessage("Invalid Credentials");
+          setOpen(true);
+        } else if (resp?.status === 201) {
+          navigate("/coucou2");
+        } else {
+          setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);
+          setOpen(true);
+        }
+        setLoadingLogin(false);
+      });
+  }
 }
 
-export default SignIn
+export default SignIn;

@@ -1,18 +1,30 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
   Param,
   Post,
   Put,
+  Req,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UserDto } from './user.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly service: UserService) {}
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async profile(@Req() request) {
+    return request.user;
+  }
 
   @Get('/all')
   async getAll() {

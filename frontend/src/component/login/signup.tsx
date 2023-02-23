@@ -151,7 +151,7 @@ function SignUp() {
           setLoadingCreate(false);
           await signin(id)
         } else {
-          setErrorMessage(`Error ${resp?.status}, ${resp?.message}`);
+          setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);
           setOpen(true);
         }
         setLoadingCreate(false);
@@ -218,18 +218,16 @@ function SignUp() {
           console.error(err)
         })
         .then(async resp => {
-          console.log(resp)
           if (resp?.status === 401) {
             setErrorMessage("Invalid Credentials");
             setOpen(true);
           } else if (resp?.status === 201) {
             navigate("/coucou");
           } else {
-            setErrorMessage(`Error ${resp?.status}, ${resp?.message}`);
+            setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);
             setOpen(true);
           }
         })
-
   }
 }
 

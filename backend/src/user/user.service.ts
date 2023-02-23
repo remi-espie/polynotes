@@ -50,6 +50,7 @@ export class UserService {
       ...userDto,
       password: passwordHashed,
       createdAt: new Date(),
+      validated: false,
     }).save();
   }
 
