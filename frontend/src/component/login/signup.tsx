@@ -8,9 +8,10 @@ import {
   Snackbar,
   TextField,
 } from "@mui/material";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import LoadingButton from "@mui/lab/LoadingButton";
 import React from "react";
+import Tos from "../tos";
 
 function SignUp() {
   const [open, setOpen] = React.useState(false);
@@ -92,7 +93,7 @@ function SignUp() {
             label={
               <>
                 <span>I accept the </span>
-                <Link to="/ToS">terms of service</Link>
+                <Tos/>
                 <span> *</span>
               </>
             }
