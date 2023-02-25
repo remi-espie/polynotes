@@ -22,10 +22,10 @@ export class AuthService {
     //const expireDate = new Date(process.env.EXPIRESIN)
 
     res.setCookie('auth-cookie', token, {
-      httpOnly: true,
+      httpOnly: false,
       signed: false,
       maxAge: 100000000000,
-      sameSite: 'strict',
+      sameSite: 'none',
       secure: true,
       path: '/',
     });

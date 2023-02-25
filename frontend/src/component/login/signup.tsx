@@ -223,7 +223,7 @@ function SignUp() {
             setErrorMessage("Invalid Credentials");
             setOpen(true);
           } else if (resp?.status === 201) {
-            navigate("/coucou");
+            navigate("/home");
           } else {
             setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);
             setOpen(true);

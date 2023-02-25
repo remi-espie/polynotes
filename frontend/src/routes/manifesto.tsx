@@ -5,7 +5,11 @@ import {Box} from "@mui/material";
 function Manifesto() {
 
     return (
-        <div className="App">
+        <Box className="App" sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+        }}>
 
             <Box sx={{
                 width: 500,
@@ -24,7 +28,7 @@ function Manifesto() {
                 </button>
             </Link>
 
-        </div>
+        </Box>
     )
 }
 
