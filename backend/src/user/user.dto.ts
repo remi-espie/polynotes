@@ -26,6 +26,10 @@ export class UserDto {
   @IsBoolean()
   @IsOptional()
   validated?: boolean;
+
+  @IsString()
+  @IsOptional()
+  token?: string;
 }
 
 export class UserDtoLogin {

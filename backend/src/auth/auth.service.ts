@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt.strategy';
-import { FastifyReply } from 'fastify';
+import {FastifyReply} from 'fastify';
 import { UserService } from '../user/user.service';
 import { UserDtoLogin } from '../user/user.dto';
 
@@ -40,6 +40,14 @@ export class AuthService {
 
   async validateUser(payload: JwtPayload): Promise<any> {
     const user = await this.userService.getUserId(payload.id);
+    if (!user) {
+      throw new HttpException('Invalid Token', HttpStatus.UNAUTHORIZED);
+    }
+    return user;
+  }
+
+  async confirm(req: FastifyReply): Promise<any> {
+    const user = await this.userService.confirm(req);
     if (!user) {
       throw new HttpException('Invalid Token', HttpStatus.UNAUTHORIZED);
     }

@@ -4,6 +4,9 @@ import { User, UserDocument } from './user.schema';
 import { Model, Types } from 'mongoose';
 import { UserDto, UserDtoLogin } from './user.dto';
 import { PasswordProvider } from '../provider/password';
+import { MailService } from '../mail/mail.service';
+import {FastifyReply} from "fastify";
+import {v4 as uuidv4} from 'uuid';
 
 @Injectable()
 export class UserService {
@@ -11,6 +14,7 @@ export class UserService {
     @InjectModel(User.name)
     private readonly model: Model<UserDocument>,
     private passwordProvider: PasswordProvider,
+    private mailService: MailService,
   ) {}
 
   async getAll(): Promise<User[]> {
@@ -37,21 +41,31 @@ export class UserService {
       )
     ) {
       delete user.password;
+      delete user.token;
       return user;
     } else
       throw new HttpException('Invalid credential', HttpStatus.UNAUTHORIZED);
   }
 
   async create(userDto: UserDto): Promise<UserDocument> {
+    const token = btoa(uuidv4());
     const passwordHashed = await this.passwordProvider.hashPassword(
       userDto.password,
     );
-    return await new this.model({
+    const emailExists = await this.model.findOne({ email: userDto.email }).exec();
+    if (emailExists) throw new HttpException('Email address already used', HttpStatus.BAD_REQUEST);
+    const user = await new this.model({
       ...userDto,
       password: passwordHashed,
       createdAt: new Date(),
       validated: false,
+      token: token,
     }).save();
+
+    await this.mailService.sendUserConfirmation(userDto, token);
+    delete user.password;
+    delete user.token;
+    return user;
   }
 
   async update(id: string, userDto: UserDto): Promise<UserDocument> {
@@ -60,5 +74,14 @@ export class UserService {
 
   async delete(id: string): Promise<User> {
     return await this.model.findByIdAndDelete(id).exec();
+  }
+
+  async confirm(req: FastifyReply): Promise<UserDocument> {
+    const user = await this.model.findOne({ token: req.request.query['token'] }).exec();
+    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    user.validated = true;
+    user.token = null;
+    await user.save();
+    return user;
   }
 }

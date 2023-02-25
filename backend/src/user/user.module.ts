@@ -4,9 +4,10 @@ import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './user.schema';
 import { PasswordProvider } from '../provider/password';
+import {MailService} from "../mail/mail.service";
 
 @Module({
-  providers: [UserService, PasswordProvider],
+  providers: [UserService, PasswordProvider, MailService],
   controllers: [UserController],
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
