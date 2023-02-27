@@ -104,7 +104,7 @@ function Header(props:user) {
                                color="inherit"
                                size="small"
                                onClick={() => {
-                                   setOpen(false);
+                                   setOpen(true);
                                }}
                            >
                                <CloseIcon fontSize="inherit"/>
