@@ -79,7 +79,7 @@ function SignIn() {
     };
     console.log(id)
 
-    fetch("http://localhost:3001/api/auth/login", {
+    fetch("/api/auth/login", {
       method: "POST",
       mode: "cors",
       headers: {

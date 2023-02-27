@@ -9,8 +9,14 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import {Link} from "react-router-dom";
+import {useState} from "react";
+import {Alert, Collapse} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import {user} from "../types";
 
-function Header() {
+function Header(props:user) {
+
+    const [open, setOpen] = useState(props.validated);
 
     const Search = styled('div')(({theme}) => ({
         position: 'relative',
@@ -42,7 +48,6 @@ function Header() {
         color: 'inherit',
         '& .MuiInputBase-input': {
             padding: theme.spacing(1, 1, 1, 0),
-            // vertical padding + font size from searchIcon
             paddingLeft: `calc(1em + ${theme.spacing(4)})`,
             transition: theme.transitions.create('width'),
             width: '100%',
@@ -53,15 +58,14 @@ function Header() {
     }));
 
 
-    const menuId = 'primary-search-account-menu';
-
-
     return (
         <Box sx={{top:0, width:"100%", position:"absolute"}}>
             <AppBar position="static">
                 <Toolbar>
                     <IconButton>
+                        <Link to={"/home"}>
                         <img src={logo} alt="logo" width={40} height={40}/>
+                        </Link>
                     </IconButton>
 
                     <Box sx={{flexGrow: 1}}/>
@@ -80,7 +84,7 @@ function Header() {
                             size="large"
                             edge="end"
                             aria-label="account of current user"
-                            aria-controls={menuId}
+                            aria-controls="primary-search-account-menu"
                             aria-haspopup="true"
                             color="inherit"
                         >
@@ -92,6 +96,24 @@ function Header() {
 
                 </Toolbar>
             </AppBar>
+            <Collapse in={!open} sx={{width:"100%", position:"absolute", top:"4em"}}>
+                <Alert severity={"error"} variant="filled"
+                       action={
+                           <IconButton
+                               aria-label="close"
+                               color="inherit"
+                               size="small"
+                               onClick={() => {
+                                   setOpen(false);
+                               }}
+                           >
+                               <CloseIcon fontSize="inherit"/>
+                           </IconButton>
+                       }
+                >
+                    Your account is not validated yet, please check your email !
+                </Alert>
+            </Collapse>
         </Box>
     );
 }

@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Post, Res} from '@nestjs/common';
+import {Body, Controller, Get, HttpException, HttpStatus, Post, Res} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {FastifyReply} from 'fastify';
 import { UserDtoLogin } from '../user/user.dto';
@@ -20,6 +20,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: FastifyReply,
   ): Promise<any> {
     res.clearCookie('auth-cookie');
+    return new HttpException('Logout successful', HttpStatus.OK);
   }
 
   @Get('confirm')

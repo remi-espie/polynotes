@@ -131,7 +131,7 @@ function SignUp() {
       "password": password1.current.value,
     };
 
-    fetch("http://localhost:3001/api/user", {
+    fetch("/api/user", {
       method: "POST",
       mode: "cors",
       headers: {
@@ -205,7 +205,7 @@ function SignUp() {
     password:string;
   }){
     id.nickname = ""
-    fetch("http://localhost:3001/api/auth/login", {
+    fetch("/api/auth/login", {
       method: 'POST',
       mode: 'cors',
       headers: {
