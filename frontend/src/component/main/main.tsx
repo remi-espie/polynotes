@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
 import Header from "./header";
-import {Box} from "@mui/material";
+import {Box, Divider} from "@mui/material";
 import {useLocation, useNavigate} from "react-router-dom";
-import Profile from "./user/profile";
-import {user} from "../types";
+import Profile from "../user/profile";
+import {user} from "../../types";
+import Workspace from "./workspace";
 
 function Main() {
 
@@ -21,7 +22,7 @@ function Main() {
         fetch('/api/user')
             .then(resp => {
                 if (resp.status !== 200) {
-                    navigate("/user");
+                    navigate("/login");
                 } else {
                     resp.json().then(json => {
                         setConnectedUser(json._doc);
@@ -34,8 +35,10 @@ function Main() {
     return (
         <Box className="App">
             <Header _id={connectedUser._id} validated={connectedUser.validated} createdAt={connectedUser.createdAt} email={connectedUser.email} nickname={connectedUser.nickname} />
+            <Divider />
+
             {
-                location.pathname=== "/profile" ? <Profile _id={connectedUser._id} validated={connectedUser.validated} createdAt={connectedUser.createdAt} email={connectedUser.email} nickname={connectedUser.nickname}/> : <></>
+                location.pathname=== "/profile" ? <Profile _id={connectedUser._id} validated={connectedUser.validated} createdAt={connectedUser.createdAt} email={connectedUser.email} nickname={connectedUser.nickname}/> : <Workspace/>
             }
         </Box>
     )

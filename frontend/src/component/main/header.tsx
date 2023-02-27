@@ -1,4 +1,4 @@
-import logo from '../assets/logo.png';
+import logo from '../../assets/logo.png';
 import * as React from 'react';
 import {styled, alpha} from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -12,7 +12,7 @@ import {Link} from "react-router-dom";
 import {useState} from "react";
 import {Alert, Collapse} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import {user} from "../types";
+import {user} from "../../types";
 
 function Header(props:user) {
 
@@ -96,7 +96,7 @@ function Header(props:user) {
 
                 </Toolbar>
             </AppBar>
-            <Collapse in={!open} sx={{width:"100%", position:"absolute", top:"4em"}}>
+            <Collapse in={!open} sx={{width:"100%", position:"absolute", top:"4em", zIndex:"10000"}}>
                 <Alert severity={"error"} variant="filled"
                        action={
                            <IconButton

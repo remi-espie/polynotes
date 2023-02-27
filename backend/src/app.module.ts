@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { MailModule } from './mail/mail.module';
+import { PageModule } from './document/page.module';
 
 @Module({
   imports: [
@@ -16,12 +17,10 @@ import { MailModule } from './mail/mail.module';
     UserModule,
     AuthModule,
     MailModule,
+    PageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
   exports: [],
 })
 export class AppModule {}
-
-console.log(process.env);
-console.log(process.env.SECRETKEY);

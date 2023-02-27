@@ -4,9 +4,8 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
+  Param, Patch,
   Post,
-  Put,
   Req,
   UseGuards,
   UseInterceptors,
@@ -41,7 +40,7 @@ export class UserController {
     return await this.service.create(userDto);
   }
 
-  @Put(':id')
+  @Patch(':id')
   async update(@Param('id') id: string, @Body() userDto: UserDto) {
     return await this.service.update(id, userDto);
   }
