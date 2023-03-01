@@ -28,10 +28,24 @@ export class PageDto {
     @IsNotEmpty()
     type: string;
 
+    @IsString()
+    @IsNotEmpty()
+    name: string;
+
     @IsOptional()
     content: Page[];
 
     @IsOptional()
     @IsString()
     subContent: string
+}
+
+export class createPageDto {
+    @IsString()
+    @IsNotEmpty()
+    type: string;
+
+    @IsString()
+    @IsNotEmpty()
+    name: string;
 }

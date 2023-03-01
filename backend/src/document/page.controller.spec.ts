@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PageController } from './page.controller';
 
-describe('DocumentController', () => {
+describe('PageController', () => {
   let controller: PageController;
 
   beforeEach(async () => {

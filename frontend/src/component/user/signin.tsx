@@ -77,7 +77,6 @@ function SignIn() {
       "email": email.current.value,
       "password": password.current.value,
     };
-    console.log(id)
 
     fetch("/api/auth/login", {
       method: "POST",

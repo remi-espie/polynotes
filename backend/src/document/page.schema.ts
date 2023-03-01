@@ -5,7 +5,7 @@ export type PageDocument = Page & Document;
 
 @Schema()
 export class Page {
-  @Prop({ required: true, index: true, unique: true })
+  @Prop({ required: true, index: true })
   owner: string;
 
   @Prop({ required: true })
@@ -19,6 +19,9 @@ export class Page {
 
   @Prop({ required: true })
   type: string;
+
+  @Prop({ required: true })
+  name: string;
 
   @Prop()
   content: Page[];
