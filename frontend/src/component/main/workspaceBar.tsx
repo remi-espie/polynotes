@@ -4,26 +4,14 @@ import Box from '@mui/material/Box';
 import TreeView from '@mui/lab/TreeView';
 import TreeItem, {TreeItemProps, treeItemClasses} from '@mui/lab/TreeItem';
 import Typography from '@mui/material/Typography';
-import MailIcon from '@mui/icons-material/Mail';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Label from '@mui/icons-material/Label';
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
-import InfoIcon from '@mui/icons-material/Info';
-import ForumIcon from '@mui/icons-material/Forum';
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import AddIcon from '@mui/icons-material/Add';
 import {SvgIconProps} from '@mui/material/SvgIcon';
 import {Button, Divider} from "@mui/material";
 import {Link} from "react-router-dom";
+import { Workspaces } from "@mui/icons-material";
 
-declare module 'react' {
-    interface CSSProperties {
-        '--tree-view-color'?: string;
-        '--tree-view-bg-color'?: string;
-    }
-}
 
 type StyledTreeItemProps = TreeItemProps & {
     bgColor?: string;
@@ -111,44 +99,8 @@ export default function IconTreeView() {
                 defaultEndIcon={<div style={{width: 24}}/>}
                 sx={{ maxWidth: 300, color: "white", overflowY: "auto"}}
             >
-                <StyledTreeItem nodeId="0" labelIcon={MailIcon} labelText={"My Workspace"}>
-                <StyledTreeItem nodeId="1" labelText="All Mail" labelIcon={MailIcon}/>
-                <StyledTreeItem nodeId="2" labelText="Trash" labelIcon={DeleteIcon}/>
-                <StyledTreeItem nodeId="3" labelText="Categories" labelIcon={Label}>
-                    <StyledTreeItem
-                        nodeId="5"
-                        labelText="Social"
-                        labelIcon={SupervisorAccountIcon}
-                        labelInfo="90"
-                        color="#1a73e8"
-                        bgColor="#e8f0fe"
-                    />
-                    <StyledTreeItem
-                        nodeId="6"
-                        labelText="Updates"
-                        labelIcon={InfoIcon}
-                        labelInfo="2,294"
-                        color="#e3742f"
-                        bgColor="#fcefe3"
-                    />
-                    <StyledTreeItem
-                        nodeId="7"
-                        labelText="Forums"
-                        labelIcon={ForumIcon}
-                        labelInfo="3,566"
-                        color="#a250f5"
-                        bgColor="#f3e8fd"
-                    />
-                    <StyledTreeItem
-                        nodeId="8"
-                        labelText="Promotions"
-                        labelIcon={LocalOfferIcon}
-                        labelInfo="733"
-                        color="#3c8039"
-                        bgColor="#e6f4ea"
-                    />
-                </StyledTreeItem>
-                <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label}/>
+                <StyledTreeItem nodeId="0" labelIcon={Workspaces} labelText={"My Workspace"}>
+
                 </StyledTreeItem>
             </TreeView>
             <Divider/>

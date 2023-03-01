@@ -17,7 +17,7 @@ function Manifesto() {
                 textAlign: "justify"
             }}>
                 <h2>
-                    📓 Polynotes is a Notion-like tool made to help students taking notes and linking them to different
+                    📓 Polynotes is a Notion-like tool made to helps students to take notes and link them to different
                     data, with an emphasis on project management !
                 </h2>
             </Box>
