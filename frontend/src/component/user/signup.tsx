@@ -6,9 +6,9 @@ import {
   FormControlLabel,
   FormGroup,
   Snackbar,
-  TextField,
+  TextField
 } from "@mui/material";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoadingButton from "@mui/lab/LoadingButton";
 import React from "react";
 import Tos from "../tos";
@@ -38,19 +38,14 @@ function SignUp() {
   let tos = React.createRef();
 
   return (
-    <>
-      <Container
-        sx={{
-          width: "45%",
-          bgcolor: "darkgray",
-        }}
-      >
+    <div className={"login"}>
+      <Container className={"login"}>
         <h2>Create an account</h2>
         <FormGroup
           sx={{
             "> div, label, button": {
-              marginBottom: "1em",
-            },
+              marginBottom: "1em"
+            }
           }}
         >
           <TextField
@@ -93,7 +88,7 @@ function SignUp() {
             label={
               <>
                 <span>I accept the </span>
-                <Tos/>
+                <Tos />
                 <span> *</span>
               </>
             }
@@ -115,7 +110,7 @@ function SignUp() {
           {errorMessage}
         </Alert>
       </Snackbar>
-    </>
+    </div>
   );
 
   function createAccount() {
@@ -128,7 +123,7 @@ function SignUp() {
     const id = {
       "email": email.current.value,
       "nickname": nickname.current.value,
-      "password": password1.current.value,
+      "password": password1.current.value
     };
 
     fetch("/api/user", {
@@ -136,10 +131,10 @@ function SignUp() {
       mode: "cors",
       headers: {
         // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(id),
-      credentials: "same-origin",
+      credentials: "same-origin"
     })
       .catch((err) => {
         console.error(err);
@@ -148,9 +143,9 @@ function SignUp() {
         if (resp?.status === 401) {
           setErrorMessage("Invalid Credentials");
           setOpen(true);
-        } else if (resp?.status === 201){
+        } else if (resp?.status === 201) {
           setLoadingCreate(false);
-          await signin(id)
+          await signin(id);
         } else {
           setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);
           setOpen(true);
@@ -160,13 +155,13 @@ function SignUp() {
   }
 
   function testData() {
-    if (nickname.current.value.length <3){
+    if (nickname.current.value.length < 3) {
       setErrorMessage("Nickname length is too short (minimum 3 characters)");
       setOpen(true);
       return false;
     }
-    const regexMail = new RegExp("^[\\w-\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")
-    if (!regexMail.test(email.current.value)){
+    const regexMail = new RegExp("^[\\w-\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+    if (!regexMail.test(email.current.value)) {
       setErrorMessage("Please enter a valid email address");
       setOpen(true);
       return false;
@@ -201,34 +196,34 @@ function SignUp() {
 
   function signin(id: {
     nickname: string;
-    email:string;
-    password:string;
-  }){
-    id.nickname = ""
+    email: string;
+    password: string;
+  }) {
+    id.nickname = "";
     fetch("/api/auth/login", {
-      method: 'POST',
-      mode: 'cors',
+      method: "POST",
+      mode: "cors",
       headers: {
         // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(id),
-      credentials: 'same-origin',
+      credentials: "same-origin"
     })
-        .catch(err => {
-          console.error(err)
-        })
-        .then(async resp => {
-          if (resp?.status === 401) {
-            setErrorMessage("Invalid Credentials");
-            setOpen(true);
-          } else if (resp?.status === 201) {
-            navigate("/home");
-          } else {
-            setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);
-            setOpen(true);
-          }
-        })
+      .catch(err => {
+        console.error(err);
+      })
+      .then(async resp => {
+        if (resp?.status === 401) {
+          setErrorMessage("Invalid Credentials");
+          setOpen(true);
+        } else if (resp?.status === 201) {
+          navigate("/home");
+        } else {
+          setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);
+          setOpen(true);
+        }
+      });
   }
 }
 

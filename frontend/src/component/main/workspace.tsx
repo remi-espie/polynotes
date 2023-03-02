@@ -1,19 +1,74 @@
 import WorkspaceBar from "./workspaceBar";
-import React from "react";
-import {Box} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Alert, AlertTitle, Box, Snackbar } from "@mui/material";
 
 function workspace() {
-    return (
-        <Box sx={{display:"flex", flexDirection:"row", width:"100%", height:"90vh", marginTop: "4em"}}>
 
-            <Box>
-        <WorkspaceBar/>
-            </Box>
-            <Box sx={{flexGrow:1}}>
-                Coucou
-            </Box>
-        </Box>
-    );
+  useEffect(() => {
+    getWorkspaces();
+  }, []);
+
+  const [workspaces, setWorkspaces] = useState<any>([]);
+
+  const [openAlert, setOpenAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  function getWorkspaces() {
+    fetch("/api/page", {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
+        "Content-Type": "application/json"
+      },
+      credentials: "same-origin"
+    })
+      .catch((err) => {
+        console.error(err);
+      })
+      .then(async (resp) => {
+        if (resp?.status === 401) {
+          setErrorMessage("Invalid Credentials");
+          setOpenAlert(true);
+        } else if (resp?.status === 200) {
+          resp = await resp.json();
+          setWorkspaces(resp);
+        } else {
+          setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);
+          setOpenAlert(true);
+        }
+      });
+  }
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenAlert(false);
+  };
+
+  console.log(workspaces);
+
+  return (
+    <Box sx={{ display: "flex", flexDirection: "row", width: "100%", height: "90vh", marginTop: "4em" }}>
+
+      <Box>
+        <WorkspaceBar workspaces={workspaces} setErrorMessage={setErrorMessage} setOpenAlert={setOpenAlert} getWorkspaces={getWorkspaces} />
+      </Box>
+      <Box sx={{ flexGrow: 1 }}>
+        Coucou
+      </Box>
+      <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleClose}>
+        <Alert variant="filled" severity="error" onClose={handleClose}>
+          <AlertTitle>Error</AlertTitle>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
+    </Box>
+  );
 }
 
 export default workspace;

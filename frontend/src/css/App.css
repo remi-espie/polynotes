@@ -16,3 +16,9 @@
 .App > *{
   margin: auto;
 }
+
+.login {
+  width: 45%;
+  background-color: darkgray;
+  border-radius: 5px;,
+}
