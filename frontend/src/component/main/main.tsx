@@ -4,7 +4,7 @@ import {Box, Divider} from "@mui/material";
 import {useLocation, useNavigate} from "react-router-dom";
 import Profile from "../user/profile";
 import {user} from "../../types";
-import Workspace from "./workspace";
+import Workspace from "./workspace/workspace";
 
 function Main() {
 
@@ -36,7 +36,6 @@ function Main() {
         <Box className="App">
             <Header _id={connectedUser._id} validated={connectedUser.validated} createdAt={connectedUser.createdAt} email={connectedUser.email} nickname={connectedUser.nickname} />
             <Divider />
-
             {
                 location.pathname=== "/profile" ? <Profile _id={connectedUser._id} validated={connectedUser.validated} createdAt={connectedUser.createdAt} email={connectedUser.email} nickname={connectedUser.nickname}/> : <Workspace/>
             }

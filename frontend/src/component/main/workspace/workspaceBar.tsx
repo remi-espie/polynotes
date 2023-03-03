@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Folder, Workspaces } from "@mui/icons-material";
-import { createRef, useState } from "react";
+import { createRef, SyntheticEvent, useEffect, useState } from "react";
 import { LoadingButton } from "@mui/lab";
 
 
@@ -100,14 +100,41 @@ export default function WorkspaceBar(props: { workspaces: [], setErrorMessage: (
   const [openCreate, setOpenCreate] = useState(false);
   const [creationType, setCreationType] = useState("page");
   const name = createRef();
-
+  const [randomName, setRandomName] = useState("");
+  const [selectedWorkspace, setSelectedWorkspace] = useState("0")
   const [loadingCreate, setLoadingCreate] = useState(false);
+
+  useEffect(() => {
+    getRandomName();
+  }, []);
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
     newCreationType: string
   ) => {
+    console.log(selectedWorkspace.current);
     setCreationType(newCreationType);
+  };
+
+  const getRandomName = () => {
+    fetch("/random-name", {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
+      }
+    })
+      .then((resp) => resp.json())
+      .then((json) => {
+        setRandomName(json[0]);
+      });
+  }
+
+  const handleOpenCreate = () => {
+    getRandomName();
+    console.log(props.workspaces.filter((workspace: any) => workspace._id === selectedWorkspace)[0].name)
+    setOpenCreate(true);
   };
 
   function createContent() {
@@ -117,7 +144,11 @@ export default function WorkspaceBar(props: { workspaces: [], setErrorMessage: (
       "name": name.current.value
     };
 
-    fetch("/api/page/create", {
+
+    const url = selectedWorkspace === "0" ? "/api/page/create" : `/api/page/create/${selectedWorkspace}`;
+
+
+    fetch(url, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -150,7 +181,7 @@ export default function WorkspaceBar(props: { workspaces: [], setErrorMessage: (
     return workspaces.map((workspace: any) => {
       if (workspace.type === "folder") {
         return (
-          <StyledTreeItem nodeId={workspace._id} labelIcon={Folder} labelText={workspace.name}>
+          <StyledTreeItem nodeId={workspace._id} labelIcon={Folder} labelText={workspace.name} key={workspace._id}>
             {
               displayWorkspace(workspace.content)
             }
@@ -158,17 +189,26 @@ export default function WorkspaceBar(props: { workspaces: [], setErrorMessage: (
         );
       } else {
         return (
-          <StyledTreeItem nodeId={workspace._id} labelIcon={DescriptionIcon} labelText={workspace.name}>
+          <StyledTreeItem nodeId={workspace._id} labelIcon={DescriptionIcon} labelText={workspace.name}
+                          key={workspace._id}>
+            {
+              displayWorkspace(workspace.content)
+            }
           </StyledTreeItem>
         );
       }
     });
   }
 
+  const handleSelectedItems = (event: SyntheticEvent, nodeId: string) => {
+    setSelectedWorkspace(nodeId);
+  }
+
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%", width: 300 }}>
       <Button onClick={() => {
-        setOpenCreate(true);
+        handleOpenCreate();
       }} variant={"contained"} color="secondary" startIcon={<AddIcon />}
               sx={{ color: "white", m: 2 }}>Create</Button>
 
@@ -179,6 +219,7 @@ export default function WorkspaceBar(props: { workspaces: [], setErrorMessage: (
         defaultExpandIcon={<ArrowRightIcon />}
         defaultEndIcon={<div style={{ width: 24 }} />}
         sx={{ maxWidth: 300, color: "white", overflowY: "auto" }}
+        onNodeSelect={handleSelectedItems}
       >
         <StyledTreeItem nodeId="0" labelIcon={Workspaces} labelText={"My Workspace"}>
           {
@@ -207,7 +248,7 @@ export default function WorkspaceBar(props: { workspaces: [], setErrorMessage: (
         fullWidth={true}
       >
         <DialogTitle id="alert-dialog-title">
-          {"Create new document?"}
+          {"Create new document in " + props.workspaces.filter((workspace: any) => workspace._id === selectedWorkspace)[0]?.name + "?"}
         </DialogTitle>
         <DialogContent sx={{
           display: "flex",
@@ -228,7 +269,7 @@ export default function WorkspaceBar(props: { workspaces: [], setErrorMessage: (
 
 
           <TextField id="standard-basic" label="Standard" variant="standard"
-                     defaultValue="My-totally-randomly-generated-name" inputRef={name} />
+                     defaultValue={randomName} inputRef={name} />
 
 
         </DialogContent>

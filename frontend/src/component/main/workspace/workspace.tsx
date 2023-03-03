@@ -1,6 +1,7 @@
 import WorkspaceBar from "./workspaceBar";
 import React, { useEffect, useState } from "react";
 import { Alert, AlertTitle, Box, Snackbar } from "@mui/material";
+import WorkspaceRecent from "./workspaceRecent";
 
 function workspace() {
 
@@ -50,16 +51,15 @@ function workspace() {
     setOpenAlert(false);
   };
 
-  console.log(workspaces);
-
   return (
     <Box sx={{ display: "flex", flexDirection: "row", width: "100%", height: "90vh", marginTop: "4em" }}>
 
       <Box>
         <WorkspaceBar workspaces={workspaces} setErrorMessage={setErrorMessage} setOpenAlert={setOpenAlert} getWorkspaces={getWorkspaces} />
       </Box>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ display:"flex", flexDirection:"column", width:"calc(100% - 325px)", marginLeft:"20px" }}>
         Coucou
+        <WorkspaceRecent workspaces={workspaces} />
       </Box>
       <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleClose}>
         <Alert variant="filled" severity="error" onClose={handleClose}>

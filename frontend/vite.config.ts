@@ -11,6 +11,10 @@ export default defineConfig({
                 target: 'http://localhost:3001/',
                 changeOrigin: true,
             },
+            '/random-name':{
+                target: 'https://names.drycodes.com/1?nameOptions=funnyWords&separator=space&format=json',
+                changeOrigin: true,
+            }
         },
     },
 })
