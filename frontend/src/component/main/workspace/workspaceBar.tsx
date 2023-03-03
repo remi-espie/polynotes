@@ -101,7 +101,7 @@ export default function WorkspaceBar(props: { workspaces: [], setErrorMessage: (
   const [creationType, setCreationType] = useState("page");
   const name = createRef();
   const [randomName, setRandomName] = useState("");
-  const [selectedWorkspace, setSelectedWorkspace] = useState("0")
+  const [selectedWorkspace, setSelectedWorkspace] = useState("0");
   const [loadingCreate, setLoadingCreate] = useState(false);
 
   useEffect(() => {
@@ -129,11 +129,10 @@ export default function WorkspaceBar(props: { workspaces: [], setErrorMessage: (
       .then((json) => {
         setRandomName(json[0]);
       });
-  }
+  };
 
   const handleOpenCreate = () => {
     getRandomName();
-    console.log(props.workspaces.filter((workspace: any) => workspace._id === selectedWorkspace)[0].name)
     setOpenCreate(true);
   };
 
@@ -177,32 +176,24 @@ export default function WorkspaceBar(props: { workspaces: [], setErrorMessage: (
     setOpenCreate(false);
   }
 
-  function displayWorkspace(workspaces: []) {
-    return workspaces.map((workspace: any) => {
-      if (workspace.type === "folder") {
-        return (
-          <StyledTreeItem nodeId={workspace._id} labelIcon={Folder} labelText={workspace.name} key={workspace._id}>
-            {
-              displayWorkspace(workspace.content)
-            }
-          </StyledTreeItem>
-        );
-      } else {
-        return (
-          <StyledTreeItem nodeId={workspace._id} labelIcon={DescriptionIcon} labelText={workspace.name}
-                          key={workspace._id}>
-            {
-              displayWorkspace(workspace.content)
-            }
-          </StyledTreeItem>
-        );
-      }
+  function displayWorkspace(workspaces: [], parent: string | null) {
+    const workspaceParent = workspaces.filter((workspace: any) => workspace.parentId === parent);
+    console.log(workspaceParent);
+    return workspaceParent.map((workspace: any) => {
+      return (
+        <StyledTreeItem nodeId={workspace._id} labelIcon={workspace.type === "folder" ? Folder : DescriptionIcon}
+                        labelText={workspace.name} key={workspace._id}>
+          {
+            displayWorkspace(workspaces, workspace._id)
+          }
+        </StyledTreeItem>
+      );
     });
   }
 
   const handleSelectedItems = (event: SyntheticEvent, nodeId: string) => {
     setSelectedWorkspace(nodeId);
-  }
+  };
 
 
   return (
@@ -223,7 +214,7 @@ export default function WorkspaceBar(props: { workspaces: [], setErrorMessage: (
       >
         <StyledTreeItem nodeId="0" labelIcon={Workspaces} labelText={"My Workspace"}>
           {
-            displayWorkspace(props.workspaces)
+            displayWorkspace(props.workspaces, null)
           }
         </StyledTreeItem>
       </TreeView>

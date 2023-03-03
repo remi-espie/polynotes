@@ -40,24 +40,21 @@ export class PageService {
             name: pageDto.name,
             reader: [],
             writer: [],
+            parentId: null,
             modified: new Date(),
         }).save();
     }
 
     async createAt(id:string, pageDto: createPageDto, ownerid: string): Promise<PageDocument> {
-        const parent = await this.findById(id)
-        const child = await new this.model({
+        return await new this.model({
             owner: ownerid,
             type: pageDto.type,
             name: pageDto.name,
             reader: [],
             writer: [],
+            parentId: id,
             modified: new Date(),
-        });
-
-        parent.content.push(child)
-        await parent.save()
-        return child
+        }).save();
     }
 
     async update(id: string, pageDto: PageDto): Promise<PageDocument> {

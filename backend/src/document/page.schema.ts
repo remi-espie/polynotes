@@ -1,5 +1,5 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from "mongoose";
 
 export type PageDocument = Page & Document;
 
@@ -24,10 +24,10 @@ export class Page {
   name: string;
 
   @Prop()
-  content: Page[];
+  parentId: string;
 
   @Prop()
-  subContent:string
+  subContent: string;
 
 }
 

@@ -32,8 +32,8 @@ export class PageDto {
     @IsNotEmpty()
     name: string;
 
-    @IsOptional()
-    content: Page[];
+    @IsString()
+    parentId: string;
 
     @IsOptional()
     @IsString()
