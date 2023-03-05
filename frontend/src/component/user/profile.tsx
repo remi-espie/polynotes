@@ -1,8 +1,8 @@
 import {useNavigate} from "react-router-dom";
-import {user} from "../../types";
+import {userType} from "../../types";
 import {Button, Typography} from "@mui/material";
 
-function profile(props: user) {
+function profile(props: userType) {
 
     const navigate = useNavigate();
 

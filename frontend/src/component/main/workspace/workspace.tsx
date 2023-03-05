@@ -2,6 +2,8 @@ import WorkspaceBar from "./workspaceBar";
 import React, { useEffect, useState } from "react";
 import { Alert, AlertTitle, Box, Snackbar } from "@mui/material";
 import WorkspaceRecent from "./workspaceRecent";
+import WorkspaceFile from "./workspaceFile";
+import {workspaceType} from "../../../types";
 
 function workspace() {
 
@@ -32,8 +34,8 @@ function workspace() {
           setErrorMessage("Invalid Credentials");
           setOpenAlert(true);
         } else if (resp?.status === 200) {
-          resp = await resp.json();
-          setWorkspaces(resp);
+          const workspace: workspaceType[] = await resp.json();
+          setWorkspaces(workspace);
         } else {
           setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);
           setOpenAlert(true);
@@ -58,8 +60,9 @@ function workspace() {
         <WorkspaceBar workspaces={workspaces} setErrorMessage={setErrorMessage} setOpenAlert={setOpenAlert} getWorkspaces={getWorkspaces} />
       </Box>
       <Box sx={{ display:"flex", flexDirection:"column", width:"calc(100% - 325px)", marginLeft:"20px" }}>
-        Coucou
-        <WorkspaceRecent workspaces={workspaces} />
+
+        <WorkspaceRecent workspaces={workspaces}/>
+        <WorkspaceFile workspaces={workspaces}/>
       </Box>
       <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleClose}>
         <Alert variant="filled" severity="error" onClose={handleClose}>

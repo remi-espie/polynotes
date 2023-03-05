@@ -3,7 +3,7 @@ import Header from "./header";
 import {Box, Divider} from "@mui/material";
 import {useLocation, useNavigate} from "react-router-dom";
 import Profile from "../user/profile";
-import {user} from "../../types";
+import {userType} from "../../types";
 import Workspace from "./workspace/workspace";
 
 function Main() {
@@ -13,7 +13,7 @@ function Main() {
     }, [])
 
 
-    const [connectedUser, setConnectedUser] = useState({} as user);
+    const [connectedUser, setConnectedUser] = useState({} as userType);
 
     const navigate = useNavigate();
     const location = useLocation()

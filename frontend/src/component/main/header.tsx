@@ -12,9 +12,9 @@ import {Link} from "react-router-dom";
 import {useState} from "react";
 import {Alert, Collapse} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import {user} from "../../types";
+import {userType} from "../../types";
 
-function Header(props:user) {
+function Header(props:userType) {
 
     const [open, setOpen] = useState(props.validated);
 
