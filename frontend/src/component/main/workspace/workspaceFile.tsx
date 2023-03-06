@@ -4,23 +4,25 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import {useNavigate, useParams} from "react-router-dom";
 import {workspaceType} from "../../../types";
 
-export default function WorkspaceFile(props: { workspaces: []}) {
+export default function WorkspaceFile(props: { workspaces: [] }) {
 
+    const navigate = useNavigate()
     let {id} = useParams();
     let workspaces: workspaceType[]
+
     if (id === undefined) {
         workspaces = props.workspaces.filter((workspace: workspaceType) => workspace.parentId === null)
-    }
-    else {
+    } else {
+        if (props.workspaces.find((workspace: workspaceType) => workspace._id === id) === undefined) {
+            navigate("/home")
+        }
         workspaces = props.workspaces.filter((workspace: workspaceType) => workspace.parentId === id)
     }
 
 
-    const navigate = useNavigate()
-
     return (
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <Table sx={{minWidth: 650}} aria-label="simple table">
                 <TableHead>
                     <TableRow>
                         <TableCell>Name</TableCell>
@@ -29,20 +31,19 @@ export default function WorkspaceFile(props: { workspaces: []}) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {workspaces.map((workspace:workspaceType) => (
+                    {workspaces.map((workspace: workspaceType) => (
                         <TableRow
                             key={workspace._id}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor:"pointer" }}
+                            sx={{'&:last-child td, &:last-child th': {border: 0}, cursor: "pointer"}}
                             onClick={() => {
                                 if (workspace.type === "folder") {
                                     navigate(`/home/folder/${workspace._id}`)
-                                }
-                                else {
+                                } else {
                                     navigate(`/home/page/${workspace._id}`)
                                 }
                             }}
                         >
-                            <TableCell sx={{display: "flex", alignItems:"center"}}>
+                            <TableCell sx={{display: "flex", alignItems: "center"}}>
                                 {workspace.type === "folder" ? <Folder/> : <DescriptionIcon/>}
                                 {workspace.name}
                             </TableCell>

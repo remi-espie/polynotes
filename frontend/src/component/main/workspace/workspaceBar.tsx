@@ -145,8 +145,14 @@ export default function WorkspaceBar(props: { workspaces: workspaceType[], setEr
             "name": name.current.value
         };
 
-
-        const url = selectedWorkspace === "0" ? "/api/page/create" : `/api/page/create/${selectedWorkspace}`;
+        const workspace: workspaceType | undefined = props.workspaces.find((workspace) => workspace._id === selectedWorkspace);
+        let url = "/api/page/create";
+        if (workspace?.type === "folder") {
+            url += `/${workspace._id}`;
+        }
+        else if (workspace?.type === "page") {
+            url += `/${workspace.parentId}`;
+        }
 
 
         fetch(url, {
