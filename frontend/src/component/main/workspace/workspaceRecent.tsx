@@ -19,10 +19,10 @@ export default function WorkspaceRecent(props: { workspaces: [] }) {
 
     return (
         <ImageList gap={8} sx={{
-            height: 200,
+            height: 150,
             gridAutoFlow: "column",
-            gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr)) !important",
-            gridAutoColumns: "minmax(200px, 1fr)",
+            gridTemplateColumns: "repeat(auto-fill,minmax(150px,1fr)) !important",
+            gridAutoColumns: "minmax(150px, 1fr)",
             overflowX: "scroll",
             overflowY: "hidden",
         }}>

@@ -6,7 +6,7 @@ import {
   FormControlLabel,
   FormGroup,
   Snackbar,
-  TextField
+  TextField,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -30,12 +30,12 @@ function SignUp() {
 
   const [loadingCreate, setLoadingCreate] = React.useState(false);
 
-  let email = React.createRef();
-  let nickname = React.createRef();
-  let password1 = React.createRef();
-  let password2 = React.createRef();
-  let over13 = React.createRef();
-  let tos = React.createRef();
+  let email = React.createRef<HTMLInputElement>();
+  let nickname = React.createRef<HTMLInputElement>();
+  let password1 = React.createRef<HTMLInputElement>();
+  let password2 = React.createRef<HTMLInputElement>();
+  let over13 = React.createRef<HTMLInputElement>();
+  let tos = React.createRef<HTMLInputElement>();
 
   return (
     <div className={"login"}>
@@ -44,13 +44,13 @@ function SignUp() {
         <FormGroup
           sx={{
             "> div, label, button": {
-              marginBottom: "1em"
-            }
+              marginBottom: "1em",
+            },
           }}
         >
           <TextField
             id="outlined-basic"
-            label="Nickname"
+            label="Nickname (over 3 characters)"
             variant="outlined"
             required
             inputRef={nickname}
@@ -79,12 +79,12 @@ function SignUp() {
             inputRef={password2}
           />
           <FormControlLabel
-            control={<Checkbox required />}
+            control={<Checkbox required/>}
             label="I'm over 13 years old *"
-            ref={over13}
+            inputRef={over13}
           />
           <FormControlLabel
-            control={<Checkbox required />}
+            control={<Checkbox required/>}
             label={
               <>
                 <span>I accept the </span>
@@ -92,9 +92,10 @@ function SignUp() {
                 <span> *</span>
               </>
             }
-            ref={tos}
+            inputRef={tos}
           />
           <LoadingButton
+            type={"submit"}
             loading={loadingCreate}
             onClick={createAccount}
             variant="contained"
@@ -121,9 +122,9 @@ function SignUp() {
       return;
     }
     const id = {
-      "email": email.current.value,
-      "nickname": nickname.current.value,
-      "password": password1.current.value
+      email: email.current!.value as string,
+      nickname: nickname.current!.value as string,
+      password: password1.current!.value as string,
     };
 
     fetch("/api/user", {
@@ -131,10 +132,10 @@ function SignUp() {
       mode: "cors",
       headers: {
         // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(id),
-      credentials: "same-origin"
+      credentials: "same-origin",
     })
       .catch((err) => {
         console.error(err);
@@ -155,18 +156,18 @@ function SignUp() {
   }
 
   function testData() {
-    if (nickname.current.value.length < 3) {
+    if ((nickname.current?.value as string).length < 3) {
       setErrorMessage("Nickname length is too short (minimum 3 characters)");
       setOpen(true);
       return false;
     }
-    const regexMail = new RegExp("^[\\w-\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
-    if (!regexMail.test(email.current.value)) {
+    const regexMail = new RegExp("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+    if (!regexMail.test(email.current?.value as string)) {
       setErrorMessage("Please enter a valid email address");
       setOpen(true);
       return false;
     }
-    if (password1.current.value !== password2.current.value) {
+    if (password1.current?.value !== password2.current?.value) {
       setErrorMessage("Passwords are not the same");
       setOpen(true);
       return false;
@@ -174,19 +175,19 @@ function SignUp() {
     const regexPassword = new RegExp(
       "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
     );
-    if (!regexPassword.test(password1.current.value)) {
+    if (!regexPassword.test(password1.current?.value as string)) {
       setErrorMessage(
         "Please enter a password with one uppercase, one lowercase, one number and one symbol, minimum of 8 character"
       );
       setOpen(true);
       return false;
     }
-    if (!over13.current.control.checked) {
+    if (!over13.current?.checked) {
       setErrorMessage("You need to be over 13 to create an account");
       setOpen(true);
       return false;
     }
-    if (!tos.current.control.checked) {
+    if (!tos.current?.checked) {
       setErrorMessage("You need to read and accept Terms of Service");
       setOpen(true);
       return false;
@@ -194,26 +195,22 @@ function SignUp() {
     return true;
   }
 
-  function signin(id: {
-    nickname: string;
-    email: string;
-    password: string;
-  }) {
+  function signin(id: { nickname: string; email: string; password: string }) {
     id.nickname = "";
     fetch("/api/auth/login", {
       method: "POST",
       mode: "cors",
       headers: {
         // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(id),
-      credentials: "same-origin"
+      credentials: "same-origin",
     })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
       })
-      .then(async resp => {
+      .then(async (resp) => {
         if (resp?.status === 401) {
           setErrorMessage("Invalid Credentials");
           setOpen(true);

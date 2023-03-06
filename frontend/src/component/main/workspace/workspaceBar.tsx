@@ -252,7 +252,7 @@ export default function WorkspaceBar(props: { workspaces: workspaceType[], setEr
                 fullWidth={true}
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Create new document in " + props.workspaces.filter((workspace: workspaceType) => workspace._id === selectedWorkspace)[0]?.name + "?"}
+                    {"Create new page in " + props.workspaces.filter((workspace: workspaceType) => workspace._id === selectedWorkspace)[0]?.name + "?"}
                 </DialogTitle>
                 <DialogContent sx={{
                     display: "flex",

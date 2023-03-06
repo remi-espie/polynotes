@@ -3,6 +3,7 @@ import {Folder} from "@mui/icons-material";
 import DescriptionIcon from "@mui/icons-material/Description";
 import {useNavigate, useParams} from "react-router-dom";
 import {workspaceType} from "../../../types";
+import {Buffer} from "buffer";
 
 export default function WorkspaceFile(props: { workspaces: [] }) {
 
@@ -19,6 +20,22 @@ export default function WorkspaceFile(props: { workspaces: [] }) {
         workspaces = props.workspaces.filter((workspace: workspaceType) => workspace.parentId === id)
     }
 
+    function workspaceSize(workspace: workspaceType): string {
+        const size = Buffer.byteLength(JSON.stringify(workspace), 'utf8')
+        const kb = 1024;
+        const mb = kb * 1024;
+        const gb = mb * 1024;
+
+        if (size >= gb) {
+            return `${(size / gb).toFixed(2)} Gb`;
+        } else if (size >= mb) {
+            return `${(size / mb).toFixed(2)} Mb`;
+        } else if (size >= kb) {
+            return `${(size / kb).toFixed(2)} Kb`;
+        } else {
+            return `${size} bytes`;
+        }
+    }
 
     return (
         <TableContainer component={Paper}>
@@ -27,6 +44,7 @@ export default function WorkspaceFile(props: { workspaces: [] }) {
                     <TableRow>
                         <TableCell>Name</TableCell>
                         <TableCell>Owner</TableCell>
+                        <TableCell>Size</TableCell>
                         <TableCell>Last modification</TableCell>
                     </TableRow>
                 </TableHead>
@@ -48,6 +66,11 @@ export default function WorkspaceFile(props: { workspaces: [] }) {
                                 {workspace.name}
                             </TableCell>
                             <TableCell>{workspace.owner}</TableCell>
+                            <TableCell>
+                                {
+                                    workspaceSize(workspace)
+                                }
+                            </TableCell>
                             <TableCell>{new Date(workspace.modified).toLocaleString()}</TableCell>
                         </TableRow>
                     ))}

@@ -1,4 +1,11 @@
-import { Alert, AlertTitle, Container, FormGroup, Snackbar, TextField } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  Container,
+  FormGroup,
+  Snackbar,
+  TextField,
+} from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,8 +27,8 @@ function SignIn() {
     setOpen(false);
   };
 
-  let email = React.createRef();
-  let password = React.createRef();
+  let email = React.createRef<React.InputHTMLAttributes<string>>();
+  let password = React.createRef<React.InputHTMLAttributes<string>>();
 
   return (
     <div className={"login"}>
@@ -30,8 +37,8 @@ function SignIn() {
         <FormGroup
           sx={{
             "> div, label, button": {
-              marginBottom: "1em"
-            }
+              marginBottom: "1em",
+            },
           }}
         >
           <TextField
@@ -50,6 +57,7 @@ function SignIn() {
             required
           />
           <LoadingButton
+            type={"submit"}
             loading={loadingLogin}
             onClick={signin}
             variant="contained"
@@ -71,8 +79,8 @@ function SignIn() {
     setLoadingLogin(true);
 
     const id = {
-      "email": email.current.value,
-      "password": password.current.value
+      email: email.current?.value,
+      password: password.current?.value,
     };
 
     fetch("/api/auth/login", {
@@ -80,10 +88,10 @@ function SignIn() {
       mode: "cors",
       headers: {
         // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(id),
-      credentials: "same-origin"
+      credentials: "same-origin",
     })
       .catch((err) => {
         console.error(err);
