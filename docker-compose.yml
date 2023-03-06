@@ -1,0 +1,74 @@
+version: '3.7'
+
+services:
+  backend:
+    restart: unless-stopped
+    container_name: backend
+    build:
+      context: ./backend
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongodb
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`polynotes.cluster-2022-2.dopolytech.fr`) && PathPrefix(`/api`)"
+#      - "traefik.http.routers.backend.entrypoints=web"
+      - "traefik.http.routers.backend.entrypoints=web-secure"
+      - "traefik.http.routers.backend.tls.certresolver=myresolver"
+
+  frontend:
+    restart: unless-stopped
+    container_name: frontend
+    build:
+      context: ./frontend
+    depends_on:
+      - traefik
+    ports:
+      - "8081:80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`polynotes.cluster-2022-2.dopolytech.fr`)"
+#      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.http.routers.frontend.entrypoints=web-secure"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
+
+  mongodb:
+    restart: unless-stopped
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    labels:
+      - "traefik.enable=false"
+
+  traefik:
+    restart: unless-stopped
+    image: traefik:v2.9
+    container_name: traefik
+    command:
+      #      - "--backend.insecure=true"
+      - "--providers.docker"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web-secure.address=:443"
+      - "--entrypoints.web.http.redirections.entrypoint.to=web-secure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=remi.espie@etu.umontpellier.fr"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    #      - "8080:8080"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    labels:
+      - "traefik.enable=true"
