@@ -1,6 +1,14 @@
-import {Body, Controller, Get, HttpException, HttpStatus, Post, Res} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import {FastifyReply} from 'fastify';
+import { FastifyReply } from 'fastify';
 import { UserDtoLogin } from '../user/user.dto';
 
 @Controller('auth')
@@ -25,10 +33,9 @@ export class AuthController {
 
   @Get('confirm')
   public async confirm(
-      @Res({ passthrough: true }) reply: FastifyReply,
+    @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<any> {
     await this.authService.confirm(reply);
     reply.redirect('http://localhost:5173/login');
-
   }
 }

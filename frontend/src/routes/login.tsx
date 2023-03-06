@@ -1,5 +1,5 @@
 import {Box} from "@mui/material";
-import React from "react";
+import React, {useEffect} from "react";
 import SignIn from "../component/user/signin";
 import Signup from "../component/user/signup";
 import {useNavigate} from "react-router-dom";
@@ -15,7 +15,9 @@ function Login() {
         });
     }
 
-    isLoggedIn();
+    useEffect(() => {
+        isLoggedIn();
+    }, []);
 
     return (
         <Box className="App" sx={{

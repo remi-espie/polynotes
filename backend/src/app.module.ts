@@ -6,7 +6,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { MailModule } from './mail/mail.module';
-import { PageModule } from './document/page.module';
+import { PageModule } from './page/page.module';
 
 @Module({
   imports: [

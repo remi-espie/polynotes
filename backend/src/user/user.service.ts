@@ -5,8 +5,8 @@ import { Model, Types } from 'mongoose';
 import { UserDto, UserDtoLogin } from './user.dto';
 import { PasswordProvider } from '../provider/password';
 import { MailService } from '../mail/mail.service';
-import {FastifyReply} from "fastify";
-import {v4 as uuidv4} from 'uuid';
+import { FastifyReply } from 'fastify';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UserService {
@@ -52,8 +52,14 @@ export class UserService {
     const passwordHashed = await this.passwordProvider.hashPassword(
       userDto.password,
     );
-    const emailExists = await this.model.findOne({ email: userDto.email }).exec();
-    if (emailExists) throw new HttpException('Email address already used', HttpStatus.BAD_REQUEST);
+    const emailExists = await this.model
+      .findOne({ email: userDto.email })
+      .exec();
+    if (emailExists)
+      throw new HttpException(
+        'Email address already used',
+        HttpStatus.BAD_REQUEST,
+      );
     const user = await new this.model({
       ...userDto,
       password: passwordHashed,
@@ -77,7 +83,9 @@ export class UserService {
   }
 
   async confirm(req: FastifyReply): Promise<UserDocument> {
-    const user = await this.model.findOne({ token: req.request.query['token'] }).exec();
+    const user = await this.model
+      .findOne({ token: req.request.query['token'] })
+      .exec();
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     user.validated = true;
     user.token = null;
