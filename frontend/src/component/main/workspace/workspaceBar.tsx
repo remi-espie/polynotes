@@ -100,7 +100,7 @@ export default function WorkspaceBar(props: { workspaces: workspaceType[], setEr
 
     const [openCreate, setOpenCreate] = useState(false);
     const [creationType, setCreationType] = useState("page");
-    const name = createRef();
+    const name = createRef<React.InputHTMLAttributes<string>>();
     const [randomName, setRandomName] = useState("");
     const [selectedWorkspace, setSelectedWorkspace] = useState("0");
     const [loadingCreate, setLoadingCreate] = useState(false);
@@ -142,8 +142,8 @@ export default function WorkspaceBar(props: { workspaces: workspaceType[], setEr
         setLoadingCreate(true);
         const data = {
             "type": creationType,
-            "name": name.current.value
-        };
+            "name": name.current?.value
+        }
 
         const workspace: workspaceType | undefined = props.workspaces.find((workspace) => workspace._id === selectedWorkspace);
         let url = "/api/page/create";
@@ -184,7 +184,7 @@ export default function WorkspaceBar(props: { workspaces: workspaceType[], setEr
         setOpenCreate(false);
     }
 
-    function displayWorkspace(workspaces: [], parent: string | null) {
+    function displayWorkspace(workspaces: workspaceType[], parent: string | null) {
         const workspaceParent = workspaces.filter((workspace: workspaceType) => workspace.parentId === parent);
         return workspaceParent.map((workspace: workspaceType) => {
             return (
