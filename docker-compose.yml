@@ -3,7 +3,7 @@ version: '3.7'
 services:
   backend:
     restart: unless-stopped
-    container_name: backend
+    container_name: polynotes_backend
     build:
       context: ./backend
     volumes:
@@ -26,7 +26,7 @@ services:
 
   frontend:
     restart: unless-stopped
-    container_name: frontend
+    container_name: polynotes_frontend
     build:
       context: ./frontend
     depends_on:
@@ -43,7 +43,7 @@ services:
   mongodb:
     restart: unless-stopped
     image: mongo
-    container_name: mongodb
+    container_name: polynotes_mongodb
     ports:
       - "27017:27017"
     labels:
@@ -52,7 +52,7 @@ services:
   traefik:
     restart: unless-stopped
     image: traefik:v2.9
-    container_name: traefik
+    container_name: polynotes_traefik
     command:
       #      - "--backend.insecure=true"
       - "--providers.docker"
