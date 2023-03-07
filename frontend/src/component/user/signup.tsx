@@ -4,7 +4,6 @@ import {
   Checkbox,
   Container,
   FormControlLabel,
-  FormGroup,
   Snackbar,
   TextField,
 } from "@mui/material";
@@ -41,12 +40,11 @@ function SignUp() {
     <div className={"login"}>
       <Container className={"login"}>
         <h2>Create an account</h2>
-        <FormGroup
-          sx={{
-            "> div, label, button": {
-              marginBottom: "1em",
-            },
-          }}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            createAccount();}
+          }
         >
           <TextField
             id="outlined-basic"
@@ -102,7 +100,7 @@ function SignUp() {
           >
             Create an account
           </LoadingButton>
-        </FormGroup>
+        </form>
       </Container>
 
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>

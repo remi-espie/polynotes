@@ -22,3 +22,12 @@
   background-color: darkgray;
   border-radius: 5px;
 }
+
+form {
+ display: flex;
+ flex-direction: column;
+}
+
+form > div, label, button {
+  margin-bottom: 1em !important;
+}

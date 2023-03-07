@@ -2,7 +2,6 @@ import {
   Alert,
   AlertTitle,
   Container,
-  FormGroup,
   Snackbar,
   TextField,
 } from "@mui/material";
@@ -34,12 +33,11 @@ function SignIn() {
     <div className={"login"}>
       <Container>
         <h2>Or log in</h2>
-        <FormGroup
-          sx={{
-            "> div, label, button": {
-              marginBottom: "1em",
-            },
-          }}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            signin();}
+          }
         >
           <TextField
             id="outlined-basic"
@@ -64,7 +62,7 @@ function SignIn() {
           >
             Log in
           </LoadingButton>
-        </FormGroup>
+        </form>
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
           <Alert variant="filled" severity="error" onClose={handleClose}>
             <AlertTitle>Error</AlertTitle>
