@@ -43,7 +43,7 @@ services:
   mongodb:
     restart: unless-stopped
     image: mongo
-    container_name: polynotes_mongodb
+    container_name: mongodb
     ports:
       - "27017:27017"
     labels:
