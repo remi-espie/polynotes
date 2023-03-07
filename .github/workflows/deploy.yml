@@ -20,6 +20,6 @@ jobs:
         ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
         stack_file_name: docker-compose.yml
         args: up -d
-      env:
-        secretkey: ${{ secrets.SECRETKEY }}
-        expiresin: ${{ secrets.EXPIRESIN }}
+        secrets: |
+        "SECRETKEY=${{ secrets.SECRETKEY }}"
+        "EXPIRESIN=${{ secrets.EXPIRESIN }}"
