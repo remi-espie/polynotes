@@ -1,0 +1,21 @@
+name: Docker build & deploy
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "master" ]
+    
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Start Deployment
+      uses: TapTap21/docker-remote-deployment-action@v1.0
+      with:
+        remote_docker_host:  ${{ secrets.DOCKER_SSH_IP }}
+        ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
+        ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
+        stack_file_name: docker-compose.yml
