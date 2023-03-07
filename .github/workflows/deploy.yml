@@ -23,3 +23,5 @@ jobs:
       env:
         secretkey: ${{ secrets.SECRETKEY }}
         expiresin: ${{ secrets.EXPIRESIN }}
+    - name: Delete docker context
+      run: docker context rm staging
