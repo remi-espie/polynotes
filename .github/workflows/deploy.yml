@@ -15,7 +15,7 @@ jobs:
     - name: Start Deployment
       uses: TapTap21/docker-remote-deployment-action@v1.0
       with:
-        remote_docker_host: 162.38.112.152
+        remote_docker_host: respie@162.38.112.152
         ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
         ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
         stack_file_name: docker-compose.yml
