@@ -8,12 +8,14 @@ import { ConfigModule } from '@nestjs/config';
 import { MailModule } from './mail/mail.module';
 import { PageModule } from './page/page.module';
 
+console.log("coucou");
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot('mongodb://127.0.0.1/polynotes'),
+    MongooseModule.forRoot('mongodb://mongodb:27017/polynotes'),
     UserModule,
     AuthModule,
     MailModule,
