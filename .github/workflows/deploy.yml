@@ -12,8 +12,8 @@ jobs:
     steps:
     - name: 'Cleanup build folder'
       run: |
-        ls -la ../..
-        rm -rf ../_work
+        ls -la ../../
+        rm -rf ../../*
     - name: Checkout repository
       uses: actions/checkout@v3
     - name: Start Deployment
