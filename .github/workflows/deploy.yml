@@ -10,8 +10,6 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-    - name: 'Cleanup build folder'
-      uses: rtCamp/action-cleanup@master
     - name: Checkout repository
       uses: actions/checkout@v3
     - name: Start Deployment
@@ -25,3 +23,5 @@ jobs:
       env:
         secretkey: ${{ secrets.SECRETKEY }}
         expiresin: ${{ secrets.EXPIRESIN }}
+    - name: 'Cleanup build folder'
+      uses: rtCamp/action-cleanup@master
