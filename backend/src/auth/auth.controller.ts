@@ -1,11 +1,13 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   HttpException,
   HttpStatus,
   Post,
   Res,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { FastifyReply } from 'fastify';
@@ -16,6 +18,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
+  @UseInterceptors(ClassSerializerInterceptor)
   public async login(
     @Body() userDto: UserDtoLogin,
     @Res({ passthrough: true }) res: FastifyReply,
@@ -32,6 +35,7 @@ export class AuthController {
   }
 
   @Get('confirm')
+  @UseInterceptors(ClassSerializerInterceptor)
   public async confirm(
     @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<any> {
