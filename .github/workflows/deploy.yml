@@ -13,7 +13,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
     - name: Start Deployment
-      uses: remi-espie/docker-remote-deployment-action@v1.0
+      uses: remi-espie/docker-remote-deployment-action@v1.2
       with:
         remote_docker_host: respie@162.38.112.152
         ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
