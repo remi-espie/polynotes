@@ -20,9 +20,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`polynotes.cluster-2022-2.dopolytech.fr`) && PathPrefix(`/api`)"
-#      - "traefik.http.routers.backend.entrypoints=web"
-      - "traefik.http.routers.backend.entrypoints=web-secure"
-      - "traefik.http.routers.backend.tls.certresolver=myresolver"
+      - "traefik.http.routers.backend.entrypoints=web"
+#      - "traefik.http.routers.backend.entrypoints=web-secure"
+#      - "traefik.http.routers.backend.tls.certresolver=myresolver"
 
   frontend:
     restart: unless-stopped
@@ -36,9 +36,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`polynotes.cluster-2022-2.dopolytech.fr`)"
-#      - "traefik.http.routers.frontend.entrypoints=web"
-      - "traefik.http.routers.frontend.entrypoints=web-secure"
-      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
+      - "traefik.http.routers.frontend.entrypoints=web"
+#      - "traefik.http.routers.frontend.entrypoints=web-secure"
+#      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
 
   mongodb:
     restart: unless-stopped
@@ -58,15 +58,15 @@ services:
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
-      - "--entrypoints.web-secure.address=:443"
-      - "--entrypoints.web.http.redirections.entrypoint.to=web-secure"
-      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=remi.espie@etu.umontpellier.fr"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+ #     - "--entrypoints.web-secure.address=:443"
+ #     - "--entrypoints.web.http.redirections.entrypoint.to=web-secure"
+ #     - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+ #     - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+ #     - "--certificatesresolvers.myresolver.acme.email=remi.espie@etu.umontpellier.fr"
+ #     - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
-      - "80:80"
-      - "443:443"
+      - "4080:80"
+      - "4443:443"
     #      - "8080:8080"
     volumes:
       - "./letsencrypt:/letsencrypt"
