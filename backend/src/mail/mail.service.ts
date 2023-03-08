@@ -7,7 +7,7 @@ export class MailService {
   constructor(private mailerService: MailerService) {}
 
   async sendUserConfirmation(user: UserDto, token: string) {
-    const url = `http://localhost:3001/api/auth/confirm?token=${token}`;
+    const url = `https://polynotes.cluster-2022-2.dopolytech.fr/api/auth/confirm?token=${token}`;
 
     await this.mailerService.sendMail({
       to: user.email,
