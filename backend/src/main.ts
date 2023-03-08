@@ -25,11 +25,13 @@ async function bootstrap() {
 
   await app.register(helmet);
   await app.register(fastifyCsrf);
-  await app.listen(3001);
+  await app.listen(3001, '0.0.0.0');
 }
 
 import * as dotenv from 'dotenv';
 import { resolve } from 'path';
 dotenv.config({ path: resolve(__dirname, '../.env') });
 
-bootstrap();
+bootstrap().then(() => {
+  console.log('Server listening on port 3001 !');
+});

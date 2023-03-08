@@ -20,6 +20,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`polynotes.cluster-2022-2.dopolytech.fr`) && PathPrefix(`/api`)"
       - "traefik.http.routers.backend.entrypoints=web"
+      - "traefik.http.services.backend.loadbalancer.server.port=3001"
 #      - "traefik.http.routers.backend.entrypoints=web-secure"
 #      - "traefik.http.routers.backend.tls.certresolver=myresolver"
 
@@ -53,7 +54,7 @@ services:
     image: traefik:v2.9
     container_name: polynotes_traefik
     command:
-      #      - "--backend.insecure=true"
+      #      - "--api.insecure=true"
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
@@ -66,7 +67,7 @@ services:
     ports:
       - "4080:80"
       - "4443:443"
-    #      - "8080:8080"
+#      - "8080:8080"
     volumes:
       - "./letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"

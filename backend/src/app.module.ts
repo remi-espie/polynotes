@@ -8,8 +8,6 @@ import { ConfigModule } from '@nestjs/config';
 import { MailModule } from './mail/mail.module';
 import { PageModule } from './page/page.module';
 
-console.log("coucou");
-
 @Module({
   imports: [
     ConfigModule.forRoot({
