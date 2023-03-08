@@ -8,7 +8,7 @@ export default defineConfig({
         host: true,
         proxy: {
             '/api': {
-                target: 'https:/polynotes.cluster-2022-2.dopolytech.fr',
+                target: 'http://localhost:3001/',
                 changeOrigin: true,
             },
             '/random-name':{

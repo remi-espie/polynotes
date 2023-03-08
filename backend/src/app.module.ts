@@ -13,7 +13,7 @@ import { PageModule } from './page/page.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot('mongodb://mongodb:27017/polynotes'),
+    MongooseModule.forRoot('mongodb://localhost:27017/polynotes'),
     UserModule,
     AuthModule,
     MailModule,

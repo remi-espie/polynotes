@@ -6,7 +6,7 @@ import {
   TextField,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function SignIn() {
@@ -14,6 +14,53 @@ function SignIn() {
 
   const [open, setOpen] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
+
+  const [submit, setSubmit] = React.useState(false);
+
+  useEffect(() => {
+    function signin() {
+      setLoadingLogin(true);
+
+      const id = {
+        email: email.current?.value,
+        password: password.current?.value,
+      };
+
+      fetch("/api/auth/login", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(id),
+        credentials: "same-origin",
+      })
+          .catch((err) => {
+            console.error(err);
+          })
+          .then(async (resp) => {
+            if (resp?.status === 401) {
+              setErrorMessage("Invalid Credentials");
+              setOpen(true);
+            } else if (resp?.status === 201) {
+              navigate("/home");
+            } else {
+              setErrorMessage(
+                  `Error ${resp?.status}, ${await resp
+                      ?.json()
+                      .then((json) => json.message)}`
+              );
+              setOpen(true);
+            }
+            setLoadingLogin(false);
+            setSubmit(false)
+          });
+    }
+    if (submit) {
+      signin();
+    }
+  }, [submit])
 
   const navigate = useNavigate();
   const handleClose = (
@@ -26,6 +73,10 @@ function SignIn() {
     setOpen(false);
   };
 
+  function signIn(){
+    setSubmit(true)
+  }
+
   let email = React.createRef<React.InputHTMLAttributes<string>>();
   let password = React.createRef<React.InputHTMLAttributes<string>>();
 
@@ -36,8 +87,8 @@ function SignIn() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            signin();}
-          }
+            signIn();
+          }}
         >
           <TextField
             id="outlined-basic"
@@ -57,7 +108,7 @@ function SignIn() {
           <LoadingButton
             type={"submit"}
             loading={loadingLogin}
-            onClick={signin}
+            onClick={signIn}
             variant="contained"
           >
             Log in
@@ -72,41 +123,6 @@ function SignIn() {
       </Container>
     </div>
   );
-
-  function signin() {
-    setLoadingLogin(true);
-
-    const id = {
-      email: email.current?.value,
-      password: password.current?.value,
-    };
-
-    fetch("/api/auth/login", {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(id),
-      credentials: "same-origin",
-    })
-      .catch((err) => {
-        console.error(err);
-      })
-      .then(async (resp) => {
-        if (resp?.status === 401) {
-          setErrorMessage("Invalid Credentials");
-          setOpen(true);
-        } else if (resp?.status === 201) {
-          navigate("/home");
-        } else {
-          setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);
-          setOpen(true);
-        }
-        setLoadingLogin(false);
-      });
-  }
 }
 
 export default SignIn;

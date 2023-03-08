@@ -9,12 +9,13 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import LoadingButton from "@mui/lab/LoadingButton";
-import React from "react";
+import React, {useEffect} from "react";
 import Tos from "../tos";
 
 function SignUp() {
   const [open, setOpen] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
+  const [submit, setSubmit] = React.useState(false);
 
   let navigate = useNavigate();
   const handleClose = (
@@ -36,6 +37,81 @@ function SignUp() {
   let over13 = React.createRef<HTMLInputElement>();
   let tos = React.createRef<HTMLInputElement>();
 
+  useEffect(() => {
+    function createAccount() {
+      setLoadingCreate(true);
+
+      if (!testData()) {
+        setLoadingCreate(false);
+        return;
+      }
+      const id = {
+        email: email.current!.value as string,
+        nickname: nickname.current!.value as string,
+        password: password1.current!.value as string,
+      };
+
+      fetch("/api/user", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(id),
+        credentials: "same-origin",
+      })
+          .catch((err) => {
+            console.error(err);
+          })
+          .then(async (resp) => {
+            if (resp?.status === 401) {
+              setErrorMessage("Invalid Credentials");
+              setOpen(true);
+            } else if (resp?.status === 201) {
+              setLoadingCreate(false);
+              await signin(id);
+            } else {
+              setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);
+              setOpen(true);
+            }
+            setLoadingCreate(false);
+          });
+    }
+
+    function signin(id: { nickname: string; email: string; password: string }) {
+      id.nickname = "";
+      fetch("/api/auth/login", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(id),
+        credentials: "same-origin",
+      })
+          .catch((err) => {
+            console.error(err);
+          })
+          .then(async (resp) => {
+            if (resp?.status === 401) {
+              setErrorMessage("Invalid Credentials");
+              setOpen(true);
+            } else if (resp?.status === 201) {
+              navigate("/home");
+            } else {
+              setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);
+              setOpen(true);
+            }
+          });
+    }
+
+    if (submit) {
+      createAccount();
+    }
+  }, [submit])
+
   return (
     <div className={"login"}>
       <Container className={"login"}>
@@ -43,8 +119,8 @@ function SignUp() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            createAccount();}
-          }
+            setSubmit(true)
+          }}
         >
           <TextField
             id="outlined-basic"
@@ -95,7 +171,10 @@ function SignUp() {
           <LoadingButton
             type={"submit"}
             loading={loadingCreate}
-            onClick={createAccount}
+            onClick={ () => {
+              setSubmit(true)
+            }
+          }
             variant="contained"
           >
             Create an account
@@ -111,47 +190,6 @@ function SignUp() {
       </Snackbar>
     </div>
   );
-
-  function createAccount() {
-    setLoadingCreate(true);
-
-    if (!testData()) {
-      setLoadingCreate(false);
-      return;
-    }
-    const id = {
-      email: email.current!.value as string,
-      nickname: nickname.current!.value as string,
-      password: password1.current!.value as string,
-    };
-
-    fetch("/api/user", {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(id),
-      credentials: "same-origin",
-    })
-      .catch((err) => {
-        console.error(err);
-      })
-      .then(async (resp) => {
-        if (resp?.status === 401) {
-          setErrorMessage("Invalid Credentials");
-          setOpen(true);
-        } else if (resp?.status === 201) {
-          setLoadingCreate(false);
-          await signin(id);
-        } else {
-          setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);
-          setOpen(true);
-        }
-        setLoadingCreate(false);
-      });
-  }
 
   function testData() {
     if ((nickname.current?.value as string).length < 3) {
@@ -193,33 +231,6 @@ function SignUp() {
     return true;
   }
 
-  function signin(id: { nickname: string; email: string; password: string }) {
-    id.nickname = "";
-    fetch("/api/auth/login", {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(id),
-      credentials: "same-origin",
-    })
-      .catch((err) => {
-        console.error(err);
-      })
-      .then(async (resp) => {
-        if (resp?.status === 401) {
-          setErrorMessage("Invalid Credentials");
-          setOpen(true);
-        } else if (resp?.status === 201) {
-          navigate("/home");
-        } else {
-          setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);
-          setOpen(true);
-        }
-      });
-  }
 }
 
 export default SignUp;
