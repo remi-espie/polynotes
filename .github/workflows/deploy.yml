@@ -12,6 +12,13 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+    - name: Create .env file
+      run: |
+      'echo "SECRETKEY=$SECRETKEY" >> .env'
+      'echo "EXPIRESIN=$EXPIRESIN" >> .env'
+      env:
+        EXPIRESIN: ${{ secrets.EXPIRESIN }}
+        SECRETKEY: ${{ secrets.SECRETKEY }}
     - name: Start Deployment
       uses: remi-espie/docker-remote-deployment-action@v1.6
       with:
@@ -20,6 +27,3 @@ jobs:
         ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
         stack_file_name: docker-compose.yml
         args: up --build -d
-      env:
-        SECRETKEY: ${{ secrets.SECRETKEY }}
-        EXPIRESIN: ${{ secrets.EXPIRESIN }}

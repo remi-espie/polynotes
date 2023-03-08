@@ -11,9 +11,8 @@ services:
       - /usr/src/app/node_modules
     ports:
       - "3001:3001"
-    environment:
-      - SECRETKEY
-      - EXPIRESIN
+    env_file:
+      - ./.env
     depends_on:
       - mongodb
       - traefik
