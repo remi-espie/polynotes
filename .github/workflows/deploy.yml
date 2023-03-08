@@ -14,8 +14,8 @@ jobs:
       uses: actions/checkout@v3
     - name: Create .env file
       run: |
-      'echo "SECRETKEY=$SECRETKEY" >> .env'
-      'echo "EXPIRESIN=$EXPIRESIN" >> .env'
+        echo "SECRETKEY=$SECRETKEY" >> .env
+        echo "EXPIRESIN=$EXPIRESIN" >> .env
       env:
         EXPIRESIN: ${{ secrets.EXPIRESIN }}
         SECRETKEY: ${{ secrets.SECRETKEY }}
