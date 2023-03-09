@@ -16,7 +16,7 @@ jobs:
       run: |
         echo "SECRETKEY=$SECRETKEY" >> .env
         echo "EXPIRESIN=$EXPIRESIN" >> .env
-        echo "SMTP_HOST=${SMTP_HOST" >> .env
+        echo "SMTP_HOST=$SMTP_HOST" >> .env
         echo "SMTP_PORT=$SMTP_PORT" >> .env
         echo "SMTP_USER=$SMTP_USER" >> .env
         echo "SMTP_PASS=$SMTP_PASS" >> .env
