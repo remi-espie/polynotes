@@ -5,7 +5,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {workspaceType} from "../../../types";
 import {Buffer} from "buffer";
 
-export default function WorkspaceFile(props: { workspaces: [] }) {
+export default function WorkspaceFile(props: { workspaces: workspaceType[] }) {
 
     const navigate = useNavigate()
     let {id} = useParams();

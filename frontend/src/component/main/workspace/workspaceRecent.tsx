@@ -5,7 +5,7 @@ import ImageListItemBar from "@mui/material/ImageListItemBar";
 import {useNavigate} from "react-router-dom";
 import {workspaceType} from "../../../types";
 
-export default function WorkspaceRecent(props: { workspaces: [] }) {
+export default function WorkspaceRecent(props: { workspaces: workspaceType[] }) {
 
     const workspaces = props.workspaces.sort((a: workspaceType, b: workspaceType) => {
         return new Date(b.modified).getTime() - new Date(a.modified).getTime();

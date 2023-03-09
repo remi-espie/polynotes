@@ -1,4 +1,3 @@
-import '../css/App.css'
 import {Link} from "react-router-dom";
 import {Box} from "@mui/material";
 import Logo from "../assets/logo.png";

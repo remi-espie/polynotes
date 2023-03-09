@@ -116,7 +116,7 @@ function SignUp() {
     <div className={"login"}>
       <Container className={"login"}>
         <h2>Create an account</h2>
-        <form
+        <form className={"customForm"}
           onSubmit={(e) => {
             e.preventDefault();
             setSubmit(true)

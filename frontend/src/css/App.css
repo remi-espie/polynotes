@@ -28,6 +28,14 @@ form {
  flex-direction: column;
 }
 
-form > div, label, button {
+.customForm > div {
+  margin-bottom: 1em !important;
+}
+
+.customForm > label{
+  margin-bottom: 1em !important;
+}
+
+.customForm > button{
   margin-bottom: 1em !important;
 }

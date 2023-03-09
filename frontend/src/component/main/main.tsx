@@ -1,17 +1,21 @@
 import React, {useEffect, useState} from "react";
-import Header from "./header";
+import SearchHeader from "./searchHeader";
 import {Box, Divider} from "@mui/material";
 import {useLocation, useNavigate} from "react-router-dom";
 import Profile from "../user/profile";
-import {userType} from "../../types";
+import {userType, workspaceType} from "../../types";
 import Workspace from "./workspace/workspace";
 
 function Main() {
 
     useEffect(() => {
         isLoggedIn();
+        getWorkspaces();
     }, [])
 
+    const [openAlert, setOpenAlert] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [workspaces, setWorkspaces] = useState<any>([]);
 
     const [connectedUser, setConnectedUser] = useState({} as userType);
 
@@ -31,13 +35,53 @@ function Main() {
             })
     }
 
+    function getWorkspaces() {
+        fetch("/api/page", {
+            method: "GET",
+            mode: "cors",
+            headers: {
+                // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
+                "Content-Type": "application/json"
+            },
+            credentials: "same-origin"
+        })
+            .catch((err) => {
+                console.error(err);
+            })
+            .then(async (resp) => {
+                if (resp?.status === 401) {
+                    setErrorMessage("Invalid Credentials");
+                    setOpenAlert(true);
+                } else if (resp?.status === 200) {
+                    const workspace: workspaceType[] = await resp.json();
+                    setWorkspaces(workspace);
+                } else {
+                    setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);
+                    setOpenAlert(true);
+                }
+            });
+    }
+
+    const handleClose = (
+        event?: React.SyntheticEvent | Event,
+        reason?: string
+    ) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        setOpenAlert(false);
+    };
+
 
     return (
         <Box className="App">
-            <Header _id={connectedUser._id} validated={connectedUser.validated} createdAt={connectedUser.createdAt} email={connectedUser.email} nickname={connectedUser.nickname} />
+            <SearchHeader user={connectedUser} workspaces={workspaces}/>
             <Divider />
             {
-                location.pathname=== "/profile" ? <Profile _id={connectedUser._id} validated={connectedUser.validated} createdAt={connectedUser.createdAt} email={connectedUser.email} nickname={connectedUser.nickname}/> : <Workspace/>
+                location.pathname=== "/profile" ?
+                    <Profile user={connectedUser} />
+                    :
+                    <Workspace workspaces={workspaces} getWorkspaces={getWorkspaces} errorMessage={errorMessage} setErrorMessage={setErrorMessage} setOpenAlert={setOpenAlert} openAlert={openAlert} handleClose={handleClose}/>
             }
         </Box>
     )

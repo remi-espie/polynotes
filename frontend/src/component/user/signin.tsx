@@ -84,7 +84,7 @@ function SignIn() {
     <div className={"login"}>
       <Container>
         <h2>Or log in</h2>
-        <form
+        <form className={"customForm"}
           onSubmit={(e) => {
             e.preventDefault();
             signIn();
