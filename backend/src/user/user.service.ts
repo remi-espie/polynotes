@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class UserService {
   constructor(
     @InjectModel(User.name)
-    private readonly model: Model<UserDocument>,
+    private model: Model<UserDocument>,
     private passwordProvider: PasswordProvider,
     private mailService: MailService,
   ) {}
@@ -40,8 +40,8 @@ export class UserService {
         user.password,
       )
     ) {
-      delete user.password;
-      delete user.token;
+      user.password = undefined;
+      user.token = undefined;
       return user;
     } else
       throw new HttpException('Invalid credential', HttpStatus.UNAUTHORIZED);
@@ -67,10 +67,9 @@ export class UserService {
       validated: false,
       token: token,
     }).save();
-
     await this.mailService.sendUserConfirmation(userDto, token);
-    delete user.password;
-    delete user.token;
+    user.password = undefined;
+    user.token = undefined;
     return user;
   }
 
