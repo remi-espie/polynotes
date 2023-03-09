@@ -143,7 +143,11 @@ export default function WorkspaceBar(props: {
     setCreationType(newCreationType);
   };
 
-  const getRandomName = () => {
+  const handleOpenCreate = () => {
+    setOpenCreate(true);
+  };
+
+  function getRandomName() {
     fetch("/random-name", {
       method: "GET",
       mode: "cors",
@@ -152,45 +156,39 @@ export default function WorkspaceBar(props: {
         "Content-Type": "application/json",
       },
     })
-      .then((resp) => resp.json())
-      .then((json) => {
-        setRandomName(json[0]);
-      });
-  };
+        .then((resp) => resp.json())
+        .then((json) => {
+          setRandomName(json[0]);
+        });
+  }
 
-  const handleOpenCreate = () => {
-    getRandomName();
-    setOpenCreate(true);
-  };
+  function uploadContent() {
+    setLoadingCreate(true);
+    const data = {
+      type: creationType,
+      name: name.current?.value,
+    };
 
-  useEffect(() => {
-    function uploadContent() {
-      setLoadingCreate(true);
-      const data = {
-        type: creationType,
-        name: name.current?.value,
-      };
-
-      const workspace: workspaceType | undefined = props.workspaces.find(
+    const workspace: workspaceType | undefined = props.workspaces.find(
         (workspace) => workspace._id === selectedWorkspace
-      );
-      let url = "/api/page/create";
-      if (workspace?.type === "folder") {
-        url += `/${workspace._id}`;
-      } else if (workspace?.type === "page") {
-        url += `/${workspace.parentId}`;
-      }
+    );
+    let url = "/api/page/create";
+    if (workspace?.type === "folder") {
+      url += `/${workspace._id}`;
+    } else if (workspace?.type === "page") {
+      url += `/${workspace.parentId}`;
+    }
 
-      fetch(url, {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-        credentials: "same-origin",
-      })
+    fetch(url, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+      credentials: "same-origin",
+    })
         .catch((err) => {
           console.error(err);
         })
@@ -207,11 +205,15 @@ export default function WorkspaceBar(props: {
           setLoadingCreate(false);
           props.getWorkspaces();
         });
-      setOpenCreate(false);
-    }
+    setOpenCreate(false);
+    setCreateContent(false);
+  }
+
+  useEffect(() => {
 
     if (createContent) {
       uploadContent();
+      getRandomName();
     }
   }, [createContent]);
 

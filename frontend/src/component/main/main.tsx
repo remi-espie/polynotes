@@ -25,7 +25,7 @@ function Main() {
                     navigate("/login");
                 } else {
                     resp.json().then(json => {
-                        setConnectedUser(json._doc);
+                        setConnectedUser(json);
                     })
                 }
             })
