@@ -210,7 +210,6 @@ export default function WorkspaceBar(props: {
   }
 
   useEffect(() => {
-
     if (createContent) {
       uploadContent();
       getRandomName();
