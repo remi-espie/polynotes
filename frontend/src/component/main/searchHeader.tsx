@@ -6,19 +6,23 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Alert, Autocomplete, Collapse, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { Folder } from "@mui/icons-material";
+import DescriptionIcon from "@mui/icons-material/Description";
 import { userType, workspaceType } from "../../types";
 
 function SearchHeader(props: { user: userType; workspaces: workspaceType[] }) {
   const [open, setOpen] = useState(props.user.validated);
+  const navigate = useNavigate();
 
   const list = props.workspaces.map((workspace) => {
     return {
       label: workspace.name,
       id: workspace._id,
+      type: workspace.type,
     };
   });
 
@@ -41,6 +45,7 @@ function SearchHeader(props: { user: userType; workspaces: workspaceType[] }) {
                 alignItems: "center",
               },
             }}
+            freeSolo
             options={list}
             renderInput={(params) => (
               <TextField
@@ -53,6 +58,26 @@ function SearchHeader(props: { user: userType; workspaces: workspaceType[] }) {
                 }
               />
             )}
+            renderOption={(props, option) => (
+              <li {...props}>
+                <>
+                  {option.type === "folder" ? <Folder /> : <DescriptionIcon />}
+                  {"  " + option.label}
+                </>
+              </li>
+            )}
+            onChange={(event, value) => {
+              if (value !== null && typeof value !== "string") {
+                const workspace: workspaceType | undefined =
+                  props.workspaces.find(
+                    (workspace) => workspace._id === value.id
+                  );
+                if (workspace !== undefined)
+                  navigate(`/home/${workspace?.type}/${workspace?._id}`);
+              } else {
+                navigate(`/home`);
+              }
+            }}
           />
           <Box sx={{ flexGrow: 1 }} />
           <Box>
