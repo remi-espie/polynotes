@@ -232,7 +232,7 @@ export default function WorkspaceBar(props: {
           key={workspace._id}
           onClick={() => {
             if (workspace.type === "page") {
-              navigate(`/page/${workspace._id}`);
+              navigate(`/home/page/${workspace._id}`);
             }
           }}
         >
@@ -269,7 +269,7 @@ export default function WorkspaceBar(props: {
 
       <TreeView
         aria-label="workspace"
-        defaultExpanded={["3"]}
+        defaultExpanded={["0"]}
         defaultCollapseIcon={<ArrowDropDownIcon />}
         defaultExpandIcon={<ArrowRightIcon />}
         defaultEndIcon={<div style={{ width: 24 }} />}

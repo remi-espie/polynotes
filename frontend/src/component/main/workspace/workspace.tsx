@@ -5,6 +5,7 @@ import WorkspaceRecent from "./workspaceRecent";
 import WorkspaceFile from "./workspaceFile";
 import { workspaceType } from "../../../types";
 import { useParams } from "react-router-dom";
+import WorkspacePage from "./workspacePage";
 
 function workspace(props: {
   workspaces: workspaceType[];
@@ -48,7 +49,7 @@ function workspace(props: {
             <WorkspaceRecent workspaces={props.workspaces} />
             <WorkspaceFile workspaces={props.workspaces} />
           </>
-        ) : null}
+        ) : <WorkspacePage workspaces={props.workspaces} />}
       </Box>
       <Snackbar
         open={props.openAlert}

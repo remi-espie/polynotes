@@ -33,15 +33,7 @@ export class PageService {
   }
 
   async create(pageDto: createPageDto, ownerid: string): Promise<PageDocument> {
-    return await new this.model({
-      owner: ownerid,
-      type: pageDto.type,
-      name: pageDto.name,
-      reader: [],
-      writer: [],
-      parentId: null,
-      modified: new Date(),
-    }).save();
+    return await this.createAt(null, pageDto, ownerid);
   }
 
   async createAt(
@@ -49,6 +41,42 @@ export class PageService {
     pageDto: createPageDto,
     ownerid: string,
   ): Promise<PageDocument> {
+    const firstColumn = [
+      {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [
+              {
+                type: 'text',
+                text: 'A new story begins...',
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const secondColumn = [
+      {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [
+              {
+                type: 'text',
+                text: '... with a new page',
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const defaultPage = [firstColumn, secondColumn];
+
     return await new this.model({
       owner: ownerid,
       type: pageDto.type,
@@ -57,6 +85,7 @@ export class PageService {
       writer: [],
       parentId: id,
       modified: new Date(),
+      subContent: JSON.stringify(defaultPage),
     }).save();
   }
 

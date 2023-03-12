@@ -24,7 +24,7 @@ export default function WorkspaceRecent(props: { workspaces: workspaceType[] }) 
             gridTemplateColumns: "repeat(auto-fill,minmax(150px,1fr)) !important",
             gridAutoColumns: "minmax(150px, 1fr)",
             overflowX: "scroll",
-
+            overflowY: "hidden",
         }}>
             {workspaces.map((workspace: workspaceType) => (
                 <ImageListItem sx={{cursor: "pointer"}} key={workspace._id} onClick={() => {
