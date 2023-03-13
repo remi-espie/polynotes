@@ -10,10 +10,19 @@ import ColumnExtension from "./column-extension";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
+import Commands from "./slashCommand-extension/commands.js";
+import getSuggestionItems from "./slashCommand-extension/items.js";
+import renderItems from "./slashCommand-extension/renderItems.jsx";
 
 export default function PageContent(props: { row: any[] }) {
   const editor = useEditor({
-    extensions: [StarterKit, ColumnExtension],
+    extensions: [StarterKit, ColumnExtension,
+        Commands.configure({
+            suggestion: {
+                items: getSuggestionItems,
+                render: renderItems
+            }
+        })],
     content: generateHTML(props.row, [Document, Paragraph, Text]),
   });
 

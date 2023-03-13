@@ -2,7 +2,7 @@ import WorkspaceBar from "./workspaceBar";
 import React from "react";
 import { Alert, AlertTitle, Box, Snackbar } from "@mui/material";
 import WorkspaceRecent from "./workspaceRecent";
-import WorkspaceFile from "./workspaceFile";
+import WorkspaceExplorer from "./workspaceExplorer";
 import { workspaceType } from "../../../types";
 import { useParams } from "react-router-dom";
 import WorkspacePage from "./workspacePage";
@@ -47,7 +47,7 @@ function workspace(props: {
         {type === undefined || type === "folder" ? (
           <>
             <WorkspaceRecent workspaces={props.workspaces} />
-            <WorkspaceFile workspaces={props.workspaces} />
+            <WorkspaceExplorer workspaces={props.workspaces} />
           </>
         ) : <WorkspacePage workspaces={props.workspaces} />}
       </Box>

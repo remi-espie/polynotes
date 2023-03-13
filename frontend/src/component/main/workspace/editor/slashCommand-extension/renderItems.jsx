@@ -1,6 +1,6 @@
 import { ReactRenderer } from "@tiptap/react";
 import tippy from "tippy.js";
-import CommandsList from "./commandList";
+import CommandsList from "./CommandsList";
 
 const renderItems = () => {
   let component;

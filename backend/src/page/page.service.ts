@@ -41,7 +41,7 @@ export class PageService {
     pageDto: createPageDto,
     ownerid: string,
   ): Promise<PageDocument> {
-    let defaultPage = null;
+    let defaultPage = [];
     if (pageDto.type === 'page')
       defaultPage = [
         {

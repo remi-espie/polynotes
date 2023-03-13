@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class CommandList extends Component {
+class CommandsList extends Component {
   state = {
     selectedIndex: 0
   };
@@ -80,4 +80,4 @@ class CommandList extends Component {
   }
 }
 
-export default CommandList;
+export default CommandsList;
