@@ -6,7 +6,7 @@ import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import { generateHTML } from "@tiptap/react";
 import { Box } from "@mui/material";
-import ColumnExtension from "../../../column-extension";
+import ColumnExtension from "./column-extension";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
