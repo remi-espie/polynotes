@@ -84,7 +84,10 @@ export default function WorkspaceFile(props: { workspaces: workspaceType[] }) {
                 {workspace.name}
               </TableCell>
               <TableCell>{workspace.owner}</TableCell>
-              <TableCell>{workspaceSize(workspace)}</TableCell>
+              <TableCell>
+                {workspace.type === "folder" ? JSON.parse(workspace.subContent).length + " files | " : null }
+                {workspaceSize(workspace)}
+              </TableCell>
               <TableCell>
                 {new Date(workspace.modified).toLocaleString()}
               </TableCell>

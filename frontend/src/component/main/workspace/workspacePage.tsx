@@ -1,12 +1,11 @@
 import {workspaceType} from "../../../types";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {Box, Button, Grid} from "@mui/material";
-import PageContent from "./pageContent";
+import PageContent from "./editor/pageContent";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from '@mui/icons-material/Delete';
-
 
 export default function WorkspacePage(props: { workspaces: workspaceType[] }) {
 
@@ -65,30 +64,20 @@ export default function WorkspacePage(props: { workspaces: workspaceType[] }) {
         },
     ];
 
-    function addColumn(index: number) {
+    function addRow() {
         setPageContent((prev) => {
             let newContent = prev
-            newContent.splice(index + 1, 0, defaultColumn)
+            newContent.push(defaultColumn[0])
             return newContent
         })
         setReloadKey(reloadKey + 1)
     }
 
-    function addRow(indexColumn: number) {
+    function deleteRow(indexRow:number) {
         setPageContent((prev) => {
             let newContent = prev
-            newContent[indexColumn].push(defaultColumn[0])
-            return newContent
-        })
-        setReloadKey(reloadKey + 1)
-        console.log(pageContent[indexColumn])
-    }
-
-    function deleteRow(indexCol:number, indexRow:number) {
-        setPageContent((prev) => {
-            let newContent = prev
-            newContent[indexCol].splice(indexRow, 1)
-            if (newContent[indexCol].length === 0) newContent.splice(indexCol, 1)
+            newContent.splice(indexRow, 1)
+            if (newContent.length === 0) newContent.splice(indexRow, 1)
             return newContent
         })
         setReloadKey(reloadKey + 1)
@@ -96,50 +85,46 @@ export default function WorkspacePage(props: { workspaces: workspaceType[] }) {
 
 
     return (
-        <Box display="grid" gridTemplateColumns="repeat(auto-fill, 1fr)" gridAutoColumns="minmax(40%, 1fr)"
-             gridAutoFlow="column" gap={8} sx={{overflowX: "scroll", height: "100%"}} key={reloadKey}>
-            {
-                pageContent.map((column: any[], indexCol: number) => {
-                    return (
-                        <Grid item xs={12} md={6} lg={6} key={indexCol}>
-                            <Box display="flex" flexDirection="row" sx={{width: "99%", overflowY: "scroll"}}>
-                                <Box sx={{width: "100%"}}>
-                                    {column.map((row: any, indexRow: number) => {
-                                        return (
-                                            <Box display="flex" flexDirection="row" sx={{width: "99%", margin: "auto"}}>
-                                                <PageContent row={row}/>
+      <Box>
+        {pageContent.map((row: any[], indexRow: number) => {
+          return (
+              <Box
+                display="flex"
+                flexDirection="row"
+                sx={{ width: "99%"}}
+                key={indexRow}
+              >
+                <Box sx={{ width: "99%", margin: "auto" }} display="flex" flexDirection="row" alignItems="center">
+                    <PageContent row={row} />
+                    <IconButton
+                        aria-label={"Delete row"}
+                        size={"small"}
+                        color={"error"}
+                        sx={{ height: 32, width: 32, marginTop: 2 }}
+                        onClick={() => {
+                            deleteRow(indexRow)
+                        }}
+                    >
+                        <DeleteIcon />
+                    </IconButton>
+                </Box>
+              </Box>
+          );
 
-                                                <IconButton aria-label={"Delete row"} size={"small"}
-                                                            color={"error"} sx={{height: 32, width: 32, marginTop: 2}}
-                                                            onClick={() => {
-                                                                deleteRow(indexCol, indexRow)
-                                                            }}>
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                            </Box>
-                                        )
-                                    })}
-                                </Box>
-                                <IconButton aria-label={"add column here"} size={"small"}
-                                            color={"secondary"} sx={{height: 32, width: 32, marginTop: 2}}
-                                            onClick={() => {
-                                                addColumn(indexCol)
-                                            }}>
-                                    <AddIcon/>
-                                </IconButton>
-                            </Box>
-                            <Button aria-label={"add row here"} size={"large"} color={"secondary"} variant="contained"
-                                    sx={{width: "80%"}} onClick={() => {
-                                addRow(indexCol)
-                            }
-                            }>
-                                <AddIcon/>
-                            </Button>
-                        </Grid>
-                    )
-                })
-            }
-        </Box>
-    )
+        })}
+          <Button
+              aria-label={"Add a new row"}
+              size={"large"}
+              color={"secondary"}
+              variant="contained"
+              sx={{ width: "80%" }}
+              onClick={() => {
+                  addRow();
+              }}
+          >
+              <AddIcon />
+          </Button>
+      </Box>
+    );
 }
 

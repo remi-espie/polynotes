@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@gocapsule/column-extension": "^1.0.0-beta-3",
     "@mui/icons-material": "^5.11.9",
     "@mui/lab": "^5.0.0-alpha.120",
     "@mui/material": "^5.11.10",
@@ -18,6 +19,7 @@
     "@tiptap/pm": "^2.0.0-beta.220",
     "@tiptap/react": "^2.0.0-beta.220",
     "@tiptap/starter-kit": "^2.0.0-beta.220",
+    "@tiptap/suggestion": "^2.0.0-beta.220",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.1"

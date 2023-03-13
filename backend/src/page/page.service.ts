@@ -41,41 +41,24 @@ export class PageService {
     pageDto: createPageDto,
     ownerid: string,
   ): Promise<PageDocument> {
-    const firstColumn = [
-      {
-        type: 'doc',
-        content: [
-          {
-            type: 'paragraph',
-            content: [
-              {
-                type: 'text',
-                text: 'A new story begins...',
-              },
-            ],
-          },
-        ],
-      },
-    ];
-
-    const secondColumn = [
-      {
-        type: 'doc',
-        content: [
-          {
-            type: 'paragraph',
-            content: [
-              {
-                type: 'text',
-                text: '... with a new page',
-              },
-            ],
-          },
-        ],
-      },
-    ];
-
-    const defaultPage = [firstColumn, secondColumn];
+    let defaultPage = null;
+    if (pageDto.type === 'page')
+      defaultPage = [
+        {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [
+                {
+                  type: 'text',
+                  text: 'A new story begins...',
+                },
+              ],
+            },
+          ],
+        },
+      ];
 
     return await new this.model({
       owner: ownerid,

@@ -11,7 +11,7 @@
 
 [NestJS](https://nestjs.com/)+[Fastify](https://www.fastify.io/) backend with [MongoDB](https://www.mongodb.com) database !
 
-Email validation through [Elastic Email](https://elasticemail.com) !
+Email validation through any SMTP service !
 
 [ReactJS 18](https://fr.reactjs.org/)+[ViteJS](https://vitejs.dev/) frontend, with [MaterialUI](https://mui.com/) for CSS !
 
