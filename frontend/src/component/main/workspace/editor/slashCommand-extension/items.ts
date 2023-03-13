@@ -1,8 +1,10 @@
-const getSuggestionItems = (query) => {
+import {Editor, Range} from "@tiptap/core";
+
+const getSuggestionItems = (query: { query: string; }) => {
     return [
         {
             title: "H1",
-            command: ({editor, range}) => {
+            command: ({editor, range} : {editor: Editor, range: Range}) => {
                 editor
                     .chain()
                     .focus()
@@ -13,7 +15,7 @@ const getSuggestionItems = (query) => {
         },
         {
             title: "H2",
-            command: ({editor, range}) => {
+            command: ({editor, range} : {editor: Editor, range: Range}) => {
                 editor
                     .chain()
                     .focus()
@@ -24,7 +26,7 @@ const getSuggestionItems = (query) => {
         },
         {
             title: "H3",
-            command: ({editor, range}) => {
+            command: ({editor, range} : {editor: Editor, range: Range}) => {
                 editor
                     .chain()
                     .focus()
@@ -35,7 +37,7 @@ const getSuggestionItems = (query) => {
         },
         {
             title: "H4",
-            command: ({editor, range}) => {
+            command: ({editor, range} : {editor: Editor, range: Range}) => {
                 editor
                     .chain()
                     .focus()
@@ -46,7 +48,7 @@ const getSuggestionItems = (query) => {
         },
         {
             title: "H5",
-            command: ({editor, range}) => {
+            command: ({editor, range} : {editor: Editor, range: Range}) => {
                 editor
                     .chain()
                     .focus()
@@ -57,7 +59,7 @@ const getSuggestionItems = (query) => {
         },
         {
             title: "Paragraph",
-            command: ({editor, range}) => {
+            command: ({editor, range} : {editor: Editor, range: Range}) => {
                 editor
                     .chain()
                     .focus()
@@ -68,9 +70,9 @@ const getSuggestionItems = (query) => {
         },
         {
             title: "Column",
-            command: ({editor, range}) => {
+            command: ({editor, range} : {editor: Editor, range: Range}) => {
                 const pos = editor.view.state.selection.from
-                if (editor.view.domAtPos(pos).node !== null && (editor.view.domAtPos(pos).node.parentNode.classList.contains("column"))) {
+                if (editor.view.domAtPos(pos).node !== null && (editor.view.domAtPos(pos).node!.parentNode! as HTMLElement).classList.contains("column")) {
                     editor
                         .chain()
                         .focus()
@@ -89,19 +91,19 @@ const getSuggestionItems = (query) => {
         },
         {
             title: "bold",
-            command: ({editor, range}) => {
+            command: ({editor, range} : {editor: Editor, range: Range}) => {
                 editor.chain().focus().deleteRange(range).setMark("bold").run();
             }
         },
         {
             title: "italic",
-            command: ({editor, range}) => {
+            command: ({editor, range} : {editor: Editor, range: Range}) => {
                 editor.chain().focus().deleteRange(range).setMark("italic").run();
             }
         },
         {
             title: "image",
-            command: ({editor, range}) => {
+            command: ({editor, range} : {editor: Editor, range: Range}) => {
                 console.log("call some function from parent");
                 editor.chain().focus().deleteRange(range).setNode("paragraph").run();
             }

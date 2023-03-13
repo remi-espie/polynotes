@@ -10,19 +10,11 @@ import ColumnExtension from "./column-extension";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
-import Commands from "./slashCommand-extension/commands.js";
-import getSuggestionItems from "./slashCommand-extension/items.js";
-import renderItems from "./slashCommand-extension/renderItems.jsx";
+import Commands from "./slashCommand-extension/commands";
 
 export default function PageContent(props: { row: any[] }) {
   const editor = useEditor({
-    extensions: [StarterKit, ColumnExtension,
-        Commands.configure({
-            suggestion: {
-                items: getSuggestionItems,
-                render: renderItems
-            }
-        })],
+    extensions: [StarterKit, ColumnExtension, Commands],
     content: generateHTML(props.row, [Document, Paragraph, Text]),
   });
 
@@ -39,7 +31,7 @@ export default function PageContent(props: { row: any[] }) {
           sx={{ height: 32, width: 32 }}
           onClick={() => {
               const pos = editor!.view.state.selection.from
-              if (editor!.view.domAtPos(pos).node !== null && (editor!.view.domAtPos(pos).node.parentNode!.classList.contains("column"))) {
+              if (editor!.view.domAtPos(pos).node !== null && (editor!.view.domAtPos(pos).node.parentNode! as HTMLElement).classList.contains("column")) {
                   editor!.chain().focus().insertColumns().run();
               }
               else editor!.chain().focus().setColumns(2).run();
@@ -54,7 +46,7 @@ export default function PageContent(props: { row: any[] }) {
           sx={{ height: 32, width: 32 }}
           onClick={() => {
               const pos = editor!.view.state.selection.from
-              if (editor!.view.domAtPos(pos).node !== null && editor!.view.domAtPos(pos).node.parentNode!.classList.contains("column")) {
+              if (editor!.view.domAtPos(pos).node !== null && (editor!.view.domAtPos(pos).node.parentNode! as HTMLElement).classList.contains("column")) {
                   const nbColumn = editor!.view.domAtPos(pos).node.parentNode!.parentNode!.children.length
                   if (nbColumn>2) {
                       editor!.chain().focus().unsetColumns().setColumns(nbColumn - 1).run()

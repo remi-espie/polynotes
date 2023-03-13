@@ -1,7 +1,7 @@
 import {workspaceType} from "../../../types";
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {Box, Button, Grid} from "@mui/material";
+import {Box, Button} from "@mui/material";
 import PageContent from "./editor/pageContent";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
@@ -73,7 +73,7 @@ export default function WorkspacePage(props: { workspaces: workspaceType[] }) {
         setReloadKey(reloadKey + 1)
     }
 
-    function deleteRow(indexRow:number) {
+    function deleteRow(indexRow: number) {
         setPageContent((prev) => {
             let newContent = prev
             newContent.splice(indexRow, 1)
@@ -85,46 +85,46 @@ export default function WorkspacePage(props: { workspaces: workspaceType[] }) {
 
 
     return (
-      <Box>
-        {pageContent.map((row: any[], indexRow: number) => {
-          return (
-              <Box
-                display="flex"
-                flexDirection="row"
-                sx={{ width: "99%"}}
-                key={indexRow}
-              >
-                <Box sx={{ width: "99%", margin: "auto" }} display="flex" flexDirection="row" alignItems="center">
-                    <PageContent row={row} />
-                    <IconButton
-                        aria-label={"Delete row"}
-                        size={"small"}
-                        color={"error"}
-                        sx={{ height: 32, width: 32, marginTop: 2 }}
-                        onClick={() => {
-                            deleteRow(indexRow)
-                        }}
+        <Box>
+            {pageContent.map((row: any[], indexRow: number) => {
+                return (
+                    <Box
+                        display="flex"
+                        flexDirection="row"
+                        sx={{width: "99%"}}
+                        key={indexRow}
                     >
-                        <DeleteIcon />
-                    </IconButton>
-                </Box>
-              </Box>
-          );
+                        <Box sx={{width: "99%", margin: "auto"}} display="flex" flexDirection="row" alignItems="center">
+                            <PageContent row={row}/>
+                            <IconButton
+                                aria-label={"Delete row"}
+                                size={"small"}
+                                color={"error"}
+                                sx={{height: 32, width: 32, marginTop: 2}}
+                                onClick={() => {
+                                    deleteRow(indexRow)
+                                }}
+                            >
+                                <DeleteIcon/>
+                            </IconButton>
+                        </Box>
+                    </Box>
+                );
 
-        })}
-          <Button
-              aria-label={"Add a new row"}
-              size={"large"}
-              color={"secondary"}
-              variant="contained"
-              sx={{ width: "80%" }}
-              onClick={() => {
-                  addRow();
-              }}
-          >
-              <AddIcon />
-          </Button>
-      </Box>
+            })}
+            <Button
+                aria-label={"Add a new row"}
+                size={"large"}
+                color={"secondary"}
+                variant="contained"
+                sx={{width: "80%"}}
+                onClick={() => {
+                    addRow();
+                }}
+            >
+                <AddIcon/>
+            </Button>
+        </Box>
     );
 }
 
