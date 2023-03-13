@@ -18,7 +18,7 @@ export class User {
   createdAt: Date;
 
   @Prop({ required: true })
-  validated: Boolean;
+  validated: boolean;
 
   @Prop()
   token: string;
