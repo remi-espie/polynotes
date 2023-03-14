@@ -3,11 +3,12 @@ import React from "react";
 import { Alert, AlertTitle, Box, Snackbar } from "@mui/material";
 import WorkspaceRecent from "./workspaceRecent";
 import WorkspaceExplorer from "./workspaceExplorer";
-import { workspaceType } from "../../../types";
+import {userType, workspaceType} from "../../../types";
 import { useParams } from "react-router-dom";
 import WorkspacePage from "./workspacePage";
 
 function workspace(props: {
+    user: userType;
   workspaces: workspaceType[];
   getWorkspaces: () => void;
   setErrorMessage: (value: string) => void;
@@ -28,19 +29,21 @@ function workspace(props: {
         marginTop: "4em",
       }}
     >
-      <Box>
-        <WorkspaceBar
-          workspaces={props.workspaces}
-          setErrorMessage={props.setErrorMessage}
-          setOpenAlert={props.setOpenAlert}
-          getWorkspaces={props.getWorkspaces}
-        />
-      </Box>
+      {Object.keys(props.user).length !== 0  ? (
+        <Box>
+          <WorkspaceBar
+            workspaces={props.workspaces}
+            setErrorMessage={props.setErrorMessage}
+            setOpenAlert={props.setOpenAlert}
+            getWorkspaces={props.getWorkspaces}
+          />
+        </Box>
+      ) : null}
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
-          width: "calc(100% - 325px)",
+          width: "100%",
           marginLeft: "20px",
         }}
       >
@@ -49,7 +52,9 @@ function workspace(props: {
             <WorkspaceRecent workspaces={props.workspaces} />
             <WorkspaceExplorer workspaces={props.workspaces} />
           </>
-        ) : <WorkspacePage workspaces={props.workspaces} />}
+        ) : (
+          <WorkspacePage workspaces={props.workspaces} user={props.user} />
+        )}
       </Box>
       <Snackbar
         open={props.openAlert}

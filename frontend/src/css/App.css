@@ -39,3 +39,30 @@ form {
 .customForm > button{
   margin-bottom: 1em !important;
 }
+
+
+
+.ProseMirror .column-block {
+  width: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 24px;
+  padding: 8px 0;
+}
+
+.ProseMirror .column {
+  overflow: auto;
+  border: 1px gray dashed;
+  border-radius: 8px;
+  padding: 8px;
+  margin: -8px;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}

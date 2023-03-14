@@ -1,62 +1,49 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import React from "react";
+import React, {useEffect} from "react";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import { generateHTML } from "@tiptap/react";
 import { Box } from "@mui/material";
 import ColumnExtension from "./column-extension";
-import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 import Commands from "./slashCommand-extension/commands";
+import { Placeholder } from "@tiptap/extension-placeholder";
+import { Underline } from "@tiptap/extension-underline";
+import { Subscript } from "@tiptap/extension-subscript";
+import { Superscript } from "@tiptap/extension-superscript";
+import { Image } from "@tiptap/extension-image";
+import { Link } from "@tiptap/extension-link";
 
-export default function PageContent(props: { row: any[] }) {
+export default function PageContent(props: { row: any[], editable: boolean }) {
   const editor = useEditor({
-    extensions: [StarterKit, ColumnExtension, Commands],
+    extensions: [
+      StarterKit,
+      ColumnExtension,
+      Underline,
+      Subscript,
+      Superscript,
+      Commands,
+      Image,
+      Link.configure({
+        protocols: ["ftp", "mailto", "tel"],
+      }),
+      Placeholder.configure({
+        placeholder: "A new story begins...",
+      }),
+    ],
     content: generateHTML(props.row, [Document, Paragraph, Text]),
+    editable: props.editable
   });
+
+  useEffect(() => {
+    editor?.setEditable(props.editable)
+  }, [props.editable])
 
   return (
     <Box sx={{ width: "inherit" }} display="flex" flexDirection="row">
       <Box sx={{ width: "inherit" }}>
         <EditorContent editor={editor} />
-      </Box>
-      <Box display="flex" flexDirection="column" alignSelf="center">
-        <IconButton
-          aria-label={"add column here"}
-          size={"small"}
-          color={"primary"}
-          sx={{ height: 32, width: 32 }}
-          onClick={() => {
-              const pos = editor!.view.state.selection.from
-              if (editor!.view.domAtPos(pos).node !== null && (editor!.view.domAtPos(pos).node.parentNode! as HTMLElement).classList.contains("column")) {
-                  editor!.chain().focus().insertColumns().run();
-              }
-              else editor!.chain().focus().setColumns(2).run();
-          }}
-        >
-          <ViewColumnIcon />
-        </IconButton>
-        <IconButton
-          aria-label={"Delete columns"}
-          size={"small"}
-          color={"warning"}
-          sx={{ height: 32, width: 32 }}
-          onClick={() => {
-              const pos = editor!.view.state.selection.from
-              if (editor!.view.domAtPos(pos).node !== null && (editor!.view.domAtPos(pos).node.parentNode! as HTMLElement).classList.contains("column")) {
-                  const nbColumn = editor!.view.domAtPos(pos).node.parentNode!.parentNode!.children.length
-                  if (nbColumn>2) {
-                      editor!.chain().focus().unsetColumns().setColumns(nbColumn - 1).run()
-                  }
-                  else editor!.chain().focus().unsetColumns().run();
-              }
-          }}
-        >
-          <DeleteIcon />
-        </IconButton>
       </Box>
     </Box>
   );

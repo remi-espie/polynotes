@@ -15,7 +15,7 @@ function Main() {
 
     const [openAlert, setOpenAlert] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const [workspaces, setWorkspaces] = useState<any>([]);
+    const [workspaces, setWorkspaces] = useState<workspaceType[]>([]);
 
     const [connectedUser, setConnectedUser] = useState({} as userType);
 
@@ -23,6 +23,7 @@ function Main() {
     const location = useLocation()
 
     async function isLoggedIn() {
+        if (!location.pathname.includes("/home/page/") && !location.pathname.includes("/home/folder/")) {
         fetch('/api/user')
             .then(resp => {
                 if (resp.status !== 200) {
@@ -33,6 +34,7 @@ function Main() {
                     })
                 }
             })
+        }
     }
 
     function getWorkspaces() {
@@ -81,7 +83,7 @@ function Main() {
                 location.pathname=== "/profile" ?
                     <Profile user={connectedUser} />
                     :
-                    <Workspace workspaces={workspaces} getWorkspaces={getWorkspaces} errorMessage={errorMessage} setErrorMessage={setErrorMessage} setOpenAlert={setOpenAlert} openAlert={openAlert} handleClose={handleClose}/>
+                    <Workspace user={connectedUser} workspaces={workspaces} getWorkspaces={getWorkspaces} errorMessage={errorMessage} setErrorMessage={setErrorMessage} setOpenAlert={setOpenAlert} openAlert={openAlert} handleClose={handleClose}/>
             }
         </Box>
     )

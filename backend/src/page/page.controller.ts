@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
+  Get, HttpException, HttpStatus,
   Param,
   Patch,
   Post,
@@ -23,15 +23,17 @@ export class PageController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
-  async find(@Param('id') id: string) {
-    return await this.service.findById(id);
+  async find(@Req() request, @Param('id') id: string) {
+    if (request.user) return await this.service.findById(id, request.user.id);
+    else return await this.service.findById(id, 'anon');
   }
 
   @Get('')
   @UseGuards(JwtAuthGuard)
   async findUser(@Req() request) {
-    return await this.service.findByUser(request.user.id);
+    console.log(request.user)
+    if (request.user) return await this.service.findByUser(request.user.id);
+    else throw new HttpException("Anonymous user", HttpStatus.ACCEPTED)
   }
 
   @Post('/create')
@@ -52,8 +54,9 @@ export class PageController {
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
-  async update(@Param('id') id: string, @Body() pageDto: PageDto) {
-    return await this.service.update(id, pageDto);
+  async update(@Param('id') id: string, @Body() pageDto: PageDto, @Req() request) {
+    if (request.user) return await this.service.update(id, pageDto, request.user.id);
+    else return await this.service.update(id, pageDto, 'anon');
   }
 
   @Delete(':id')

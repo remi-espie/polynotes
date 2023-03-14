@@ -1,4 +1,4 @@
-import {workspaceType} from "../../../types";
+import {userType, workspaceType} from "../../../types";
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {Box, Button} from "@mui/material";
@@ -7,17 +7,20 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function WorkspacePage(props: { workspaces: workspaceType[] }) {
+export default function WorkspacePage(props: { workspaces: workspaceType[], user: userType }) {
 
     const navigate = useNavigate();
     let {id} = useParams();
     let workspace: workspaceType | undefined;
 
     const [pageContent, setPageContent] = useState<any[]>([])
+    const [editable, setEditable] = useState<boolean>(false)
     const [reloadKey, setReloadKey] = useState<number>(0)
 
     let subContent: any[] = [];
     let changeContent = false;
+
+    let fetchWorkspace = false;
 
 
     if (id === undefined) {
@@ -27,7 +30,7 @@ export default function WorkspacePage(props: { workspaces: workspaceType[] }) {
             (workspace: workspaceType) => workspace._id === id
         )
 
-        if (workspace === undefined) navigate("/home");
+        if (workspace === undefined) fetchWorkspace = true
         else {
             subContent = JSON.parse(workspace.subContent)
             changeContent = true
@@ -36,8 +39,41 @@ export default function WorkspacePage(props: { workspaces: workspaceType[] }) {
     }
 
     useEffect(() => {
+        function getWorkspace() {
+            fetch(`/api/page/${id}`, {
+                method: "GET",
+                mode: "cors",
+                headers: {
+                    // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
+                    "Content-Type": "application/json"
+                },
+                credentials: "same-origin"
+            })
+                .catch((err) => {
+                    console.error(err);
+                })
+                .then(async (resp) => {
+                    if (resp?.status === 200) {
+                        workspace = await resp.json();
+                        subContent = JSON.parse(workspace?.subContent as string)
+                        setEditable((workspace?.owner === props.user._id || workspace?.writer.includes("anon")) as boolean)
+                        setPageContent(subContent)
+                    } else {
+                        navigate("/login");
+                    }
+                });
+        }
+        if (fetchWorkspace){
+            getWorkspace()
+            fetchWorkspace = false
+        }
+
+    }, [fetchWorkspace])
+
+    useEffect(() => {
         function changeContentState() {
             setPageContent(subContent)
+            setEditable((workspace?.owner === props.user._id || workspace?.writer.includes("anon")) as boolean)
         }
 
         if (changeContent) {
@@ -54,10 +90,6 @@ export default function WorkspacePage(props: { workspaces: workspaceType[] }) {
                 {
                     type: 'paragraph',
                     content: [
-                        {
-                            type: 'text',
-                            text: 'Write your story !',
-                        },
                     ],
                 },
             ],
@@ -83,7 +115,6 @@ export default function WorkspacePage(props: { workspaces: workspaceType[] }) {
         setReloadKey(reloadKey + 1)
     }
 
-
     return (
         <Box>
             {pageContent.map((row: any[], indexRow: number) => {
@@ -95,7 +126,7 @@ export default function WorkspacePage(props: { workspaces: workspaceType[] }) {
                         key={indexRow}
                     >
                         <Box sx={{width: "99%", margin: "auto"}} display="flex" flexDirection="row" alignItems="center">
-                            <PageContent row={row}/>
+                            <PageContent row={row} editable={editable}/>
                             <IconButton
                                 aria-label={"Delete row"}
                                 size={"small"}

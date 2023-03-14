@@ -88,7 +88,7 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
       };
 
     const setColumns =
-      (n: number, keepContent = true) =>
+      (n: number, keepContent = false) =>
       ({ tr, dispatch }: CommandProps) => {
         try {
           const { doc, selection } = tr;
@@ -110,7 +110,6 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
           let columnBlock;
           if (keepContent) {
             const content = sel.content().toJSON();
-            console.log(content)
             const firstColumn = buildColumn(content);
             const otherColumns = buildNColumns(n - 1);
             columnBlock = buildColumnBlock({
@@ -180,8 +179,7 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
         }
 
         tr = tr.setSelection(sel);
-
-        tr = tr.insert(sel.$to.pos, col);
+        tr = tr.insert(sel._$to.pos, col);
         return dispatch(tr);
       } catch (error) {
         console.error(error);
