@@ -27,7 +27,7 @@ export default function WorkspaceRecent(props: { workspaces: workspaceType[] }) 
             overflowY: "hidden",
         }}>
             {workspaces.map((workspace: workspaceType) => (
-                <ImageListItem sx={{cursor: "pointer"}} key={workspace.id} onClick={() => {
+                <ImageListItem sx={{cursor: "pointer", height:"calc(100% - 25px) !important"}} key={workspace.id} onClick={() => {
                     if (workspace.type === "folder") {
                         navigate(`/home/folder/${workspace.id}`)
                     } else {
@@ -35,7 +35,7 @@ export default function WorkspaceRecent(props: { workspaces: workspaceType[] }) 
                     }
                 }
                 }>
-                    <img src={workspace.type === "folder" ? folder : description} alt={workspace.type}/>
+                    <img src={workspace.type === "folder" ? folder : description} alt={workspace.type} style={{ height:"calc(100% - 25px)"}}/>
                     <ImageListItemBar
                         title={workspace.name}
                     />
