@@ -73,7 +73,7 @@ function SearchHeader(props: { user: userType; workspaces: workspaceType[] }) {
                     (workspace) => workspace.id === value.id
                   );
                 if (workspace !== undefined)
-                  navigate(`/home/${workspace?.type}/${workspace?._id}`);
+                  navigate(`/home/${workspace?.type}/${workspace?.id}`);
               } else {
                 navigate(`/home`);
               }
