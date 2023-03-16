@@ -1,5 +1,5 @@
 export type userType = {
-    _id: string,
+    id: string,
     nickname: string,
     email: string,
     validated: boolean,
@@ -7,7 +7,7 @@ export type userType = {
 }
 
 export type workspaceType = {
-    _id: string;
+    id: string;
 
     owner: string;
 

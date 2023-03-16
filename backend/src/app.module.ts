@@ -7,13 +7,19 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { MailModule } from './mail/mail.module';
 import { PageModule } from './page/page.module';
+import { sanitizePlugin } from './provider/sanitizePlugin';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot('mongodb://mongodb:27017/polynotes'),
+    MongooseModule.forRoot('mongodb://mongodb:27017/polynotes', {
+      connectionFactory: (connection) => {
+        connection.plugin(sanitizePlugin);
+        return connection;
+      },
+    }),
     UserModule,
     AuthModule,
     MailModule,

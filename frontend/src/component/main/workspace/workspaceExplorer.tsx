@@ -25,7 +25,7 @@ export default function WorkspaceExplorer(props: { workspaces: workspaceType[] }
     } else {
         if (
             props.workspaces.find(
-                (workspace: workspaceType) => workspace._id === id
+                (workspace: workspaceType) => workspace.id === id
             ) === undefined
         ) {
             navigate("/home");
@@ -66,16 +66,16 @@ export default function WorkspaceExplorer(props: { workspaces: workspaceType[] }
                 <TableBody>
                     {workspaces.map((workspace: workspaceType) => (
                         <TableRow
-                            key={workspace._id}
+                            key={workspace.id}
                             sx={{
                                 "&:last-child td, &:last-child th": {border: 0},
                                 cursor: "pointer",
                             }}
                             onClick={() => {
                                 if (workspace.type === "folder") {
-                                    navigate(`/home/folder/${workspace._id}`);
+                                    navigate(`/home/folder/${workspace.id}`);
                                 } else {
-                                    navigate(`/home/page/${workspace._id}`);
+                                    navigate(`/home/page/${workspace.id}`);
                                 }
                             }}
                         >
@@ -87,7 +87,7 @@ export default function WorkspaceExplorer(props: { workspaces: workspaceType[] }
                             <TableCell>
                                 {workspace.type === "folder" ? props.workspaces.filter(
                                     (workspace2: workspaceType) =>
-                                        workspace2.parentId === workspace._id).length + " files | " : null}
+                                        workspace2.parentId === workspace.id).length + " files | " : null}
                                 {workspaceSize(workspace)}
                             </TableCell>
                             <TableCell>

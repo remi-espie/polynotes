@@ -26,7 +26,7 @@ function workspace(props: {
         flexDirection: "row",
         width: "100%",
         height: "90vh",
-        marginTop: "4em",
+        marginTop: "4em"
       }}
     >
       {Object.keys(props.user).length !== 0  ? (
@@ -39,14 +39,7 @@ function workspace(props: {
           />
         </Box>
       ) : null}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          marginLeft: "20px",
-        }}
-      >
+      <Box display="flex" flexDirection="column" width="80%" margin="0 auto">
         {type === undefined || type === "folder" ? (
           <>
             <WorkspaceRecent workspaces={props.workspaces} />

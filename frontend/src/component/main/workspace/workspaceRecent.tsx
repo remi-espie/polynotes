@@ -27,11 +27,11 @@ export default function WorkspaceRecent(props: { workspaces: workspaceType[] }) 
             overflowY: "hidden",
         }}>
             {workspaces.map((workspace: workspaceType) => (
-                <ImageListItem sx={{cursor: "pointer"}} key={workspace._id} onClick={() => {
+                <ImageListItem sx={{cursor: "pointer"}} key={workspace.id} onClick={() => {
                     if (workspace.type === "folder") {
-                        navigate(`/home/folder/${workspace._id}`)
+                        navigate(`/home/folder/${workspace.id}`)
                     } else {
-                        navigate(`/home/page/${workspace._id}`)
+                        navigate(`/home/page/${workspace.id}`)
                     }
                 }
                 }>

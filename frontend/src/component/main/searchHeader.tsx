@@ -21,7 +21,7 @@ function SearchHeader(props: { user: userType; workspaces: workspaceType[] }) {
   const list = props.workspaces.map((workspace) => {
     return {
       label: workspace.name,
-      id: workspace._id,
+      id: workspace.id,
       type: workspace.type,
     };
   });
@@ -70,7 +70,7 @@ function SearchHeader(props: { user: userType; workspaces: workspaceType[] }) {
               if (value !== null && typeof value !== "string") {
                 const workspace: workspaceType | undefined =
                   props.workspaces.find(
-                    (workspace) => workspace._id === value.id
+                    (workspace) => workspace.id === value.id
                   );
                 if (workspace !== undefined)
                   navigate(`/home/${workspace?.type}/${workspace?._id}`);

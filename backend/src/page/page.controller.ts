@@ -36,13 +36,13 @@ export class PageController {
     else throw new HttpException("Anonymous user", HttpStatus.ACCEPTED)
   }
 
-  @Post('/create')
+  @Post('')
   @UseGuards(JwtAuthGuard)
   async create(@Body() pageDto: createPageDto, @Req() request) {
     return await this.service.create(pageDto, request.user.id);
   }
 
-  @Post('/create/:id')
+  @Post('/:id')
   @UseGuards(JwtAuthGuard)
   async createAt(
     @Param('id') id: string,

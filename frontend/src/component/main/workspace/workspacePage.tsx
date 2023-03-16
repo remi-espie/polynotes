@@ -27,7 +27,7 @@ export default function WorkspacePage(props: { workspaces: workspaceType[], user
         navigate("/home");
     } else {
         workspace = props.workspaces.find(
-            (workspace: workspaceType) => workspace._id === id
+            (workspace: workspaceType) => workspace.id === id
         )
 
         if (workspace === undefined) fetchWorkspace = true
@@ -56,7 +56,7 @@ export default function WorkspacePage(props: { workspaces: workspaceType[], user
                     if (resp?.status === 200) {
                         workspace = await resp.json();
                         subContent = JSON.parse(workspace?.subContent as string)
-                        setEditable((workspace?.owner === props.user._id || workspace?.writer.includes("anon")) as boolean)
+                        setEditable((workspace?.owner === props.user.id || workspace?.writer.includes("anon")) as boolean)
                         setPageContent(subContent)
                     } else {
                         navigate("/login");
@@ -73,7 +73,7 @@ export default function WorkspacePage(props: { workspaces: workspaceType[], user
     useEffect(() => {
         function changeContentState() {
             setPageContent(subContent)
-            setEditable((workspace?.owner === props.user._id || workspace?.writer.includes("anon")) as boolean)
+            setEditable((workspace?.owner === props.user.id || workspace?.writer.includes("anon")) as boolean)
         }
 
         if (changeContent) {

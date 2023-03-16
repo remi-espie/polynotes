@@ -172,18 +172,18 @@ export default function WorkspaceBar(props: {
         };
 
         const workspace: workspaceType | undefined = props.workspaces.find(
-            (workspace) => workspace._id === selectedWorkspace
+            (workspace) => workspace.id === selectedWorkspace
         );
-        let url = "/api/page/create";
+        let url = "/api/page";
 
         if (workspace === undefined) {
             if (id !== undefined && props.workspaces.find(
-                (workspace) => workspace._id === id
+                (workspace) => workspace.id === id
             )!.type === "folder") {
                 url += `/${id}`;
             }
         } else if (workspace?.type === "folder") {
-            url += `/${workspace._id}`;
+            url += `/${workspace.id}`;
         } else if (workspace?.type === "page") {
             url += `/${workspace.parentId}`;
         }
@@ -235,17 +235,17 @@ export default function WorkspaceBar(props: {
         return workspaceParent.map((workspace: workspaceType) => {
             return (
                 <StyledTreeItem
-                    nodeId={workspace._id}
+                    nodeId={workspace.id}
                     labelIcon={workspace.type === "folder" ? Folder : DescriptionIcon}
                     labelText={workspace.name}
-                    key={workspace._id}
+                    key={workspace.id}
                     onClick={() => {
                         if (workspace.type === "page") {
-                            navigate(`/home/page/${workspace._id}`);
+                            navigate(`/home/page/${workspace.id}`);
                         }
                     }}
                 >
-                    {displayWorkspace(workspaces, workspace._id)}
+                    {displayWorkspace(workspaces, workspace.id)}
                 </StyledTreeItem>
             );
         });
@@ -324,7 +324,7 @@ export default function WorkspaceBar(props: {
                 <DialogTitle id="alert-dialog-title">
                     {"Create new page in " +
                         props.workspaces.filter(
-                            (workspace: workspaceType) => workspace._id === selectedWorkspace
+                            (workspace: workspaceType) => workspace.id === selectedWorkspace
                         )[0]?.name +
                         "?"}
                 </DialogTitle>
