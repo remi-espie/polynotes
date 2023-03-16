@@ -27,7 +27,7 @@ export class Page {
   parentId: string;
 
   @Prop()
-  subContent: string;
+  subContent: [];
 }
 
 export const PageSchema = SchemaFactory.createForClass(Page);

@@ -1,10 +1,6 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import React, {useEffect} from "react";
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from "@tiptap/extension-text";
-import { generateHTML } from "@tiptap/react";
 import { Box } from "@mui/material";
 import ColumnExtension from "./column-extension";
 import Commands from "./slashCommand-extension/commands";
@@ -14,8 +10,10 @@ import { Subscript } from "@tiptap/extension-subscript";
 import { Superscript } from "@tiptap/extension-superscript";
 import { Image } from "@tiptap/extension-image";
 import { Link } from "@tiptap/extension-link";
+import { useDebounce } from 'use-debounce';
+import {JSONContent} from "@tiptap/core";
 
-export default function PageContent(props: { row: any[], editable: boolean }) {
+export default function PageContent(props: { row: JSONContent, editable: boolean, setSendPage: (state:boolean) => void, setPageContent:  React.Dispatch<React.SetStateAction<any[]>>, index:number }) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -32,7 +30,7 @@ export default function PageContent(props: { row: any[], editable: boolean }) {
         placeholder: "A new story begins...",
       }),
     ],
-    content: generateHTML(props.row, [Document, Paragraph, Text]),
+    content: props.row,
     editable: props.editable
   });
 
@@ -40,11 +38,23 @@ export default function PageContent(props: { row: any[], editable: boolean }) {
     editor?.setEditable(props.editable)
   }, [props.editable])
 
+  const [debouncedEditor] = useDebounce(editor?.state.doc.content, 1000);
+
+  useEffect(() => {
+    if (debouncedEditor) {
+      props.setPageContent((prev) => {
+        let newContent = prev
+        newContent[props.index] = editor!.getJSON()
+        return newContent
+      })
+      props.setSendPage(true)
+    }
+  }, [debouncedEditor]);
+
+
   return (
-    <Box sx={{ width: "inherit" }} display="flex" flexDirection="row">
       <Box sx={{ width: "inherit" }}>
-        <EditorContent editor={editor} />
+        <EditorContent editor={editor}/>
       </Box>
-    </Box>
   );
 }

@@ -74,7 +74,6 @@ function Main() {
         setOpenAlert(false);
     };
 
-
     return (
         <Box className="App">
             <SearchHeader user={connectedUser} workspaces={workspaces}/>

@@ -69,7 +69,7 @@ export class PageService {
       writer: [],
       parentId: id,
       modified: new Date(),
-      subContent: JSON.stringify(defaultPage),
+      subContent: defaultPage,
     }).save();
   }
 

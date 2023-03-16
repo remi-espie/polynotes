@@ -23,5 +23,5 @@ export type workspaceType = {
 
     parentId: string;
 
-    subContent: string
+    subContent: any[]
 }

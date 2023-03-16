@@ -1,11 +1,12 @@
 import {userType, workspaceType} from "../../../types";
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {Box, Button} from "@mui/material";
+import {Alert, AlertTitle, Box, Button, Snackbar} from "@mui/material";
 import PageContent from "./editor/pageContent";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from '@mui/icons-material/Delete';
+import {JSONContent} from "@tiptap/core";
 
 export default function WorkspacePage(props: { workspaces: workspaceType[], user: userType }) {
 
@@ -32,7 +33,7 @@ export default function WorkspacePage(props: { workspaces: workspaceType[], user
 
         if (workspace === undefined) fetchWorkspace = true
         else {
-            subContent = JSON.parse(workspace.subContent)
+            subContent = workspace.subContent
             changeContent = true
         }
 
@@ -55,7 +56,7 @@ export default function WorkspacePage(props: { workspaces: workspaceType[], user
                 .then(async (resp) => {
                     if (resp?.status === 200) {
                         workspace = await resp.json();
-                        subContent = JSON.parse(workspace?.subContent as string)
+                        subContent = workspace!.subContent
                         setEditable((workspace?.owner === props.user.id || workspace?.writer.includes("anon")) as boolean)
                         setPageContent(subContent)
                     } else {
@@ -113,11 +114,56 @@ export default function WorkspacePage(props: { workspaces: workspaceType[], user
             return newContent
         })
         setReloadKey(reloadKey + 1)
+        setSendPage(true)
     }
+
+    const [sendPage, setSendPage] = useState(false)
+
+    useEffect(() => {
+        if (sendPage){
+            workspace!.subContent = pageContent
+            fetch(`/api/page/${id}`, {
+                method: "PATCH",
+                mode: "cors",
+                headers: {
+                    // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
+                    "Content-Type": "application/json"
+                },
+                credentials: "same-origin",
+                body: JSON.stringify(workspace)
+            })
+                .catch((err) => {
+                    setErrorMessage(`Error : ${err}`)
+                    setOpen(true)
+                })
+                .then(async (resp) => {
+                    if (resp?.status !== 200) {
+                        setErrorMessage(`Error : ${resp?.status}, ${resp?.statusText}`)
+                        setOpen(true)
+                    }
+                })
+            setSendPage(false)
+        }
+    }, [sendPage])
+
+
+
+    const [open, setOpen] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState("");
+
+    const handleClose = (
+        event?: React.SyntheticEvent | Event,
+        reason?: string
+    ) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        setOpen(false);
+    };
 
     return (
         <Box>
-            {pageContent.map((row: any[], indexRow: number) => {
+            {pageContent.map((row: JSONContent, indexRow: number) => {
                 return (
                     <Box
                         display="flex"
@@ -126,7 +172,7 @@ export default function WorkspacePage(props: { workspaces: workspaceType[], user
                         key={indexRow}
                     >
                         <Box sx={{width: "99%", margin: "auto"}} display="flex" flexDirection="row" alignItems="center">
-                            <PageContent row={row} editable={editable}/>
+                            <PageContent row={row} editable={editable} setSendPage={setSendPage} setPageContent={setPageContent} index={indexRow} />
                             <IconButton
                                 aria-label={"Delete row"}
                                 size={"small"}
@@ -139,6 +185,13 @@ export default function WorkspacePage(props: { workspaces: workspaceType[], user
                                 <DeleteIcon/>
                             </IconButton>
                         </Box>
+
+                        <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+                            <Alert variant="filled" severity="error" onClose={handleClose}>
+                                <AlertTitle>Page cannot be saved !</AlertTitle>
+                                {errorMessage}
+                            </Alert>
+                        </Snackbar>
                     </Box>
                 );
 

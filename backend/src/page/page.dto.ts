@@ -1,9 +1,9 @@
 import {
   IsArray,
-  IsDate,
+  IsDateString,
   IsNotEmpty,
   IsOptional,
-  IsString,
+  IsString, ValidateIf,
 } from 'class-validator';
 
 export class PageDto {
@@ -19,7 +19,7 @@ export class PageDto {
   @IsOptional()
   writer: string[];
 
-  @IsDate()
+  @IsDateString()
   @IsOptional()
   modified: Date;
 
@@ -32,11 +32,12 @@ export class PageDto {
   name: string;
 
   @IsString()
+  @ValidateIf((object, value) => value !== null)
   parentId: string;
 
   @IsOptional()
-  @IsString()
-  subContent: string;
+  @IsArray()
+  subContent: [];
 }
 
 export class createPageDto {
