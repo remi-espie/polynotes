@@ -37,9 +37,7 @@ type StyledTreeItemProps = TreeItemProps & {
 };
 
 const StyledTreeItemRoot = styled(TreeItem)(({theme}) => ({
-    color: "white",
     [`& .${treeItemClasses.content}`]: {
-        color: "white",
         borderTopRightRadius: theme.spacing(2),
         borderBottomRightRadius: theme.spacing(2),
         paddingRight: theme.spacing(1),
@@ -282,7 +280,7 @@ export default function WorkspaceBar(props: {
                 defaultCollapseIcon={<ArrowDropDownIcon/>}
                 defaultExpandIcon={<ArrowRightIcon/>}
                 defaultEndIcon={<div style={{width: 24}}/>}
-                sx={{maxWidth: 300, color: "white", overflowY: "auto"}}
+                sx={{maxWidth: 300, overflowY: "auto"}}
                 onNodeSelect={handleSelectedItems}
             >
                 <StyledTreeItem
@@ -322,11 +320,16 @@ export default function WorkspaceBar(props: {
                 fullWidth={true}
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Create new page in " +
-                        props.workspaces.filter(
-                            (workspace: workspaceType) => workspace.id === selectedWorkspace
-                        )[0]?.name +
-                        "?"}
+                    {
+                        selectedWorkspace === "0" ?
+
+                            "Create new content in home ?"
+                            :
+                            "Create new content in " +
+                            props.workspaces.filter(
+                                (workspace: workspaceType) => workspace.id === selectedWorkspace
+                            )[0]?.name +
+                            "?"}
                 </DialogTitle>
                 <DialogContent
                     sx={{

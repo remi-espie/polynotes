@@ -86,8 +86,8 @@ export default function WorkspaceExplorer(props: { workspaces: workspaceType[] }
                             <TableCell>{workspace.owner}</TableCell>
                             <TableCell>
                                 {workspace.type === "folder" ? props.workspaces.filter(
-                                    (workspace2: workspaceType) =>
-                                        workspace2.parentId === workspace.id).length + " files | " : null}
+                                    (workspaceChildren: workspaceType) =>
+                                        workspaceChildren.parentId === workspace.id).length + " files | " : null}
                                 {workspaceSize(workspace)}
                             </TableCell>
                             <TableCell>
