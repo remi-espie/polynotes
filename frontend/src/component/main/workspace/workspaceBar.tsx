@@ -356,7 +356,7 @@ export default function WorkspaceBar(props: {
 
                     <TextField
                         id="standard-basic"
-                        label="Standard"
+                        label="File name"
                         variant="standard"
                         defaultValue={randomName}
                         inputRef={name}

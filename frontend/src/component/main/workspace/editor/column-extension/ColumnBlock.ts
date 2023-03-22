@@ -130,11 +130,9 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
               return false;
             }
 
-            if (!this.options.nestedColumns && par.name === Column.name) {
-              return false;
-            }
+            return !(!this.options.nestedColumns && par.name === Column.name);
 
-            return true;
+
           };
           if (!canAcceptColumnBlockChild(parent)) {
             console.warn('content not allowed');

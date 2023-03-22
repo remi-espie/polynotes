@@ -40,8 +40,6 @@ form {
   margin-bottom: 1em !important;
 }
 
-
-
 .ProseMirror .column-block {
   width: 100%;
   display: grid;
@@ -49,6 +47,10 @@ form {
   grid-auto-columns: 1fr;
   gap: 24px;
   padding: 8px 0;
+}
+
+.ProseMirror *{
+  text-align: left;
 }
 
 .ProseMirror .column {

@@ -46,7 +46,8 @@ function workspace(props: {
             <WorkspaceExplorer workspaces={props.workspaces} />
           </>
         ) : (
-          <WorkspacePage workspaces={props.workspaces} user={props.user} />
+          <WorkspacePage workspaces={props.workspaces} user={props.user}
+                         getWorkspaces={props.getWorkspaces} />
         )}
       </Box>
       <Snackbar

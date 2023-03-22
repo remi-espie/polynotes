@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Delete,
-  Get, HttpException, HttpStatus,
+  Get,
+  HttpException,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -12,6 +14,7 @@ import {
 import { PageService } from './page.service';
 import { createPageDto, PageDto } from './page.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { AllowAnyGuard } from '../auth/allow-any.guard';
 
 @Controller('page')
 export class PageController {
@@ -23,6 +26,7 @@ export class PageController {
   }
 
   @Get(':id')
+  @UseGuards(AllowAnyGuard)
   async find(@Req() request, @Param('id') id: string) {
     if (request.user) return await this.service.findById(id, request.user.id);
     else return await this.service.findById(id, 'anon');
@@ -31,13 +35,12 @@ export class PageController {
   @Get('')
   @UseGuards(JwtAuthGuard)
   async findUser(@Req() request) {
-    console.log(request.user)
     if (request.user) return await this.service.findByUser(request.user.id);
-    else throw new HttpException("Anonymous user", HttpStatus.ACCEPTED)
+    else throw new HttpException('Anonymous user', HttpStatus.ACCEPTED);
   }
 
   @Post('')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AllowAnyGuard)
   async create(@Body() pageDto: createPageDto, @Req() request) {
     return await this.service.create(pageDto, request.user.id);
   }
@@ -53,15 +56,20 @@ export class PageController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
-  async update(@Param('id') id: string, @Body() pageDto: PageDto, @Req() request) {
-    if (request.user) return await this.service.update(id, pageDto, request.user.id);
+  @UseGuards(AllowAnyGuard)
+  async update(
+    @Param('id') id: string,
+    @Body() pageDto: PageDto,
+    @Req() request,
+  ) {
+    if (request.user)
+      return await this.service.update(id, pageDto, request.user.id);
     else return await this.service.update(id, pageDto, 'anon');
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  async delete(@Param('id') id: string) {
-    return await this.service.delete(id);
+  async delete(@Param('id') id: string, @Req() request) {
+    return await this.service.delete(id, request.user.id);
   }
 }

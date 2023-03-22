@@ -56,7 +56,12 @@ function Main() {
           setErrorMessage("Invalid Credentials");
           setOpenAlert(true);
         } else if (resp?.status === 200) {
-          const workspace: workspaceType[] = await resp.json();
+          let workspace: workspaceType[] = await resp.json();
+
+          workspace.sort((a) => {
+            return a.type === "folder" ? 0 : 1
+          })
+
           setWorkspaces(workspace);
         } else {
           setErrorMessage(`Error ${resp?.status}, ${resp?.statusText}`);

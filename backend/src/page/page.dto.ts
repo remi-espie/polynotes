@@ -3,7 +3,8 @@ import {
   IsDateString,
   IsNotEmpty,
   IsOptional,
-  IsString, ValidateIf,
+  IsString,
+  ValidateIf,
 } from 'class-validator';
 
 export class PageDto {

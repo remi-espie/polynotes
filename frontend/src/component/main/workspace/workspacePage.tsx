@@ -1,16 +1,35 @@
 import { userType, workspaceType } from "../../../types";
-import React, { useEffect, useState } from "react";
+import React, { createRef, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Alert, AlertTitle, Box, Button, Snackbar } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControlLabel,
+  Snackbar,
+  Switch,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 import PageContent from "./editor/pageContent";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { JSONContent } from "@tiptap/core";
+import ShareIcon from "@mui/icons-material/Share";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
+import EditIcon from "@mui/icons-material/Edit";
 
 export default function WorkspacePage(props: {
   workspaces: workspaceType[];
   user: userType;
+  getWorkspaces: () => void;
 }) {
   const navigate = useNavigate();
   let { id } = useParams();
@@ -38,6 +57,19 @@ export default function WorkspacePage(props: {
       changeContent = true;
     }
   }
+
+  const [open, setOpen] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
 
   useEffect(() => {
     function getWorkspace() {
@@ -98,24 +130,29 @@ export default function WorkspacePage(props: {
       },
     ],
   };
+
   function addRow() {
-    setPageContent((prev) => {
-      let newContent = prev;
-      newContent.push(defaultColumn);
-      return newContent;
-    });
-    setReloadKey(reloadKey + 1);
+    if (editable) {
+      setPageContent((prev) => {
+        let newContent = prev;
+        newContent.push(defaultColumn);
+        return newContent;
+      });
+      setReloadKey(reloadKey + 1);
+    }
   }
 
   function deleteRow(indexRow: number) {
-    setPageContent((prev) => {
-      let newContent = prev;
-      newContent.splice(indexRow, 1);
-      if (newContent.length === 0) newContent.splice(indexRow, 1);
-      return newContent;
-    });
-    setReloadKey(reloadKey + 1);
-    setSendPage(true);
+    if (editable) {
+      setPageContent((prev) => {
+        let newContent = prev;
+        newContent.splice(indexRow, 1);
+        if (newContent.length === 0) newContent.splice(indexRow, 1);
+        return newContent;
+      });
+      setReloadKey(reloadKey + 1);
+      setSendPage(true);
+    }
   }
 
   const [sendPage, setSendPage] = useState(false);
@@ -147,17 +184,68 @@ export default function WorkspacePage(props: {
     }
   }, [sendPage]);
 
-  const [open, setOpen] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState("");
+  const [deletePage, setDeletePage] = useState(false);
 
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
+  const delPage = () => {
+    setDeletePage(true);
+  };
+
+  useEffect(() => {
+    if (deletePage) {
+      fetch(`/api/page/${id}`, {
+        method: "DELETE",
+        mode: "cors",
+        headers: {
+          // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
+        },
+        credentials: "same-origin",
+      })
+        .catch((err) => {
+          setErrorMessage(`Error : ${err}`);
+          setOpen(true);
+        })
+        .then(async (resp) => {
+          if (resp?.status !== 200) {
+            setErrorMessage(`Error : ${resp?.status}, ${resp?.statusText}`);
+            setOpen(true);
+          } else {
+            props.getWorkspaces();
+            navigate("/home");
+          }
+        });
+      setDeletePage(false);
     }
-    setOpen(false);
+  }, [deletePage]);
+
+  const handleShare = () => {
+    setOpenShare(true);
+  };
+
+  const [openShare, setOpenShare] = useState(false);
+  const [shareType, setShareType] = useState("reader");
+  const name = createRef<React.InputHTMLAttributes<string>>();
+  const [anonymous, setAnonymous] = useState(false);
+
+  const handleAnonymous = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAnonymous(event.target.checked);
+  };
+
+  const handleShareChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newShareType: string
+  ) => {
+    setShareType(newShareType);
+  };
+
+  const sharePage = () => {
+    const sharedTo = anonymous ? "anon" : (name.current?.value as string);
+    if (shareType === "writer") {
+      if (!workspace?.writer.includes(sharedTo)) workspace?.writer.push(sharedTo);
+      if (!workspace?.reader.includes(sharedTo)) workspace?.reader.push(sharedTo);
+    } else if (shareType === "reader") {
+      if (!workspace?.reader.includes(sharedTo)) workspace?.reader.push(sharedTo);
+    }
+    setSendPage(true);
   };
 
   return (
@@ -183,11 +271,17 @@ export default function WorkspacePage(props: {
                 setPageContent={setPageContent}
                 index={indexRow}
               />
+
               <IconButton
                 aria-label={"Delete row"}
                 size={"small"}
                 color={"error"}
-                sx={{ height: 32, width: 32, marginTop: 2 }}
+                sx={{
+                  height: 32,
+                  width: 32,
+                  marginTop: 2,
+                  display: editable ? "" : "none",
+                }}
                 onClick={() => {
                   deleteRow(indexRow);
                 }}
@@ -195,28 +289,113 @@ export default function WorkspacePage(props: {
                 <DeleteIcon />
               </IconButton>
             </Box>
-
-            <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
-              <Alert variant="filled" severity="error" onClose={handleClose}>
-                <AlertTitle>Page cannot be saved !</AlertTitle>
-                {errorMessage}
-              </Alert>
-            </Snackbar>
           </Box>
         );
       })}
-      <Button
-        aria-label={"Add a new row"}
-        size={"large"}
-        color={"secondary"}
-        variant="contained"
-        sx={{ width: "80%" }}
-        onClick={() => {
-          addRow();
+
+      <Box display="flex" flexDirection="row" justifyContent="space-evenly">
+        <Button
+          aria-label={"Add a new row"}
+          size={"large"}
+          color={"secondary"}
+          variant="contained"
+          sx={{ width: "20%", display: editable ? "" : "none" }}
+          onClick={addRow}
+        >
+          <AddIcon />
+        </Button>
+
+        <Button
+          aria-label={"Share page"}
+          size={"large"}
+          color={"primary"}
+          variant="contained"
+          sx={{ width: "20%", display: editable ? "" : "none" }}
+          onClick={handleShare}
+        >
+          <ShareIcon />
+        </Button>
+
+        <Button
+          aria-label={"Delete page"}
+          size={"large"}
+          color={"error"}
+          variant="contained"
+          sx={{ width: "20%", display: editable ? "" : "none" }}
+          onClick={delPage}
+        >
+          <DeleteIcon />
+        </Button>
+      </Box>
+
+      <Dialog
+        open={openShare}
+        onClose={() => {
+          setOpenShare(false);
         }}
+        aria-labelledby="dialog-dialog-title"
+        aria-describedby="dialog-dialog-description"
+        maxWidth={"sm"}
+        fullWidth={true}
       >
-        <AddIcon />
-      </Button>
+        <DialogTitle id="alert-dialog-title">Share file ?</DialogTitle>
+        <DialogContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <ToggleButtonGroup
+            color="secondary"
+            value={shareType}
+            exclusive
+            onChange={handleShareChange}
+            aria-label="Create new document"
+            sx={{ justifyContent: "center" }}
+          >
+            <ToggleButton value="reader">
+              {" "}
+              <AutoStoriesIcon /> Reader{" "}
+            </ToggleButton>
+            <ToggleButton value="writer">
+              <EditIcon /> Writer
+            </ToggleButton>
+          </ToggleButtonGroup>
+
+          <TextField
+            id="standard-basic"
+            label="Share to user"
+            variant="standard"
+            defaultValue=""
+            inputRef={name}
+            disabled={anonymous}
+          />
+
+          <FormControlLabel
+            control={<Switch onChange={handleAnonymous} />}
+            label="Anonymous"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpenShare(false);
+            }}
+          >
+            Abort
+          </Button>
+          <Button onClick={sharePage} autoFocus>
+            Share
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+        <Alert variant="filled" severity="error" onClose={handleClose}>
+          <AlertTitle>Page cannot be saved !</AlertTitle>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

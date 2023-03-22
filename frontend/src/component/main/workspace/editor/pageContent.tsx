@@ -10,6 +10,7 @@ import { Subscript } from "@tiptap/extension-subscript";
 import { Superscript } from "@tiptap/extension-superscript";
 import { Image } from "@tiptap/extension-image";
 import { Link } from "@tiptap/extension-link";
+import TextAlign from '@tiptap/extension-text-align'
 import { useDebounce } from 'use-debounce';
 import {JSONContent} from "@tiptap/core";
 
@@ -28,6 +29,9 @@ export default function PageContent(props: { row: JSONContent, editable: boolean
       }),
       Placeholder.configure({
         placeholder: "A new story begins...",
+      }),
+      TextAlign.configure({
+        types: ['heading', 'paragraph', 'image'],
       }),
     ],
     content: props.row,

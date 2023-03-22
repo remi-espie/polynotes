@@ -20,12 +20,8 @@ export class PageService {
       const page = await this.model.findById(id).exec();
       if (!page)
         throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
-      if (
-        page.owner === idUser ||
-        page.reader.includes('anon') ||
-        page.reader.includes(idUser)
-      )
-        return page;
+
+      if (page.owner === idUser || page.reader.includes(idUser)) return page;
       else throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
     } else throw new HttpException('Invalid ID', HttpStatus.BAD_REQUEST);
   }
@@ -38,14 +34,14 @@ export class PageService {
     return page;
   }
 
-  async create(pageDto: createPageDto, ownerid: string): Promise<PageDocument> {
-    return await this.createAt(null, pageDto, ownerid);
+  async create(pageDto: createPageDto, idOwner: string): Promise<PageDocument> {
+    return await this.createAt(null, pageDto, idOwner);
   }
 
   async createAt(
     id: string,
     pageDto: createPageDto,
-    ownerid: string,
+    idOwner: string,
   ): Promise<PageDocument> {
     let defaultPage = [];
     if (pageDto.type === 'page')
@@ -62,7 +58,7 @@ export class PageService {
       ];
 
     return await new this.model({
-      owner: ownerid,
+      owner: idOwner,
       type: pageDto.type,
       name: pageDto.name,
       reader: [],
@@ -84,7 +80,10 @@ export class PageService {
     else throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
   }
 
-  async delete(id: string): Promise<Page> {
+  async delete(id: string, idUser): Promise<Page> {
+    const page = await this.model.findById(id).exec();
+    if (!page || page.owner !== idUser)
+      throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
     return await this.model.findByIdAndDelete(id).exec();
   }
 }

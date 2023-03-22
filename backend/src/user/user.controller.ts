@@ -29,8 +29,9 @@ export class UserController {
   }
 
   @Get(':id')
-  async find(@Param('id') id: string) {
-    return await this.service.getUserId(id);
+  @UseGuards(JwtAuthGuard)
+  async find(@Param('id') id: string, @Req() request) {
+    return await this.service.getUserId(id, request.user.id);
   }
 
   @Post()
@@ -39,12 +40,18 @@ export class UserController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() userDto: UserDto) {
-    return await this.service.update(id, userDto);
+  @UseGuards(JwtAuthGuard)
+  async update(
+    @Param('id') id: string,
+    @Body() userDto: UserDto,
+    @Req() request,
+  ) {
+    return await this.service.update(id, userDto, request.user.id);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
-    return await this.service.delete(id);
+  @UseGuards(JwtAuthGuard)
+  async delete(@Param('id') id: string, @Req() request) {
+    return await this.service.delete(id, request.user.id);
   }
 }

@@ -104,6 +104,30 @@ const getSuggestionItems = (query: { query: string }) => {
       },
     },
     {
+      title: "Align Left",
+      command: ({ editor, range }: { editor: Editor; range: Range }) => {
+        editor.chain().focus().deleteRange(range).setTextAlign('left').run();
+      },
+    },
+    {
+      title: "Align Center",
+      command: ({ editor, range }: { editor: Editor; range: Range }) => {
+        editor.chain().focus().deleteRange(range).setTextAlign('center').run();
+      },
+    },
+    {
+      title: "Align Right",
+      command: ({ editor, range }: { editor: Editor; range: Range }) => {
+        editor.chain().focus().deleteRange(range).setTextAlign('right').run();
+      },
+    },
+    {
+      title: "Justify",
+      command: ({ editor, range }: { editor: Editor; range: Range }) => {
+        editor.chain().focus().deleteRange(range).setTextAlign('justify').run();
+      },
+    },
+    {
       title: "Strike",
       command: ({ editor, range }: { editor: Editor; range: Range }) => {
         editor.chain().focus().deleteRange(range).toggleStrike().run();

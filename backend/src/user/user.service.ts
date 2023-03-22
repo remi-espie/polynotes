@@ -21,10 +21,10 @@ export class UserService {
     return await this.model.find().exec();
   }
 
-  async getUserId(id: string): Promise<UserDocument> {
+  async getUserId(id: string, idUser: string): Promise<UserDocument> {
     if (Types.ObjectId.isValid(id)) {
       const user = await this.model.findById(id).exec();
-      if (!user)
+      if (!user || user.id !== idUser)
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
       delete user.password;
       return user;
@@ -73,11 +73,17 @@ export class UserService {
     return user;
   }
 
-  async update(id: string, userDto: UserDto): Promise<UserDocument> {
+  async update(
+    id: string,
+    userDto: UserDto,
+    idUser: string,
+  ): Promise<UserDocument> {
+    await this.getUserId(id, idUser);
     return await this.model.findByIdAndUpdate(id, userDto).exec();
   }
 
-  async delete(id: string): Promise<User> {
+  async delete(id: string, idUser: string): Promise<User> {
+    await this.getUserId(id, idUser);
     return await this.model.findByIdAndDelete(id).exec();
   }
 

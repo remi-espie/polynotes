@@ -27,7 +27,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   private static extractJWT(req: FastifyRequest): string | null {
-    console.trace();
     const data = req?.cookies['auth-cookie'];
     if (!data) {
       return null;
