@@ -12,5 +12,6 @@ import { MailService } from '../mail/mail.service';
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
+  exports: [UserService],
 })
 export class UserModule {}

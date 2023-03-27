@@ -33,7 +33,7 @@ export default function WorkspacePage(props: {
 }) {
   const navigate = useNavigate();
   let { id } = useParams();
-  let workspace: workspaceType | undefined;
+  const [workspace, setWorkspace] = useState<workspaceType | undefined>(undefined);
 
   const [pageContent, setPageContent] = useState<any[]>([]);
   const [editable, setEditable] = useState<boolean>(false);
@@ -44,19 +44,21 @@ export default function WorkspacePage(props: {
 
   let fetchWorkspace = false;
 
-  if (id === undefined) {
-    navigate("/home");
-  } else {
-    workspace = props.workspaces.find(
-      (workspace: workspaceType) => workspace.id === id
-    );
+  useEffect(() => {
+    if (id === undefined) {
+      navigate("/home");
+    } else {
+      setWorkspace(props.workspaces.find(
+          (workspace: workspaceType) => workspace.id === id
+      ));
 
-    if (workspace === undefined) fetchWorkspace = true;
-    else {
-      subContent = workspace.subContent;
-      changeContent = true;
+      if (workspace === undefined) fetchWorkspace = true;
+      else {
+        subContent = workspace.subContent;
+        changeContent = true;
+      }
     }
-  }
+  }, [id,]);
 
   const [open, setOpen] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
@@ -87,13 +89,14 @@ export default function WorkspacePage(props: {
         })
         .then(async (resp) => {
           if (resp?.status === 200) {
-            workspace = await resp.json();
-            subContent = workspace!.subContent;
+            const workspace = await resp.json()
+            setWorkspace(workspace);
+            // subContent = workspace!.subContent;
             setEditable(
-              (workspace?.owner === props.user.id ||
-                workspace?.writer.includes("anon")) as boolean
+              (workspace.owner === props.user.id ||
+                  workspace.writer.includes("anon")) as boolean
             );
-            setPageContent(subContent);
+            setPageContent(workspace!.subContent);
           } else {
             navigate("/login");
           }
@@ -158,7 +161,7 @@ export default function WorkspacePage(props: {
   const [sendPage, setSendPage] = useState(false);
 
   useEffect(() => {
-    if (sendPage) {
+    if (sendPage && editable) {
       workspace!.subContent = pageContent;
       fetch(`/api/page/${id}`, {
         method: "PATCH",
@@ -225,6 +228,7 @@ export default function WorkspacePage(props: {
   const [shareType, setShareType] = useState("reader");
   const name = createRef<React.InputHTMLAttributes<string>>();
   const [anonymous, setAnonymous] = useState(false);
+  const [uploadSharePage, setUploadSharePage] = useState(false);
 
   const handleAnonymous = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAnonymous(event.target.checked);
@@ -245,8 +249,35 @@ export default function WorkspacePage(props: {
     } else if (shareType === "reader") {
       if (!workspace?.reader.includes(sharedTo)) workspace?.reader.push(sharedTo);
     }
-    setSendPage(true);
+
+    setUploadSharePage(true);
   };
+
+    useEffect(() => {
+      if (uploadSharePage) {
+        const sharedTo = anonymous ? "anon" : (name.current?.value as string);
+        fetch(`/api/page/share/${shareType}/${id}/${sharedTo}`, {
+          method: "PATCH",
+          mode: "cors",
+          headers: {
+            // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
+          },
+          credentials: "same-origin",
+        })
+            .catch((err) => {
+              setErrorMessage(`Error : ${err}`);
+              setOpen(true);
+            })
+            .then(async (resp) => {
+              if (resp?.status !== 200) {
+                setErrorMessage(`Error : ${resp?.status}, ${resp?.statusText}`);
+                setOpen(true);
+              }
+            });
+        setUploadSharePage(false);
+        setOpenShare(false);
+      }
+    }, [uploadSharePage])
 
   return (
     <Box key={reloadKey}>

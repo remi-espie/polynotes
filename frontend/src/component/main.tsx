@@ -22,20 +22,20 @@ function Main() {
   const location = useLocation();
 
   async function isLoggedIn() {
-    if (
-      !location.pathname.includes("/home/page/") &&
-      !location.pathname.includes("/home/folder/")
-    ) {
-      fetch("/api/user").then((resp) => {
-        if (resp.status !== 200) {
+    fetch("/api/user").then((resp) => {
+      if (resp.status !== 200) {
+        if (
+          !location.pathname.includes("/home/page/") &&
+          !location.pathname.includes("/home/folder/")
+        ) {
           navigate("/login");
-        } else {
-          resp.json().then((json) => {
-            setConnectedUser(json);
-          });
         }
-      });
-    }
+      } else {
+        resp.json().then((json) => {
+          setConnectedUser(json);
+        });
+      }
+    });
   }
 
   function getWorkspaces() {
@@ -59,8 +59,8 @@ function Main() {
           let workspace: workspaceType[] = await resp.json();
 
           workspace.sort((a) => {
-            return a.type === "folder" ? 0 : 1
-          })
+            return a.type === "folder" ? 0 : 1;
+          });
 
           setWorkspaces(workspace);
         } else {

@@ -67,6 +67,19 @@ export class PageController {
     else return await this.service.update(id, pageDto, 'anon');
   }
 
+  @Patch('/share/:type/:id/:idUser')
+  @UseGuards(AllowAnyGuard)
+  async share(
+    @Param('type') type: string,
+    @Param('id') id: string,
+    @Param('idUser') idUser: string,
+    @Req() request,
+  ) {
+    if (request.user)
+      return await this.service.share(id, idUser, type, request.user.id);
+    else return await this.service.share(id, idUser, type, 'anon');
+  }
+
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   async delete(@Param('id') id: string, @Req() request) {

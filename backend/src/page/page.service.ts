@@ -3,12 +3,14 @@ import { HydratedDocument, Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Page, PageDocument } from './page.schema';
 import { createPageDto, PageDto } from './page.dto';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class PageService {
   constructor(
     @InjectModel(Page.name)
     private readonly model: Model<PageDocument>,
+    private readonly userService: UserService,
   ) {}
 
   async getAll(): Promise<Page[]> {
@@ -78,6 +80,35 @@ export class PageService {
     if (page.owner === idUser || page.writer.includes(idUser))
       return await this.model.findByIdAndUpdate(id, pageDto).exec();
     else throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
+  }
+
+  async share(
+    id: string,
+    idUserToShare: string,
+    type: string,
+    idUser: string,
+  ): Promise<PageDocument> {
+    const page = await this.findById(id, idUser);
+    if (page.owner === idUser) {
+      let userToShare: string;
+      if (idUserToShare === 'anon') {
+        userToShare = 'anon';
+      } else {
+        userToShare = (await this.userService.getUserByMail(idUserToShare)).id;
+      }
+      if (!userToShare)
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      if (type === 'writer')
+        return await this.model
+          .findByIdAndUpdate(id, {
+            $push: { writer: userToShare, reader: userToShare },
+          })
+          .exec();
+      else if (type === 'reader')
+        return await this.model
+          .findByIdAndUpdate(id, { $push: { reader: userToShare } })
+          .exec();
+    } else throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
   }
 
   async delete(id: string, idUser): Promise<Page> {

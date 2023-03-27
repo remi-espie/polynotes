@@ -47,6 +47,14 @@ export class UserService {
       throw new HttpException('Invalid credential', HttpStatus.UNAUTHORIZED);
   }
 
+  async getUserByMail(userMail: string): Promise<UserDocument> {
+    const user = await this.model.findOne({ email: userMail }).exec();
+    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    user.password = undefined;
+    user.token = undefined;
+    return user;
+  }
+
   async create(userDto: UserDto): Promise<UserDocument> {
     const token = btoa(uuidv4());
     const passwordHashed = await this.passwordProvider.hashPassword(

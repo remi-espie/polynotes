@@ -15,7 +15,8 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import { userType, workspaceType } from "../../types";
 
 function SearchHeader(props: { user: userType; workspaces: workspaceType[] }) {
-  const [open, setOpen] = useState(props.user.validated);
+  const validated = props.user.validated !== undefined ? props.user.validated : true;
+  const [open, setOpen] = useState(validated);
   const navigate = useNavigate();
 
   const list = props.workspaces.map((workspace) => {

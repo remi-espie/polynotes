@@ -1,5 +1,5 @@
 import WorkspaceBar from "./workspaceBar";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Alert, AlertTitle, Box, Snackbar } from "@mui/material";
 import WorkspaceRecent from "./workspaceRecent";
 import WorkspaceExplorer from "./workspaceExplorer";
@@ -18,6 +18,12 @@ function workspace(props: {
   errorMessage: string;
 }) {
   let { type } = useParams();
+  const [displayBar, setDisplayBar] = useState(false);
+
+  useEffect(() => {
+      if (Object.keys(props.user).length !== 0) setDisplayBar(true)
+      console.log(props.user)
+  }, [props.user.id])
 
   return (
     <Box
@@ -29,7 +35,7 @@ function workspace(props: {
         marginTop: "4em"
       }}
     >
-      {Object.keys(props.user).length !== 0  ? (
+      {displayBar ? (
         <Box>
           <WorkspaceBar
             workspaces={props.workspaces}
