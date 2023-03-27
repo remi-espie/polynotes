@@ -14,7 +14,7 @@ import { sanitizePlugin } from './provider/sanitizePlugin';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/polynotes', {
+    MongooseModule.forRoot('mongodb://mongodb:27017/polynotes', {
       connectionFactory: (connection) => {
         connection.plugin(sanitizePlugin);
         return connection;
