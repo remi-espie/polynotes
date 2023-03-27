@@ -33,14 +33,12 @@ export default function WorkspacePage(props: {
 }) {
   const navigate = useNavigate();
   let { id } = useParams();
-  const [workspace, setWorkspace] = useState<workspaceType | undefined>(undefined);
+  const [workspace, setWorkspace] = useState<workspaceType | undefined>();
 
   const [pageContent, setPageContent] = useState<any[]>([]);
   const [editable, setEditable] = useState<boolean>(false);
   const [reloadKey, setReloadKey] = useState<number>(0);
 
-  let subContent: any[] = [];
-  let changeContent = false;
 
   let fetchWorkspace = false;
 
@@ -48,17 +46,22 @@ export default function WorkspacePage(props: {
     if (id === undefined) {
       navigate("/home");
     } else {
-      setWorkspace(props.workspaces.find(
-          (workspace: workspaceType) => workspace.id === id
-      ));
+      const workspaceLocal = props.workspaces.find(
+        (workspace: workspaceType) => workspace.id === id
+      );
+      setWorkspace(workspace);
 
-      if (workspace === undefined) fetchWorkspace = true;
+      if (workspaceLocal === undefined) fetchWorkspace = true;
       else {
-        subContent = workspace.subContent;
-        changeContent = true;
+        setPageContent(workspaceLocal.subContent);
+        setEditable(
+            (workspaceLocal.owner === props.user.id ||
+                workspaceLocal.writer.includes("anon")) as boolean
+        );
+        setReloadKey(reloadKey + 1);
       }
     }
-  }, [id,]);
+  }, [id]);
 
   const [open, setOpen] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
@@ -108,21 +111,6 @@ export default function WorkspacePage(props: {
       fetchWorkspace = false;
     }
   }, [fetchWorkspace]);
-
-  useEffect(() => {
-    function changeContentState() {
-      setPageContent(subContent);
-      setEditable(
-        (workspace?.owner === props.user.id ||
-          workspace?.writer.includes("anon")) as boolean
-      );
-    }
-
-    if (changeContent) {
-      changeContentState();
-      changeContent = false;
-    }
-  }, [changeContent]);
 
   const defaultColumn = {
     type: "doc",
