@@ -9,12 +9,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 
 export default function WorkspaceRecent(props: { workspaces: workspaceType[] }) {
 
-    // const workspaces = props.workspaces.sort((a: workspaceType, b: workspaceType) => {
-    //     return new Date(b.modified).getTime() - new Date(a.modified).getTime();
-    // });
-
     const navigate = useNavigate()
-
 
     return (
         <ImageList gap={8} sx={{

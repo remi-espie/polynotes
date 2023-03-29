@@ -173,7 +173,7 @@ export default function WorkspacePage(props: {
         });
       setSendPage(false);
     }
-  }, [sendPage]);
+  }, [sendPage, workspace]);
 
   const [deletePage, setDeletePage] = useState(false);
 

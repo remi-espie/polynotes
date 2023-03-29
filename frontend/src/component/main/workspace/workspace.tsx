@@ -22,7 +22,6 @@ function workspace(props: {
 
   useEffect(() => {
       if (Object.keys(props.user).length !== 0) setDisplayBar(true)
-      console.log(props.user)
   }, [props.user.id])
 
   return (
