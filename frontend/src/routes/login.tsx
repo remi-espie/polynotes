@@ -32,8 +32,9 @@ function Login() {
         sx={{
           display: "flex",
           justifyContent: "space-around",
-          width: "60vw",
+            width: { xs: "80vw", md: "60vw"},
           alignItems: "center",
+            flexDirection: { xs: "column", md: "row"}
         }}
       >
         <Signup />

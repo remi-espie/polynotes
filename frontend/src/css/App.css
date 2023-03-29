@@ -18,9 +18,8 @@
 }
 
 .login {
-  width: 45%;
-  background-color: darkgray;
   border-radius: 5px;
+  margin-bottom: 2em;
 }
 
 form {

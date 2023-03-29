@@ -49,7 +49,7 @@ export default function WorkspacePage(props: {
       const workspaceLocal = props.workspaces.find(
         (workspace: workspaceType) => workspace.id === id
       );
-      setWorkspace(workspace);
+      setWorkspace(workspaceLocal);
 
       if (workspaceLocal === undefined) fetchWorkspace = true;
       else {

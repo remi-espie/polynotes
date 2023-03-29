@@ -1,11 +1,11 @@
 import {
   Alert,
-  AlertTitle,
+  AlertTitle, Box,
   Checkbox,
   Container,
   FormControlLabel,
   Snackbar,
-  TextField,
+  TextField, useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -112,8 +112,11 @@ function SignUp() {
     }
   }, [submit])
 
+  const theme = useTheme();
+
   return (
-    <div className={"login"}>
+    <Box className={"login"} sx={{backgroundColor:theme.palette.grey.A200,
+      width: { xs: "100%", md: "45%"}}}>
       <Container className={"login"}>
         <h2>Create an account</h2>
         <form className={"customForm"}
@@ -154,7 +157,7 @@ function SignUp() {
           />
           <FormControlLabel
             control={<Checkbox required/>}
-            label="I'm over 13 years old *"
+            label="I'm over 13 years old or over the digital legal age where I reside *"
             inputRef={over13}
           />
           <FormControlLabel
@@ -188,7 +191,7 @@ function SignUp() {
           {errorMessage}
         </Alert>
       </Snackbar>
-    </div>
+    </Box>
   );
 
   function testData() {

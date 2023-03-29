@@ -13,6 +13,10 @@ import { Link } from "@tiptap/extension-link";
 import TextAlign from '@tiptap/extension-text-align'
 import { useDebounce } from 'use-debounce';
 import {JSONContent} from "@tiptap/core";
+import {Table} from "@tiptap/extension-table";
+import {TableRow} from "@tiptap/extension-table-row";
+import {TableHeader} from "@tiptap/extension-table-header";
+import {TableCell} from "@tiptap/extension-table-cell";
 
 export default function PageContent(props: { row: JSONContent, editable: boolean, setSendPage: (state:boolean) => void, setPageContent:  React.Dispatch<React.SetStateAction<any[]>>, index:number }) {
   const editor = useEditor({
@@ -33,6 +37,13 @@ export default function PageContent(props: { row: JSONContent, editable: boolean
       TextAlign.configure({
         types: ['heading', 'paragraph', 'image'],
       }),
+
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content: props.row,
     editable: props.editable

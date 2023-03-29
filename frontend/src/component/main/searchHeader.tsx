@@ -8,11 +8,12 @@ import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Alert, Autocomplete, Collapse, TextField } from "@mui/material";
+import {Alert, Autocomplete, Collapse, TextField} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Folder } from "@mui/icons-material";
 import DescriptionIcon from "@mui/icons-material/Description";
 import { userType, workspaceType } from "../../types";
+
 
 function SearchHeader(props: { user: userType; workspaces: workspaceType[] }) {
   const validated = props.user.validated !== undefined ? props.user.validated : true;
@@ -37,11 +38,13 @@ function SearchHeader(props: { user: userType; workspaces: workspaceType[] }) {
             </Link>
           </IconButton>
 
-          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{
+              color: "white",flexGrow: 1 }} />
           <Autocomplete
             sx={{
               flexGrow: 20,
               label: {
+                color: "white",
                 display: "flex",
                 alignItems: "center",
               },

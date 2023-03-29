@@ -1,9 +1,11 @@
 import {
   Alert,
   AlertTitle,
+  Box,
   Container,
   Snackbar,
   TextField,
+  useTheme,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import React, { useEffect } from "react";
@@ -36,31 +38,32 @@ function SignIn() {
         body: JSON.stringify(id),
         credentials: "same-origin",
       })
-          .catch((err) => {
-            console.error(err);
-          })
-          .then(async (resp) => {
-            if (resp?.status === 401) {
-              setErrorMessage("Invalid Credentials");
-              setOpen(true);
-            } else if (resp?.status === 201) {
-              navigate("/home");
-            } else {
-              setErrorMessage(
-                  `Error ${resp?.status}, ${await resp
-                      ?.json()
-                      .then((json) => json.message)}`
-              );
-              setOpen(true);
-            }
-            setLoadingLogin(false);
-            setSubmit(false)
-          });
+        .catch((err) => {
+          console.error(err);
+        })
+        .then(async (resp) => {
+          if (resp?.status === 401) {
+            setErrorMessage("Invalid Credentials");
+            setOpen(true);
+          } else if (resp?.status === 201) {
+            navigate("/home");
+          } else {
+            setErrorMessage(
+              `Error ${resp?.status}, ${await resp
+                ?.json()
+                .then((json) => json.message)}`
+            );
+            setOpen(true);
+          }
+          setLoadingLogin(false);
+          setSubmit(false);
+        });
     }
+
     if (submit) {
       signin();
     }
-  }, [submit])
+  }, [submit]);
 
   const navigate = useNavigate();
   const handleClose = (
@@ -73,18 +76,24 @@ function SignIn() {
     setOpen(false);
   };
 
-  function signIn(){
-    setSubmit(true)
+  function signIn() {
+    setSubmit(true);
   }
 
   let email = React.createRef<React.InputHTMLAttributes<string>>();
   let password = React.createRef<React.InputHTMLAttributes<string>>();
+  const theme = useTheme();
 
   return (
-    <div className={"login"}>
+    <Box
+      className={"login"}
+      sx={{ backgroundColor: theme.palette.grey.A200,
+        width: { xs: "100%", md: "45%"} }}
+    >
       <Container>
         <h2>Or log in</h2>
-        <form className={"customForm"}
+        <form
+          className={"customForm"}
           onSubmit={(e) => {
             e.preventDefault();
             signIn();
@@ -121,7 +130,7 @@ function SignIn() {
           </Alert>
         </Snackbar>
       </Container>
-    </div>
+    </Box>
   );
 }
 
