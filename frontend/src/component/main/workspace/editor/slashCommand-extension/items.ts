@@ -80,6 +80,12 @@ const getSuggestionItems = (query: { query: string }) => {
       },
     },
     {
+      title: "Delete column",
+      command: ({ editor, range }: { editor: Editor; range: Range }) => {
+          editor.chain().focus().deleteRange(range).unsetColumns().run();
+      },
+    },
+    {
       title: "HR",
       command: ({ editor, range }: { editor: Editor; range: Range }) => {
         editor.chain().focus().deleteRange(range).setHorizontalRule().run();

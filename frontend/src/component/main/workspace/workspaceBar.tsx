@@ -309,15 +309,7 @@ export default function WorkspaceBar(props: {
         anchor="left"
         open={openDrawer}
       >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
+
         <Divider />
         <Box
           sx={{
@@ -326,6 +318,10 @@ export default function WorkspaceBar(props: {
             height: "100%",
           }}
         >
+          <Box sx={{
+            display: "flex",
+            flexDirection: "row",
+          }}>
           <Button
             onClick={() => {
               handleOpenCreate();
@@ -333,10 +329,20 @@ export default function WorkspaceBar(props: {
             variant={"contained"}
             color="secondary"
             startIcon={<AddIcon />}
-            sx={{ color: "white", m: 2 }}
+            sx={{ color: "white", m: 2, flexGrow: 1 }}
           >
             Create
           </Button>
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "rtl" ? (
+                  <ChevronRightIcon />
+              ) : (
+                  <ChevronLeftIcon />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          </Box>
 
           <TreeView
             aria-label="workspace"

@@ -74,6 +74,59 @@ export default function PageContent(props: { row: JSONContent, editable: boolean
 
   return (
       <Box sx={{ width: "inherit" }}>
+        {editor && <Box sx={{
+          visibility: editor.isActive('table') ? 'visible' : 'hidden',
+        }}>
+          <button
+              onClick={() => editor.chain().focus().toggleHeaderRow().run()}
+              className={editor.isActive('Insert header') ? 'is-active' : ''}
+          >
+            Insert header
+          </button>
+
+          <button
+              onClick={() => editor.chain().focus().addColumnAfter().run()}
+              className={editor.isActive('Insert column') ? 'is-active' : ''}
+          >
+            Insert column
+          </button>
+
+          <button
+              onClick={() => editor.chain().focus().deleteColumn().run()}
+              className={editor.isActive('Delete column') ? 'is-active' : ''}
+          >
+            Delete column
+          </button>
+
+          <button
+              onClick={() => editor.chain().focus().addRowAfter().run()}
+              className={editor.isActive('Insert row') ? 'is-active' : ''}
+          >
+            Insert row
+          </button>
+
+          <button
+              onClick={() => editor.chain().focus().deleteRow().run()}
+              className={editor.isActive('delete row') ? 'is-active' : ''}
+          >
+            Delete row
+          </button>
+
+          <button
+              onClick={() => editor.chain().focus().mergeOrSplit().run()}
+              className={editor.isActive('Merge or Split') ? 'is-active' : ''}
+          >
+            Merge or Split
+          </button>
+
+          <button
+              onClick={() => editor.chain().focus().deleteTable().run()}
+              className={editor.isActive('Delete table') ? 'is-active' : ''}
+          >
+            Delete table
+          </button>
+        </Box>
+        }
         <EditorContent editor={editor}/>
       </Box>
   );

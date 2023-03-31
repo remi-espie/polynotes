@@ -68,9 +68,13 @@ form {
     pointer-events: none;
 }
 
-.ProseMirror table, th, td {
+table, th, td {
     border-collapse: collapse;
-    border: 1px solid white;
+    border: 1px solid black !important;
+}
+
+.ProseMirror th{
+    background-color: #e9ecef;
 }
 
 .ProseMirror ul li *{
@@ -80,4 +84,8 @@ form {
 
 .ProseMirror ul[data-type="taskList"] li::marker{
     content: "";
+}
+
+.resize-cursor {
+    cursor: ew-resize;
 }
