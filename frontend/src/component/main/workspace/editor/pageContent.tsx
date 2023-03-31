@@ -17,6 +17,8 @@ import {Table} from "@tiptap/extension-table";
 import {TableRow} from "@tiptap/extension-table-row";
 import {TableHeader} from "@tiptap/extension-table-header";
 import {TableCell} from "@tiptap/extension-table-cell";
+import {TaskItem} from "@tiptap/extension-task-item";
+import {TaskList} from "@tiptap/extension-task-list";
 
 export default function PageContent(props: { row: JSONContent, editable: boolean, setSendPage: (state:boolean) => void, setPageContent:  React.Dispatch<React.SetStateAction<any[]>>, index:number }) {
   const editor = useEditor({
@@ -37,13 +39,16 @@ export default function PageContent(props: { row: JSONContent, editable: boolean
       TextAlign.configure({
         types: ['heading', 'paragraph', 'image'],
       }),
-
       Table.configure({
         resizable: true,
       }),
       TableRow,
       TableHeader,
       TableCell,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+      }),
     ],
     content: props.row,
     editable: props.editable

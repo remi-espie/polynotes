@@ -1,69 +1,83 @@
 #root {
-  width: 100%;
-  text-align: center;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
+    width: 100%;
+    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
 }
 
-.App{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
+.App {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 
-.App > *{
-  margin: auto;
+.App > * {
+    margin: auto;
 }
 
 .login {
-  border-radius: 5px;
-  margin-bottom: 2em;
+    border-radius: 5px;
+    margin-bottom: 2em;
 }
 
 form {
- display: flex;
- flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .customForm > div {
-  margin-bottom: 1em !important;
+    margin-bottom: 1em !important;
 }
 
-.customForm > label{
-  margin-bottom: 1em !important;
+.customForm > label {
+    margin-bottom: 1em !important;
 }
 
-.customForm > button{
-  margin-bottom: 1em !important;
+.customForm > button {
+    margin-bottom: 1em !important;
 }
 
 .ProseMirror .column-block {
-  width: 100%;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;
-  gap: 24px;
-  padding: 8px 0;
+    width: 100%;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 24px;
+    padding: 8px 0;
 }
 
-.ProseMirror *{
-  text-align: left;
+.ProseMirror * {
+    text-align: left;
 }
 
 .ProseMirror .column {
-  overflow: auto;
-  border: 1px gray dashed;
-  border-radius: 8px;
-  padding: 8px;
-  margin: -8px;
+    overflow: auto;
+    border: 1px gray dashed;
+    border-radius: 8px;
+    padding: 8px;
+    margin: -8px;
 }
 
 .ProseMirror p.is-editor-empty:first-child::before {
-  color: #adb5bd;
-  content: attr(data-placeholder);
-  float: left;
-  height: 0;
-  pointer-events: none;
+    color: #adb5bd;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+}
+
+.ProseMirror table, th, td {
+    border-collapse: collapse;
+    border: 1px solid white;
+}
+
+.ProseMirror ul li *{
+    display: inline-block;
+    line-height: 0.5;
+}
+
+.ProseMirror ul[data-type="taskList"] li::marker{
+    content: "";
 }

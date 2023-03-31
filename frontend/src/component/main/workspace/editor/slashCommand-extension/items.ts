@@ -160,6 +160,18 @@ const getSuggestionItems = (query: { query: string }) => {
         }
       },
     },
+    {
+      title: "Table",
+      command: ({editor, range}: { editor: Editor; range: Range }) => {
+        editor.chain().focus().deleteRange(range).insertTable().run();
+      },
+    },
+    {
+      title: "Checkbox",
+      command: ({ editor, range }: { editor: Editor; range: Range }) => {
+        editor.chain().focus().deleteRange(range).toggleTaskList().run();
+      },
+    },
   ].filter((item) =>
     item.title.toLowerCase().startsWith(query.query.toLowerCase())
   );
