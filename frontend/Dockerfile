@@ -6,7 +6,7 @@ COPY tsconfig*.json ./
 COPY vite.config*.ts ./
 COPY src ./src
 COPY index.html ./
-RUN npm i
+RUN npm i -f
 RUN npm run build
 
 FROM nginx:stable-alpine as production-stage
