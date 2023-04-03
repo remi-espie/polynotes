@@ -169,7 +169,7 @@ const getSuggestionItems = (query: { query: string }) => {
     {
       title: "Table",
       command: ({editor, range}: { editor: Editor; range: Range }) => {
-        editor.chain().focus().deleteRange(range).insertTable().run();
+        editor.chain().focus().deleteRange(range).addTable().run();
       },
     },
     {

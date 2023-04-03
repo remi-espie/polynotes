@@ -9,6 +9,10 @@ import DescriptionIcon from "@mui/icons-material/Description";
 
 export default function WorkspaceRecent(props: { workspaces: workspaceType[] }) {
 
+    const workspaces = [...props.workspaces].sort((a: workspaceType, b: workspaceType) => {
+        return new Date(b.modified).getTime() - new Date(a.modified).getTime();
+    });
+
     const navigate = useNavigate()
 
     return (
@@ -20,7 +24,7 @@ export default function WorkspaceRecent(props: { workspaces: workspaceType[] }) 
             overflowX: "scroll",
             overflowY: "hidden",
         }}>
-            {props.workspaces.map((workspace: workspaceType) => (
+            {workspaces.map((workspace: workspaceType) => (
                 <ImageListItem sx={{cursor: "pointer", height:"calc(100% - 25px) !important"}} key={workspace.id} onClick={() => {
                     if (workspace.type === "folder") {
                         navigate(`/home/folder/${workspace.id}`)
