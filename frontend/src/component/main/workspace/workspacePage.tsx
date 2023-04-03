@@ -63,6 +63,15 @@ export default function WorkspacePage(props: {
     }
   }, [id]);
 
+  useEffect(() => {
+    if (workspace === undefined) return;
+    setEditable(
+        (workspace!.owner === props.user.id ||
+            workspace!.writer.includes("anon")) as boolean
+    );
+    setReloadKey(reloadKey + 1);
+  }, [props.user])
+
   const [open, setOpen] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
 
@@ -312,7 +321,7 @@ export default function WorkspacePage(props: {
         );
       })}
 
-      <Box display="flex" flexDirection="row" justifyContent="space-evenly">
+      <Box display="flex" flexDirection="row" justifyContent="space-evenly" key={reloadKey}>
         <Button
           aria-label={"Add a new row"}
           size={"large"}
