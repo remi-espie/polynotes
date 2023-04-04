@@ -1,6 +1,6 @@
 import {CommandProps, mergeAttributes, Node} from '@tiptap/core'
 import {ReactNodeViewRenderer} from '@tiptap/react'
-import activeTableComponent from "./databaseComponent";
+import databaseComponent from "./databaseComponent";
 
 
 declare module '@tiptap/core' {
@@ -13,7 +13,7 @@ declare module '@tiptap/core' {
 
 
 export default Node.create({
-    name: 'activeTableComponent',
+    name: 'databaseComponent',
 
     group: 'block',
 
@@ -33,17 +33,17 @@ export default Node.create({
     parseHTML() {
         return [
             {
-                tag: 'active-table',
+                tag: 'database-extension',
             },
         ]
     },
 
     renderHTML({HTMLAttributes}) {
-        return ['active-table', mergeAttributes(HTMLAttributes)]
+        return ['database-extension', mergeAttributes(HTMLAttributes)]
     },
 
     addNodeView() {
-        return ReactNodeViewRenderer(activeTableComponent)
+        return ReactNodeViewRenderer(databaseComponent)
     },
 
 
@@ -57,7 +57,7 @@ export default Node.create({
                         console.log('no dispatch');
                         return;
                     }
-                    tr = tr.insert(selection.$to.pos, doc.type.schema.node('activeTableComponent', {content: [["Your table"], []], type: true}));
+                    tr = tr.insert(selection.$to.pos, doc.type.schema.node('databaseComponent', {content: [["Your table"], []], type: true}));
                     return dispatch(tr);
                 } catch (error) {
                     console.error(error);
