@@ -24,6 +24,9 @@ export default Node.create({
             content: {
                 default: [],
             },
+            header: {
+                default: [],
+            },
             type: {
                 default: true,
             }
@@ -57,7 +60,7 @@ export default Node.create({
                         console.log('no dispatch');
                         return;
                     }
-                    tr = tr.insert(selection.$to.pos, doc.type.schema.node('databaseComponent', {content: [["Your table"], []], type: true}));
+                    tr = tr.insert(selection.$to.pos, doc.type.schema.node('databaseComponent', {content: [["Your table"], []], header: [{headerName:"Your Table", defaultColumnTypeName: "Text"}], type: true}));
                     return dispatch(tr);
                 } catch (error) {
                     console.error(error);
