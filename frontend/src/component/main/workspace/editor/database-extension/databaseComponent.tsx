@@ -17,7 +17,6 @@ export default (props: { node: { attrs: { content: (string | number)[][] | undef
     }, [viewTable])
 
     const tableToKanban = (tableContent: (string | number)[][]) => {
-        console.log(tableColumns)
         let kabanContent: BoardData = {lanes: [] as Lane[]}
 
         for (const [indexRow, tableRow] of tableContent[0].entries()) {
@@ -72,7 +71,6 @@ export default (props: { node: { attrs: { content: (string | number)[][] | undef
 
     let tableContent = props.node.attrs.content
     let tableColumns = props.node.attrs.header
-
     let kanbanContent = tableToKanban(tableContent!);
 
 
@@ -111,12 +109,10 @@ export default (props: { node: { attrs: { content: (string | number)[][] | undef
                     />
                     :
                     <Board data={kanbanContent}
-                           draggable
                            canAddLanes
                            editable
                            editLaneTitle
                            laneDraggable
-                           cardDraggable
                            onCardUpdate={(cardId, card,) => {
                                console.log("coucou")
                                const lane = kanbanContent.lanes.find((value) => value.id === card.laneId)
