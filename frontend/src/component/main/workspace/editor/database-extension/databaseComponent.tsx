@@ -55,10 +55,11 @@ export default (props: { node: { attrs: { content: (string | number)[][] | undef
 
         for (const [, kanbanColumn] of kanbanContent.lanes.entries()) {
             for (const [indexCard, kanbanCard] of kanbanColumn.cards!.entries()) {
-                if (tableContent[indexCard] === undefined) tableContent[indexCard] = []
-                tableContent[indexCard].push(kanbanCard.title!)
+                if (tableContent[indexCard +1] === undefined) tableContent[indexCard +1] = []
+                tableContent[indexCard +1].push(kanbanCard.title!)
             }
         }
+
 
         return tableContent
     }
