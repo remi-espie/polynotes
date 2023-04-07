@@ -33,12 +33,8 @@ export default (props: { node: { attrs: { content: (string | number)[][] | undef
             for (const [indexElement, tableElement] of tableRow.entries()) {
                 if (indexRow !== 0) {
                     kabanContent.lanes[indexElement].cards!.push({
-                        id: "Card1" + indexRow.toString() + indexElement.toString(),
+                        id: "Card" + indexRow.toString() + indexElement.toString(),
                         title: tableElement.toString(),
-                    })
-                    kabanContent.lanes[indexElement].cards!.push({
-                        id: "Card2" + indexRow.toString() + indexElement.toString(),
-                        title: tableElement.toString()
                     })
                 }
             }
@@ -59,9 +55,8 @@ export default (props: { node: { attrs: { content: (string | number)[][] | undef
 
         for (const [, kanbanColumn] of kanbanContent.lanes.entries()) {
             for (const [indexCard, kanbanCard] of kanbanColumn.cards!.entries()) {
-                if (indexCard % 2 !== 0) continue
-                if (tableContent[indexCard / 2 + 1] === undefined) tableContent[indexCard / 2 + 1] = []
-                tableContent[indexCard / 2 + 1].push(kanbanCard.title!)
+                if (tableContent[indexCard] === undefined) tableContent[indexCard] = []
+                tableContent[indexCard].push(kanbanCard.title!)
             }
         }
 
@@ -109,23 +104,25 @@ export default (props: { node: { attrs: { content: (string | number)[][] | undef
                     />
                     :
                     <Board data={kanbanContent}
+                           draggable
                            canAddLanes
                            editable
                            editLaneTitle
+                           cardDraggable
                            laneDraggable
                            onCardUpdate={(cardId, card,) => {
                                console.log("coucou")
                                const lane = kanbanContent.lanes.find((value) => value.id === card.laneId)
                                const cardIndex = lane!.cards!.findIndex((value) => value.id === cardId)
-                               lane!.cards!.splice(cardIndex - 1, 2, card, card)
+                               lane!.cards!.splice(cardIndex, 1, card,)
                            }}
                            onCardAdd={(card, laneId) => {
-                               kanbanContent.lanes.find((value) => value.id === laneId)!.cards!.push(card, card)
+                               kanbanContent.lanes.find((value) => value.id === laneId)!.cards!.push(card)
                            }}
                            onCardDelete={(cardId, laneId) => {
                                const lane = kanbanContent.lanes.find((value) => value.id === laneId)
                                const cardIndex = lane!.cards!.findIndex((value) => value.id === cardId)
-                               lane!.cards!.splice(cardIndex - 1, 2)
+                               lane!.cards!.splice(cardIndex, 1)
                            }}
                            onLaneAdd={(lane) => {
                                kanbanContent.lanes.push({id: lane.laneId, title: lane.title, cards: []})
