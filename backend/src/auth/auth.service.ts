@@ -17,14 +17,12 @@ export class AuthService {
     if (!user)
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
 
-    // generate and sign token
     const token = this._createToken(user.id);
-    //const expireDate = new Date(process.env.EXPIRESIN)
 
     res.setCookie('auth-cookie', token, {
       httpOnly: true,
       signed: false,
-      maxAge: 100000000000,
+      maxAge: 3600,
       sameSite: 'lax',
       secure: true,
       path: '/',

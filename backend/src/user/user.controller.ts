@@ -23,10 +23,10 @@ export class UserController {
     return request.user;
   }
 
-  @Get('/all')
-  async getAll() {
-    return await this.service.getAll();
-  }
+  // @Get('/all')
+  // async getAll() {
+  //   return await this.service.getAll();
+  // }
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)

@@ -112,7 +112,6 @@ export default (props: { node: { attrs: { content: (string | number)[][] | undef
                            cardDraggable
                            laneDraggable
                            onCardUpdate={(cardId, card,) => {
-                               console.log("coucou")
                                const lane = kanbanContent.lanes.find((value) => value.id === card.laneId)
                                const cardIndex = lane!.cards!.findIndex((value) => value.id === cardId)
                                lane!.cards!.splice(cardIndex, 1, card,)
