@@ -6,6 +6,7 @@ import WorkspaceExplorer from "./workspaceExplorer";
 import {userType, workspaceType} from "../../../types";
 import { useParams } from "react-router-dom";
 import WorkspacePage from "./workspacePage";
+import WorkspaceForm from "./workspaceForm";
 
 function workspace(props: {
     user: userType;
@@ -50,7 +51,9 @@ function workspace(props: {
             <WorkspaceRecent workspaces={props.workspaces} />
             <WorkspaceExplorer workspaces={props.workspaces} />
           </>
-        ) : (
+        ) : type === "form" ? (<WorkspaceForm workspaces={props.workspaces} user={props.user}
+                                               getWorkspaces={props.getWorkspaces}/>)
+            : (
           <WorkspacePage workspaces={props.workspaces} user={props.user}
                          getWorkspaces={props.getWorkspaces} />
         )}

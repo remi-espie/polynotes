@@ -30,6 +30,7 @@ import {createRef, SyntheticEvent, useEffect, useState} from "react";
 import {LoadingButton} from "@mui/lab";
 import {workspaceType} from "../../../types";
 import IconButton from "@mui/material/IconButton";
+import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -190,7 +191,7 @@ export default function WorkspaceBar(props: {
             }
         } else if (workspace?.type === "folder") {
             url += `/${workspace.id}`;
-        } else if (workspace?.type === "page") {
+        } else if (workspace?.type === "page" || workspace?.type === "form") {
             url += `/${workspace.parentId}`;
         }
 
@@ -248,6 +249,9 @@ export default function WorkspaceBar(props: {
                     onClick={() => {
                         if (workspace.type === "page") {
                             navigate(`/home/page/${workspace.id}`);
+                        }
+                        else if (workspace.type === "form") {
+                            navigate(`/home/form/${workspace.id}`);
                         }
                     }}
                 >
@@ -416,6 +420,9 @@ export default function WorkspaceBar(props: {
                                 <ToggleButton value="page">
                                     {" "}
                                     <NoteAddIcon/> Page{" "}
+                                </ToggleButton>
+                                <ToggleButton value="form">
+                                    <FormatAlignJustifyIcon/> Form
                                 </ToggleButton>
                                 <ToggleButton value="folder">
                                     <CreateNewFolderIcon/> Folder

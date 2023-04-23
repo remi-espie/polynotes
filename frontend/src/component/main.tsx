@@ -26,6 +26,7 @@ function Main() {
             if (resp.status !== 200) {
                 if (
                     !location.pathname.includes("/home/page/") &&
+                    !location.pathname.includes("/home/form/") &&
                     !location.pathname.includes("/home/folder/")
                 ) {
                     navigate("/login");

@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom";
 import {workspaceType} from "../../../types";
 import {Folder} from "@mui/icons-material";
 import DescriptionIcon from "@mui/icons-material/Description";
+import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
 
 export default function WorkspaceRecent(props: { workspaces: workspaceType[] }) {
 
@@ -25,18 +26,23 @@ export default function WorkspaceRecent(props: { workspaces: workspaceType[] }) 
             overflowY: "hidden",
         }}>
             {workspaces.map((workspace: workspaceType) => (
-                <ImageListItem sx={{cursor: "pointer", height:"calc(100% - 25px) !important"}} key={workspace.id} onClick={() => {
-                    if (workspace.type === "folder") {
-                        navigate(`/home/folder/${workspace.id}`)
-                    } else {
-                        navigate(`/home/page/${workspace.id}`)
-                    }
-                }
-                }>
+                <ImageListItem sx={{cursor: "pointer", height: "calc(100% - 25px) !important"}} key={workspace.id}
+                               onClick={() => {
+                                   workspace.type === "folder" ?
+                                       navigate(`/home/folder/${workspace.id}`)
+                                       :
+                                       workspace.type === "form" ?
+                                           navigate(`/home/form/${workspace.id}`)
+                                           :
+                                           navigate(`/home/page/${workspace.id}`)
+                               }
+                               }>
                     {workspace.type === "folder" ?
-                        <Folder sx={{ height:"100%", width:"100%"}}/>
+                        <Folder sx={{height: "100%", width: "100%"}}/>
                         :
-                        <DescriptionIcon sx={{ height:"100%", width:"100%"}}/>
+                        workspace.type === "page" ? <DescriptionIcon sx={{height: "100%", width: "100%"}}/>
+                            :
+                            <FormatAlignJustifyIcon sx={{height: "100%", width: "100%"}}/>
                     }
                     <ImageListItemBar
                         title={workspace.name}

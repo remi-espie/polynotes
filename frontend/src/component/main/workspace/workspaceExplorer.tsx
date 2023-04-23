@@ -12,6 +12,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import {useNavigate, useParams} from "react-router-dom";
 import {workspaceType} from "../../../types";
 import {Buffer} from "buffer";
+import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 
 export default function WorkspaceExplorer(props: { workspaces: workspaceType[] }) {
     const navigate = useNavigate();
@@ -72,15 +73,17 @@ export default function WorkspaceExplorer(props: { workspaces: workspaceType[] }
                                 cursor: "pointer",
                             }}
                             onClick={() => {
-                                if (workspace.type === "folder") {
-                                    navigate(`/home/folder/${workspace.id}`);
-                                } else {
-                                    navigate(`/home/page/${workspace.id}`);
-                                }
+                                workspace.type === "folder" ?
+                                    navigate(`/home/folder/${workspace.id}`)
+                                    :
+                                    workspace.type === "form" ?
+                                        navigate(`/home/form/${workspace.id}`)
+                                        :
+                                        navigate(`/home/page/${workspace.id}`)
                             }}
                         >
                             <TableCell sx={{display: "flex", alignItems: "center"}}>
-                                {workspace.type === "folder" ? <Folder/> : <DescriptionIcon/>}
+                                {workspace.type === "folder" ? <Folder/> : workspace.type === "page" ? <DescriptionIcon/> : <FormatAlignJustifyIcon/>}
                                 {workspace.name}
                             </TableCell>
                             <TableCell>{workspace.owner}</TableCell>
