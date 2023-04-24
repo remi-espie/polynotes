@@ -13,7 +13,7 @@ import {
 import FormRow, {formRow} from "./formRow";
 import {useDebounce} from "use-debounce";
 
-export default function FormContent(props: {
+export default function FormContentEditor(props: {
     row: FormRow,
     editable: boolean,
     sendPage: boolean,
