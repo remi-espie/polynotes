@@ -14,14 +14,14 @@ import {
     Snackbar,
     Switch, Tab, Tabs,
 } from "@mui/material";
-import PageContent from "./editor/pageContent";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {JSONContent} from "@tiptap/core";
 import ShareIcon from "@mui/icons-material/Share";
 import {DefaultCopyField} from "@eisberg-labs/mui-copy-field";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {TabContext, TabPanel} from "@mui/lab";
+import FormRow from "./form/formRow";
+import FormContent from "./form/formContent";
 
 
 export default function WorkspaceForm(props: {
@@ -119,21 +119,13 @@ export default function WorkspaceForm(props: {
         }
     }, [fetchWorkspace]);
 
-    const defaultColumn = {
-        type: "doc",
-        content: [
-            {
-                type: "paragraph",
-                content: [],
-            },
-        ],
-    };
 
-    function addRow() {
+    function addRow(type: string) {
         if (editable) {
             setPageContent((prev) => {
                 let newContent = prev;
-                newContent.push(defaultColumn);
+                const row = new FormRow(type)
+                newContent.push(row);
                 return newContent;
             });
             setReloadKey(reloadKey + 1);
@@ -278,7 +270,7 @@ export default function WorkspaceForm(props: {
                     <Tab label="Results" value={"Result"} />
                 </Tabs>
                 <TabPanel value={"Form"}>
-                    {pageContent.map((row: JSONContent, indexRow: number) => {
+                    {pageContent.map((row: FormRow, indexRow: number) => {
                         return (
                             <Box
                                 display="flex"
@@ -293,7 +285,7 @@ export default function WorkspaceForm(props: {
                                     flexDirection="row"
                                     alignItems="center"
                                 >
-                                    <PageContent
+                                    <FormContent
                                         row={row}
                                         editable={editable}
                                         setSendPage={setSendPage}
@@ -348,20 +340,27 @@ export default function WorkspaceForm(props: {
                             }}
                         >
                             <MenuItem onClick={() => {
+                                addRow("text");
                                 setAnchorEl(null);
                             }}>Text input</MenuItem>
+
                             <MenuItem onClick={() => {
+                                addRow("paragraph");
                                 setAnchorEl(null);
                             }}>Text area</MenuItem>
+
                             <MenuItem onClick={() => {
+                                addRow("integer");
                                 setAnchorEl(null);
                             }}>Integer</MenuItem>
 
                             <MenuItem onClick={() => {
+                                addRow("checkbox");
                                 setAnchorEl(null);
                             }}>Checkboxes</MenuItem>
 
                             <MenuItem onClick={() => {
+                                addRow("radio");
                                 setAnchorEl(null);
                             }}>Radio Button</MenuItem>
                         </Menu>
