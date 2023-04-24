@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
     Box,
     Button,
@@ -11,23 +11,31 @@ import {
     TextField
 } from "@mui/material";
 import FormRow, {formRow} from "./formRow";
+import {useDebounce} from "use-debounce";
 
-export default function FormContent(props: { row: FormRow, editable: boolean, setSendPage: (state: boolean) => void, setPageContent: React.Dispatch<React.SetStateAction<any[]>>, index: number }) {
+export default function FormContent(props: {
+    row: FormRow,
+    editable: boolean,
+    sendPage: boolean,
+    setSendPage: (state: boolean) => void,
+    setPageContent: React.Dispatch<React.SetStateAction<any[]>>,
+    index: number
+}) {
 
-    // const [debouncedEditor] = useDebounce(editor?.getHTML(), 1000);
-    //
-    // useEffect(() => {
-    //     if (debouncedEditor) {
-    //         props.setPageContent((prev) => {
-    //             let newContent = prev
-    //             newContent[props.index] = editor!.getJSON()
-    //             return newContent
-    //         })
-    //         props.setSendPage(true)
-    //     }
-    // }, [debouncedEditor]);
+    const [rowContent, setRowContent] = React.useState<any>(renderInput(props.row.input!))
 
-    const [pageContent, setPageContent] = React.useState<any>(renderInput(props.row.input!))
+    const [debouncedEditor] = useDebounce(rowContent, 1000);
+
+    useEffect(() => {
+        if (debouncedEditor) {
+            props.setPageContent((prev) => {
+                let newContent = prev
+                newContent[props.index] = props.row
+                return newContent
+            })
+            props.setSendPage(true)
+        }
+    }, [debouncedEditor]);
 
     function renderInput(input: formRow) {
         switch (input.type) {
@@ -70,14 +78,18 @@ export default function FormContent(props: { row: FormRow, editable: boolean, se
                                                               label={"Choice"}
                                                               defaultValue={item}
                                                               size="small"
+                                                              onChange={(event) => {
+                                                                  input.content[index] = event.target.value
+                                                                  setRowContent(renderInput(props.row.input!))
+                                                              }}
                                                           />}
                                         />)
                                 })
                             }
                         </FormGroup>
                         <Button variant="outlined" size="small" onClick={() => {
-                            input.content.push("")
-                            setPageContent(renderInput(props.row.input!))
+                            props.row.input!.content.push("")
+                            setRowContent(renderInput(props.row.input!))
                         }}>Add</Button>
                     </>
                 )
@@ -90,11 +102,15 @@ export default function FormContent(props: { row: FormRow, editable: boolean, se
                                     input.content.map((item: string, index: number) => {
                                         return (
                                             <FormControlLabel key={index}
-                                                              control={<Radio />}
+                                                              control={<Radio disabled={props.editable}/>}
                                                               label={<TextField
                                                                   label={"Choice"}
                                                                   defaultValue={item}
                                                                   size="small"
+                                                                  onChange={(event) => {
+                                                                      input.content[index] = event.target.value
+                                                                      setRowContent(renderInput(props.row.input!))
+                                                                  }}
                                                               />}
                                                               value={index}
                                             />)
@@ -103,8 +119,8 @@ export default function FormContent(props: { row: FormRow, editable: boolean, se
                             </RadioGroup>
                         </FormControl>
                         <Button variant="outlined" size="small" onClick={() => {
-                            input.content.push("")
-                            setPageContent(renderInput(props.row.input!))
+                            props.row.input!.content.push("")
+                            setRowContent(renderInput(props.row.input!))
                         }}>Add</Button>
                     </>
                 )
@@ -114,30 +130,29 @@ export default function FormContent(props: { row: FormRow, editable: boolean, se
 
     return (
         <Box sx={{
-            width: "30%", display: "flex", flexDirection: "column", margin: "auto", '> * > *': {
+            width: "30%", display: "flex", flexDirection: "column", margin: "auto", marginBottom: 1, '> * > *': {
                 m: 1,
             }
         }}>
-            {props.editable ? (
-                <>
-                    <TextField
-                        label="Title"
-                        defaultValue=""
-                        size="medium"
-                    />
-                    <TextField
-                        label="Description"
-                        defaultValue=""
-                        size="small"
-                    />
-                </>) : (
-                <>
-                    <h6>{props.row.heading.content}</h6>
-                    <p>{props.row.description.content}</p>
-                </>
-            )
-            }
-            {pageContent}
+            <TextField
+                label="Title"
+                defaultValue={props.row.heading.content}
+                size="medium"
+                onChange={(event) => {
+                    props.row.heading.content = event.target.value
+                    setRowContent(renderInput(props.row.input!))
+                }}
+            />
+            <TextField
+                label="Description"
+                defaultValue={props.row.description.content}
+                size="small"
+                onChange={(event) => {
+                    props.row.description.content = event.target.value
+                    setRowContent(renderInput(props.row.input!))
+                }}
+            />
+            {rowContent}
         </Box>
     );
 }

@@ -104,9 +104,15 @@ export class PageService {
             $push: { writer: userToShare, reader: userToShare },
           })
           .exec();
-      else if (type === 'reader')
+      else if (type === 'reader' || type === 'true')
         return await this.model
           .findByIdAndUpdate(id, { $push: { reader: userToShare } })
+          .exec();
+      else
+        return await this.model
+          .findByIdAndUpdate(id, {
+            $pull: { reader: userToShare, writer: userToShare },
+          })
           .exec();
     } else throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
   }

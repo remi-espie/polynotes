@@ -57,6 +57,7 @@ export default function WorkspaceForm(props: {
                         workspaceLocal.writer.includes("anon")) as boolean
                 );
                 setReloadKey(reloadKey + 1);
+                setShared(workspace!.reader.includes("anon"));
             }
         }
     }, [id]);
@@ -107,6 +108,7 @@ export default function WorkspaceForm(props: {
                                 workspace.writer.includes("anon")) as boolean
                         );
                         setPageContent(workspace!.subContent);
+                        setShared(workspace!.reader.includes("anon"));
                     } else {
                         navigate("/login");
                     }
@@ -148,7 +150,7 @@ export default function WorkspaceForm(props: {
     const [sendPage, setSendPage] = useState(false);
 
     useEffect(() => {
-        if (sendPage && editable) {
+        if (sendPage) {
             workspace!.subContent = pageContent;
             fetch(`/api/page/${id}`, {
                 method: "PATCH",
@@ -172,7 +174,7 @@ export default function WorkspaceForm(props: {
                 });
             setSendPage(false);
         }
-    }, [sendPage, workspace]);
+    }, [sendPage]);
 
     const [deletePage, setDeletePage] = useState(false);
 
@@ -231,7 +233,7 @@ export default function WorkspaceForm(props: {
 
     useEffect(() => {
         if (uploadSharePage) {
-            fetch(`/api/page/share/${shared}/${id}/`, {
+            fetch(`/api/page/share/${shared}/${id}/anon`, {
                 method: "PATCH",
                 mode: "cors",
                 headers: {
@@ -248,6 +250,8 @@ export default function WorkspaceForm(props: {
                         setErrorMessage(`Error : ${resp?.status}, ${resp?.statusText}`);
                         setOpen(true);
                     }
+                    if (shared) workspace?.reader.push("anon");
+                    else workspace?.reader.splice(workspace?.reader.indexOf("anon"), 1);
                 });
             setUploadSharePage(false);
             setOpenShare(false);
@@ -288,6 +292,7 @@ export default function WorkspaceForm(props: {
                                     <FormContent
                                         row={row}
                                         editable={editable}
+                                        sendPage={sendPage}
                                         setSendPage={setSendPage}
                                         setPageContent={setPageContent}
                                         index={indexRow}
@@ -407,7 +412,7 @@ export default function WorkspaceForm(props: {
                         >
 
                             <FormControlLabel
-                                control={<Switch onChange={handleShareChange}/>}
+                                control={<Switch onChange={handleShareChange} checked={shared === undefined ? false : shared}/>}
                                 label="Shared ?"
                                 sx={{marginBottom: 2}}
                             />
