@@ -132,7 +132,7 @@ After the CodeQL Scan, the Docker images are built and then deployed to the serv
 
 Every secret is set in a .env file through the GitHub Action workflow using GitHub's Secrets.  
 Backend's and Frontend Docker build consists of building the app, exposing the port, and running the built application.  
-However, the Frontend Docker build first build the app using the node:lts-alpine image then copy the built app to the nginx image, which is then exposed on port 80.  
+However, the Frontend Docker first builds the app using the node:lts-alpine image then copy the built app to the nginx image, which is then exposed on port 80.  
 Finally, the Docker Compose file is used to deploy the application on the server, using the Docker images built by GitHub Actions, and the images of MongoDB and Traefik.
 
 ---
