@@ -123,5 +123,4 @@ export class PageService {
       throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
     return await this.model.findByIdAndDelete(id).exec();
   }
-
 }

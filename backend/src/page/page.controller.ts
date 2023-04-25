@@ -80,7 +80,6 @@ export class PageController {
     else return await this.service.share(id, idUser, type, 'anon');
   }
 
-
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   async delete(@Param('id') id: string, @Req() request) {
