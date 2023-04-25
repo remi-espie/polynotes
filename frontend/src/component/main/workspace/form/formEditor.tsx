@@ -7,12 +7,12 @@ import {
     Menu,
     MenuItem, Switch,
     Tab,
-    Tabs, TextField,
+    Tabs,
 } from "@mui/material";
 import FormRow from "./formRow";
 import React, {useEffect, useState} from "react";
 import {TabContext, TabPanel} from "@mui/lab";
-import FormContentEditor from "./formContentEditor";
+import FormRowEditor from "./formRowEditor";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -179,21 +179,6 @@ export default function FormEditor(props: {
 
 
     const [tabValue, setTabValue] = React.useState("Form");
-    const [changeTitle, setChangeTitle] = useState(false);
-
-    useEffect(() => {
-        if (changeTitle) {
-            props.setPageContent((prev) => {
-                let newContent = prev
-                newContent[0] = title
-                return newContent
-            })
-            setSendPage(true)
-            setChangeTitle(false)
-        }
-    }, [changeTitle])
-
-    const [title, setTitle] = useState(props.pageContent[0])
 
     return (
         <TabContext value={tabValue.toString()}>
@@ -208,18 +193,8 @@ export default function FormEditor(props: {
                     <Tab label="Results" value={"Result"}/>
                 </Tabs>
                 <TabPanel value={"Form"}>
-                    <TextField
-                        label="Title"
-                        defaultValue={title}
-                        size="medium"
-                        variant="filled"
-                        onChange={(event) => {
-                            setTitle(event.target.value)
-                            setChangeTitle(true)
-                        }}
-                    />
 
-                    {props.pageContent.slice(1).map((row: FormRow, indexRow: number) => {
+                    {props.pageContent.map((row: FormRow, indexRow: number) => {
                         return (
                             <Box
                                 display="flex"
@@ -234,13 +209,13 @@ export default function FormEditor(props: {
                                     flexDirection="row"
                                     alignItems="center"
                                 >
-                                    <FormContentEditor
+                                    <FormRowEditor
                                         row={row}
                                         editable={props.editable}
                                         sendPage={sendPage}
                                         setSendPage={setSendPage}
                                         setPageContent={props.setPageContent}
-                                        index={indexRow+1}
+                                        index={indexRow}
                                     />
 
                                     <IconButton
@@ -254,7 +229,7 @@ export default function FormEditor(props: {
                                             display: props.editable ? "" : "none",
                                         }}
                                         onClick={() => {
-                                            deleteRow(indexRow+1);
+                                            deleteRow(indexRow);
                                         }}
                                     >
                                         <DeleteIcon/>

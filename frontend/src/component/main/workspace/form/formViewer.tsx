@@ -3,23 +3,29 @@ import {
 } from "@mui/material";
 import FormRow from "./formRow";
 import React, {useEffect, useState} from "react";
-import FormContentViewer from "./formContentViewer";
+import FormRowViewer from "./formRowViewer";
 import SendIcon from '@mui/icons-material/Send';
 import {LoadingButton} from "@mui/lab";
+import {useNavigate} from "react-router-dom";
+import {workspaceType} from "../../../../types";
 
 export default function FormViewer(props: {
     id: string,
+    workspace: workspaceType,
     pageContent: any[],
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>
 }) {
     const [sendPage, setSendPage] = useState<boolean>(false);
     const [answer, setAnswer] = useState<any>({});
     const [loadingForm, setLoadingForm] = useState<boolean>(false);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
-        if (sendPage){
+        if (sendPage) {
             setLoadingForm(true)
-            console.log(answer)
-            fetch(`/api/page/${props.id}`, {
+            fetch(`/api/form/${props.id}`, {
                 method: "POST",
                 mode: "cors",
                 headers: {
@@ -34,21 +40,26 @@ export default function FormViewer(props: {
                 })
                 .then(async (resp) => {
                     setLoadingForm(false)
-                    console.log(resp)
+                    if (resp?.status === 200) {
+                        navigate(`/home/form/${props.id}/success`)
+                    } else {
+                        props.setErrorMessage("Error while sending form:" + resp?.status)
+                        props.setOpen(true)
+                    }
                 });
         }
     }, [sendPage]);
 
     return (
         <>
-            <h1>{props.pageContent[0]}</h1>
-            {props.pageContent.slice(1).map((row: FormRow, indexRow: number) => {
+            <h1>{props.workspace.name}</h1>
+            {props.pageContent.map((row: FormRow, indexRow: number) => {
                 return (
                     <Box
                         display="flex"
                         flexDirection="row"
                         sx={{width: "99%"}}
-                        key={indexRow+1}
+                        key={indexRow}
                     >
 
                         <Box
@@ -57,10 +68,10 @@ export default function FormViewer(props: {
                             flexDirection="row"
                             alignItems="center"
                         >
-                            <FormContentViewer
+                            <FormRowViewer
                                 row={row}
                                 setAnswer={setAnswer}
-                                index={indexRow+1}
+                                index={indexRow}
                             />
 
 

@@ -17,6 +17,7 @@ export default function WorkspaceForm(props: {
 }) {
     const navigate = useNavigate();
     let {id} = useParams();
+    let {success} = useParams();
     const [workspace, setWorkspace] = useState<workspaceType | undefined>();
 
     const [pageContent, setPageContent] = useState<any[]>([]);
@@ -108,13 +109,24 @@ export default function WorkspaceForm(props: {
 
     return (
         <>
-            {props.user.id === workspace?.owner ? (
-                <FormEditor workspace={workspace!} editable={editable} pageContent={pageContent}
-                            setPageContent={setPageContent} reloadKey={reloadKey} setReloadKey={setReloadKey} id={id!}
-                            setErrorMessage={setErrorMessage} setOpen={setOpen} getWorkspaces={props.getWorkspaces}/>
-            ) : (
-                <FormViewer pageContent={pageContent} id={id!}/>
-            )}
+            {
+                success === "success" ? (
+                        <Alert variant="filled" severity="success">
+                            <AlertTitle>Page saved !</AlertTitle>
+                            Your page has been saved successfully
+                        </Alert>
+                    ) :
+
+                    props.user.id === workspace?.owner ? (
+                        <FormEditor workspace={workspace!} editable={editable} pageContent={pageContent}
+                                    setPageContent={setPageContent} reloadKey={reloadKey} setReloadKey={setReloadKey}
+                                    id={id!}
+                                    setErrorMessage={setErrorMessage} setOpen={setOpen}
+                                    getWorkspaces={props.getWorkspaces}/>
+                    ) : (
+                        <FormViewer workspace={workspace!} pageContent={pageContent} id={id!} setOpen={setOpen}
+                                    setErrorMessage={setErrorMessage}/>
+                    )}
 
             <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
                 <Alert variant="filled" severity="error" onClose={handleClose}>
