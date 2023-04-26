@@ -20,7 +20,18 @@ export default function FormRowViewer(props: {
     function updateAnswer(value: any) {
         props.setAnswer((prev: any) => {
             let newAnswer = prev
-            newAnswer[props.index] = value
+            newAnswer[props.index] = {name:props.row.heading.content, content:value}
+            return newAnswer
+        })
+    }
+
+    function updateAnswerCheckbox(value: number) {
+        props.setAnswer((prev: any) => {
+            let newAnswer = prev
+            if (newAnswer[props.index] === undefined) newAnswer[props.index] = {name:props.row.heading.content, content:[]}
+            if (prev[props.index].content.includes(value)) {
+                newAnswer[props.index].content.splice(newAnswer[props.index].content.indexOf(value), 1)
+            } else newAnswer[props.index].content.push(value)
             return newAnswer
         })
     }
@@ -68,7 +79,7 @@ export default function FormRowViewer(props: {
                                         <FormControlLabel key={index}
                                                           control={<Checkbox
                                                               onChange={() => {
-                                                                  updateAnswer(index)
+                                                                  updateAnswerCheckbox(index)
                                                               }}/>}
                                                           label={item}
                                         />)

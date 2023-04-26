@@ -69,7 +69,6 @@ export default function FormEditor(props: {
 
     useEffect(() => {
         if (sendPage) {
-            console.log(props.pageContent)
             props.workspace!.subContent = props.pageContent;
             fetch(`/api/page/${props.id}`, {
                 method: "PATCH",
@@ -182,7 +181,7 @@ export default function FormEditor(props: {
 
     return (
         <TabContext value={tabValue.toString()}>
-            <Box key={props.reloadKey}>
+            <Box>
                 <Tabs value={tabValue}
                       onChange={(event: React.SyntheticEvent, newValue: string) => {
                           setTabValue(newValue);
@@ -200,7 +199,7 @@ export default function FormEditor(props: {
                                 display="flex"
                                 flexDirection="row"
                                 sx={{width: "99%"}}
-                                key={indexRow+1}
+                                key={indexRow + 1}
                             >
 
                                 <Box
@@ -239,7 +238,7 @@ export default function FormEditor(props: {
                         );
                     })}
 
-                    <Box display="flex" flexDirection="row" justifyContent="space-evenly" key={props.reloadKey}>
+                    <Box display="flex" flexDirection="row" justifyContent="space-evenly">
                         <Button
                             aria-label={"Add a new row"}
                             size={"large"}

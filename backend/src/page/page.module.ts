@@ -12,5 +12,6 @@ import { UserModule } from '../user/user.module';
     UserModule,
     MongooseModule.forFeature([{ name: Page.name, schema: PageSchema }]),
   ],
+  exports: [PageService],
 })
 export class PageModule {}

@@ -22,7 +22,7 @@ export default function FormRowEditor(props: {
     index: number
 }) {
 
-    const [rowContent, setRowContent] = React.useState<any>(renderInput(props.row.input!))
+    const [rowContent, setRowContent] = React.useState<any>(props.row.input!)
 
     const [debouncedEditor] = useDebounce(rowContent, 1000);
 
@@ -80,7 +80,7 @@ export default function FormRowEditor(props: {
                                                               size="small"
                                                               onChange={(event) => {
                                                                   input.content[index] = event.target.value
-                                                                  setRowContent(renderInput(props.row.input!))
+                                                                  setRowContent(props.row.input!)
                                                               }}
                                                           />}
                                         />)
@@ -89,7 +89,7 @@ export default function FormRowEditor(props: {
                         </FormGroup>
                         <Button variant="outlined" size="small" onClick={() => {
                             props.row.input!.content.push("")
-                            setRowContent(renderInput(props.row.input!))
+                            setRowContent(props.row.input!)
                         }}>Add</Button>
                     </>
                 )
@@ -109,7 +109,7 @@ export default function FormRowEditor(props: {
                                                                   size="small"
                                                                   onChange={(event) => {
                                                                       input.content[index] = event.target.value
-                                                                      setRowContent(renderInput(props.row.input!))
+                                                                      setRowContent(props.row.input!)
                                                                   }}
                                                               />}
                                                               value={index}
@@ -120,7 +120,7 @@ export default function FormRowEditor(props: {
                         </FormControl>
                         <Button variant="outlined" size="small" onClick={() => {
                             props.row.input!.content.push("")
-                            setRowContent(renderInput(props.row.input!))
+                            setRowContent(props.row.input!)
                         }}>Add</Button>
                     </>
                 )
@@ -140,7 +140,7 @@ export default function FormRowEditor(props: {
                 size="medium"
                 onChange={(event) => {
                     props.row.heading.content = event.target.value
-                    setRowContent(renderInput(props.row.input!))
+                    setRowContent(props.row.input!)
                 }}
             />
             <TextField
@@ -149,10 +149,10 @@ export default function FormRowEditor(props: {
                 size="small"
                 onChange={(event) => {
                     props.row.description.content = event.target.value
-                    setRowContent(renderInput(props.row.input!))
+                    setRowContent(props.row.input!)
                 }}
             />
-            {rowContent}
+            {renderInput(rowContent)}
         </Box>
     );
 }

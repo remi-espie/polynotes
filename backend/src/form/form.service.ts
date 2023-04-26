@@ -20,7 +20,11 @@ export class FormService {
     formDTO: createFormDTO,
     idUser: string,
   ): Promise<FormDocument> {
-    const userShared = (await this.userService.getUserId(idUser, idUser)).email;
+    let userShared: string;
+    if (idUser === 'anon') {
+      userShared = 'anon';
+    } else
+      userShared = (await this.userService.getUserId(idUser, idUser)).email;
 
     return await new this.model({
       formId: id,

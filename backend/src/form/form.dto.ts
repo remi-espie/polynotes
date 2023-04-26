@@ -1,22 +1,4 @@
-import {
-  IsArray,
-  IsNotEmpty,
-  IsString,
-} from 'class-validator';
-
-export class formDTO {
-  @IsArray()
-  @IsNotEmpty()
-  formRows: formRow[];
-
-  @IsString()
-  @IsNotEmpty()
-  formId: string;
-
-  @IsString()
-  @IsNotEmpty()
-  user: string;
-}
+import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 
 export class createFormDTO {
   @IsArray()
@@ -27,7 +9,7 @@ export class createFormDTO {
 export class formRow {
   @IsString()
   @IsNotEmpty()
-  type: string;
+  name: string;
 
   @IsNotEmpty()
   content: any;

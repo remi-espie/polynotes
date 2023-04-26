@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MailModule } from './mail/mail.module';
 import { PageModule } from './page/page.module';
 import { sanitizePlugin } from './provider/sanitizePlugin';
+import { FormModule } from './form/form.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { sanitizePlugin } from './provider/sanitizePlugin';
     AuthModule,
     MailModule,
     PageModule,
+    FormModule,
   ],
   controllers: [AppController],
   providers: [AppService],

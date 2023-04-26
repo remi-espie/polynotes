@@ -24,7 +24,6 @@ export default function WorkspaceForm(props: {
     const [editable, setEditable] = useState<boolean>(false);
     const [reloadKey, setReloadKey] = useState<number>(0);
 
-
     let fetchWorkspace = false;
 
     useEffect(() => {
@@ -34,7 +33,6 @@ export default function WorkspaceForm(props: {
             const workspaceLocal = props.workspaces.find(
                 (workspace: workspaceType) => workspace.id === id
             );
-            setWorkspace(workspaceLocal);
 
             if (workspaceLocal === undefined) fetchWorkspace = true;
             else {
@@ -43,6 +41,7 @@ export default function WorkspaceForm(props: {
                     (workspaceLocal.owner === props.user.id ||
                         workspaceLocal.writer.includes("anon")) as boolean
                 );
+                setWorkspace(workspaceLocal)
                 setReloadKey(reloadKey + 1);
             }
         }
@@ -88,12 +87,12 @@ export default function WorkspaceForm(props: {
                     if (resp?.status === 200) {
                         const workspace = await resp.json()
                         setWorkspace(workspace);
-                        // subContent = workspace!.subContent;
                         setEditable(
                             (workspace.owner === props.user.id ||
                                 workspace.writer.includes("anon")) as boolean
                         );
                         setPageContent(workspace!.subContent);
+                        setReloadKey(reloadKey + 1);
                     } else {
                         navigate("/login");
                     }
@@ -111,22 +110,21 @@ export default function WorkspaceForm(props: {
         <>
             {
                 success === "success" ? (
-                        <Alert variant="filled" severity="success">
-                            <AlertTitle>Page saved !</AlertTitle>
-                            Your page has been saved successfully
+                        <Alert variant="filled" severity="success" sx={{".MuiAlert-message":{ margin:"auto"}}}>
+                            <AlertTitle>Answer saved !</AlertTitle>
+                            Thanks for answering this form !
                         </Alert>
                     ) :
-
-                    props.user.id === workspace?.owner ? (
-                        <FormEditor workspace={workspace!} editable={editable} pageContent={pageContent}
-                                    setPageContent={setPageContent} reloadKey={reloadKey} setReloadKey={setReloadKey}
-                                    id={id!}
-                                    setErrorMessage={setErrorMessage} setOpen={setOpen}
-                                    getWorkspaces={props.getWorkspaces}/>
-                    ) : (
-                        <FormViewer workspace={workspace!} pageContent={pageContent} id={id!} setOpen={setOpen}
-                                    setErrorMessage={setErrorMessage}/>
-                    )}
+                        props.user.id === workspace?.owner ? (
+                            <FormEditor workspace={workspace!} editable={editable} pageContent={pageContent}
+                                        setPageContent={setPageContent} reloadKey={reloadKey} setReloadKey={setReloadKey}
+                                        id={id!}
+                                        setErrorMessage={setErrorMessage} setOpen={setOpen}
+                                        getWorkspaces={props.getWorkspaces}/>
+                        ) : (
+                            <FormViewer workspace={workspace} pageContent={pageContent} id={id!} setOpen={setOpen}
+                                        setErrorMessage={setErrorMessage}/>
+                        )}
 
             <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
                 <Alert variant="filled" severity="error" onClose={handleClose}>

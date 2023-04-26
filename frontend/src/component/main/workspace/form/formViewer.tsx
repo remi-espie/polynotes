@@ -11,48 +11,50 @@ import {workspaceType} from "../../../../types";
 
 export default function FormViewer(props: {
     id: string,
-    workspace: workspaceType,
+    workspace: workspaceType | undefined,
     pageContent: any[],
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>
 }) {
     const [sendPage, setSendPage] = useState<boolean>(false);
-    const [answer, setAnswer] = useState<any>({});
+    const [answer, setAnswer] = useState<any>([]);
     const [loadingForm, setLoadingForm] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         if (sendPage) {
+            const formRows = {"formRows": answer}
             setLoadingForm(true)
             fetch(`/api/form/${props.id}`, {
                 method: "POST",
                 mode: "cors",
                 headers: {
-                    'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
+                    // 'Access-Control-Allow-Origin': 'https://cluster-2022-2.dopolytech.fr/',
                     "Content-Type": "application/json",
                 },
                 credentials: "same-origin",
-                body: JSON.stringify(answer)
+                body: JSON.stringify(formRows)
             })
                 .catch((err) => {
                     console.error(err);
                 })
                 .then(async (resp) => {
-                    setLoadingForm(false)
-                    if (resp?.status === 200) {
+                    if (resp?.status === 201) {
                         navigate(`/home/form/${props.id}/success`)
                     } else {
                         props.setErrorMessage("Error while sending form:" + resp?.status)
                         props.setOpen(true)
                     }
+                    setLoadingForm(false)
+                    setSendPage(false)
                 });
         }
     }, [sendPage]);
 
     return (
         <>
-            <h1>{props.workspace.name}</h1>
+            <h1>{props.workspace?.name}</h1>
             {props.pageContent.map((row: FormRow, indexRow: number) => {
                 return (
                     <Box
