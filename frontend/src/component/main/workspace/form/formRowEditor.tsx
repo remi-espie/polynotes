@@ -19,6 +19,7 @@ export default function FormRowEditor(props: {
     sendPage: boolean,
     setSendPage: (state: boolean) => void,
     setPageContent: React.Dispatch<React.SetStateAction<any[]>>,
+    setReloadKey: React.Dispatch<React.SetStateAction<number>>,
     index: number
 }) {
 
@@ -89,6 +90,7 @@ export default function FormRowEditor(props: {
                         </FormGroup>
                         <Button variant="outlined" size="small" onClick={() => {
                             props.row.input!.content.push("")
+                            props.setReloadKey((prev) => prev + 1)
                             setRowContent(props.row.input!)
                         }}>Add</Button>
                     </>
@@ -120,6 +122,7 @@ export default function FormRowEditor(props: {
                         </FormControl>
                         <Button variant="outlined" size="small" onClick={() => {
                             props.row.input!.content.push("")
+                            props.setReloadKey((prev) => prev + 1)
                             setRowContent(props.row.input!)
                         }}>Add</Button>
                     </>

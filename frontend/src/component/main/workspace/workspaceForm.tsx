@@ -6,7 +6,7 @@ import {
     AlertTitle,
     Snackbar,
 } from "@mui/material";
-import FormEditor from "./form/formEditor";
+import FormOwnerView from "./form/formOwnerView";
 import FormViewer from "./form/formViewer";
 
 
@@ -116,11 +116,10 @@ export default function WorkspaceForm(props: {
                         </Alert>
                     ) :
                         props.user.id === workspace?.owner ? (
-                            <FormEditor workspace={workspace!} editable={editable} pageContent={pageContent}
-                                        setPageContent={setPageContent} reloadKey={reloadKey} setReloadKey={setReloadKey}
-                                        id={id!}
-                                        setErrorMessage={setErrorMessage} setOpen={setOpen}
-                                        getWorkspaces={props.getWorkspaces}/>
+                            <FormOwnerView workspace={workspace!} editable={editable} pageContent={pageContent}
+                                           setPageContent={setPageContent} id={id!}
+                                           setErrorMessage={setErrorMessage} setOpen={setOpen}
+                                           getWorkspaces={props.getWorkspaces}/>
                         ) : (
                             <FormViewer workspace={workspace} pageContent={pageContent} id={id!} setOpen={setOpen}
                                         setErrorMessage={setErrorMessage}/>
