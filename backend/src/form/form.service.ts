@@ -26,6 +26,15 @@ export class FormService {
     } else
       userShared = (await this.userService.getUserId(idUser, idUser)).email;
 
+    const page = await this.pageService.findById(id);
+    if (page.type !== 'form')
+      throw new HttpException('Form not found', HttpStatus.NOT_FOUND);
+
+    for (const [index, row] of page.subContent.entries()) {
+      if (!validationRules[row.input.type](formDTO.formRows[index].content))
+        throw new HttpException('Invalid form data', HttpStatus.BAD_REQUEST);
+    }
+
     return await new this.model({
       formId: id,
       user: userShared,
@@ -34,9 +43,17 @@ export class FormService {
   }
 
   async getForms(id: string, idUser: string): Promise<FormDocument[]> {
-    const page = await this.pageService.findById(id, id);
-    if (page.owner === idUser) {
+    const page = await this.pageService.findByIdWithUser(id, idUser);
+    if (page) {
       return await this.model.find({ formId: id }).exec();
-    } else throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
+    } else throw new HttpException('Form not found', HttpStatus.NOT_FOUND);
   }
 }
+
+const validationRules = {
+  text: (value) => typeof value === 'string' && value.length <= 256,
+  paragraph: (value) => typeof value === 'string',
+  checkbox: (value) => Array.isArray(value),
+  radio: (value) => typeof value === 'number',
+  integer: (value) => typeof value === 'number',
+};

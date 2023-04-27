@@ -28,8 +28,9 @@ export class PageController {
   @Get(':id')
   @UseGuards(AllowAnyGuard)
   async find(@Req() request, @Param('id') id: string) {
-    if (request.user) return await this.service.findById(id, request.user.id);
-    else return await this.service.findById(id, 'anon');
+    if (request.user)
+      return await this.service.findByIdWithUser(id, request.user.id);
+    else return await this.service.findByIdWithUser(id, 'anon');
   }
 
   @Get('')
