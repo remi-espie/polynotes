@@ -17,9 +17,9 @@ export class UserService {
     private mailService: MailService,
   ) {}
 
-  async getAll(): Promise<User[]> {
-    return await this.model.find().exec();
-  }
+  // async getAll(): Promise<User[]> {
+  //   return await this.model.find().exec();
+  // }
 
   async getUserId(id: string, idUser: string): Promise<UserDocument> {
     if (Types.ObjectId.isValid(id)) {
