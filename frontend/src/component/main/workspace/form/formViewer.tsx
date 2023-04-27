@@ -53,7 +53,7 @@ export default function FormViewer(props: {
     }, [sendPage]);
 
     return (
-        <>
+        <Box sx={{paddingBottom: "2em"}}>
             <h1>{props.workspace?.name}</h1>
             {props.pageContent.map((row: FormRow, indexRow: number) => {
                 return (
@@ -96,6 +96,6 @@ export default function FormViewer(props: {
             >
                 Add
             </LoadingButton>
-        </>
+        </Box>
     );
 }
