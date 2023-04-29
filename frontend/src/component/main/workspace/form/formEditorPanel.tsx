@@ -126,8 +126,6 @@ export default function FormEditorPanel(props:{
         }
     }, [deletePage]);
 
-
-
     const handleShare = () => {
         setOpenShare(true);
     };
@@ -137,7 +135,6 @@ export default function FormEditorPanel(props:{
     const [openShare, setOpenShare] = useState(false);
     const [shared, setShared] = useState(false);
     const [uploadSharePage, setUploadSharePage] = useState(false);
-
 
     const handleShareChange = (
         event: React.ChangeEvent<HTMLElement>,

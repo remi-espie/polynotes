@@ -15,7 +15,7 @@ export class FormService {
     private readonly userService: UserService,
   ) {}
 
-  async sendForm(
+  async sendFormAnswer(
     id: string,
     formDTO: createFormDTO,
     idUser: string,
@@ -42,10 +42,27 @@ export class FormService {
     }).save();
   }
 
-  async getForms(id: string, idUser: string): Promise<FormDocument[]> {
+  async getFormAnswers(id: string, idUser: string): Promise<FormDocument[]> {
     const page = await this.pageService.findByIdWithUser(id, idUser);
     if (page) {
-      return await this.model.find({ formId: id }).exec();
+      return this.model.aggregate([
+        {
+          $match: {
+            formId: id,
+          },
+        },
+        {
+          $unwind: '$formRows',
+        },
+        {
+          $group: {
+            _id: { name: '$formRows.name' },
+            values: { $push: '$formRows.content' },
+            users: { $addToSet: '$user' },
+          },
+        },
+      ]);
+
     } else throw new HttpException('Form not found', HttpStatus.NOT_FOUND);
   }
 }

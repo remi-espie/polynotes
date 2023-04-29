@@ -32,7 +32,12 @@ export class PageService {
       if (!page)
         throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
 
-      if (page.owner === idUser || page.reader.includes(idUser)) return page;
+      if (
+        page.owner === idUser ||
+        page.reader.includes(idUser) ||
+        page.reader.includes('anon')
+      )
+        return page;
       else throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
     } else throw new HttpException('Invalid ID', HttpStatus.BAD_REQUEST);
   }

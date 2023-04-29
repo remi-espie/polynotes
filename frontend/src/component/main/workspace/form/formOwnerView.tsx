@@ -7,6 +7,7 @@ import React from "react";
 import {TabContext, TabPanel} from "@mui/lab";
 import {workspaceType} from "../../../../types";
 import FormEditorPanel from "./formEditorPanel";
+import FormResultPanel from "./formResultPanel";
 
 export default function FormOwnerView(props: {
     workspace: workspaceType,
@@ -40,9 +41,8 @@ export default function FormOwnerView(props: {
 
                 </TabPanel>
                 <TabPanel value={"Result"}>
-                    <Box>
-                        Test
-                    </Box>
+                    <FormResultPanel workspace={props.workspace} pageContent={props.pageContent} setPageContent={props.setPageContent} editable={props.editable}
+                                     id={props.id} setErrorMessage={props.setErrorMessage} setOpen={props.setOpen} getWorkspaces={props.getWorkspaces}/>
                 </TabPanel>
             </Box>
         </TabContext>
