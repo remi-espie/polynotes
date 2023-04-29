@@ -17,7 +17,7 @@ export default function WorkspaceForm(props: {
 }) {
     const navigate = useNavigate();
     let {id} = useParams();
-    let {success} = useParams();
+    let {tab} = useParams();
     const [workspace, setWorkspace] = useState<workspaceType | undefined>();
 
     const [pageContent, setPageContent] = useState<any[]>([]);
@@ -109,7 +109,7 @@ export default function WorkspaceForm(props: {
     return (
         <>
             {
-                success === "success" ? (
+                tab === "success" ? (
                         <Alert variant="filled" severity="success" sx={{".MuiAlert-message":{ margin:"auto"}}}>
                             <AlertTitle>Answer saved !</AlertTitle>
                             Thanks for answering this form !

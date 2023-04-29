@@ -18,7 +18,7 @@ import React, {useEffect, useState} from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ShareIcon from "@mui/icons-material/Share";
 import {DefaultCopyField} from "@eisberg-labs/mui-copy-field";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {workspaceType} from "../../../../types";
 
 export default function FormEditorPanel(props:{
@@ -26,11 +26,13 @@ export default function FormEditorPanel(props:{
     pageContent: any[],
     setPageContent: React.Dispatch<React.SetStateAction<any[]>>,
     editable: boolean,
-    id: string,
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
     getWorkspaces: () => void,
 }) {
+
+    const {id} = useParams();
+
     const navigate = useNavigate();
 
     const [reloadKey, setReloadKey] = useState(0);
@@ -69,7 +71,7 @@ export default function FormEditorPanel(props:{
     useEffect(() => {
         if (sendPage) {
             props.workspace!.subContent = props.pageContent;
-            fetch(`/api/page/${props.id}`, {
+            fetch(`/api/page/${id}`, {
                 method: "PATCH",
                 mode: "cors",
                 headers: {
@@ -101,7 +103,7 @@ export default function FormEditorPanel(props:{
 
     useEffect(() => {
         if (deletePage) {
-            fetch(`/api/page/${props.id}`, {
+            fetch(`/api/page/${id}`, {
                 method: "DELETE",
                 mode: "cors",
                 headers: {
@@ -149,7 +151,7 @@ export default function FormEditorPanel(props:{
 
     useEffect(() => {
         if (uploadSharePage) {
-            fetch(`/api/page/share/${shared}/${props.id}/anon`, {
+            fetch(`/api/page/share/${shared}/${id}/anon`, {
                 method: "PATCH",
                 mode: "cors",
                 headers: {

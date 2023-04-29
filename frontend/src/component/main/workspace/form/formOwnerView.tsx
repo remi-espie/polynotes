@@ -8,6 +8,7 @@ import {TabContext, TabPanel} from "@mui/lab";
 import {workspaceType} from "../../../../types";
 import FormEditorPanel from "./formEditorPanel";
 import FormResultPanel from "./formResultPanel";
+import {useNavigate, useParams} from "react-router-dom";
 
 export default function FormOwnerView(props: {
     workspace: workspaceType,
@@ -20,29 +21,36 @@ export default function FormOwnerView(props: {
     getWorkspaces: () => void,
 }) {
 
-    const [tabValue, setTabValue] = React.useState("Form");
+    const navigate = useNavigate();
+
+    const {tab} = useParams();
+    const {id} = useParams();
+
+    const [tabValue, setTabValue] = React.useState(tab || "editor");
 
     return (
         <TabContext value={tabValue.toString()}>
             <Box>
                 <Tabs value={tabValue}
                       onChange={(event: React.SyntheticEvent, newValue: string) => {
-                          setTabValue(newValue);
+                          navigate("/home/form/" + id + "/" + newValue)
+                          setTabValue(newValue)
                       }}
                       variant="fullWidth"
                 >
-                    <Tab label="Form" value={"Form"}/>
-                    <Tab label="Results" value={"Result"}/>
+                    <Tab label="Editor" value={"editor"}/>
+                    <Tab label="Results" value={"result"}/>
                 </Tabs>
-                <TabPanel value={"Form"}>
-
-                    <FormEditorPanel workspace={props.workspace} pageContent={props.pageContent} setPageContent={props.setPageContent} editable={props.editable}
-                                     id={props.id} setErrorMessage={props.setErrorMessage} setOpen={props.setOpen} getWorkspaces={props.getWorkspaces}/>
-
+                <TabPanel value={"editor"}>
+                    <FormEditorPanel workspace={props.workspace} pageContent={props.pageContent}
+                                     setPageContent={props.setPageContent} editable={props.editable}
+                                     setErrorMessage={props.setErrorMessage} setOpen={props.setOpen}
+                                     getWorkspaces={props.getWorkspaces}/>
                 </TabPanel>
-                <TabPanel value={"Result"}>
-                    <FormResultPanel workspace={props.workspace} pageContent={props.pageContent} setPageContent={props.setPageContent} editable={props.editable}
-                                     id={props.id} setErrorMessage={props.setErrorMessage} setOpen={props.setOpen} getWorkspaces={props.getWorkspaces}/>
+                <TabPanel value={"result"}>
+                    <FormResultPanel workspace={props.workspace}
+                                     setErrorMessage={props.setErrorMessage} setOpen={props.setOpen}
+                                     getWorkspaces={props.getWorkspaces}/>
                 </TabPanel>
             </Box>
         </TabContext>
