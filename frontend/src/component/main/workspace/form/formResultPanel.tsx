@@ -41,12 +41,13 @@ export default function FormResultPanel(props: {
                 .then(async (resp) => {
                     if (resp?.status === 200) {
                         const formAnswer = await resp.json()
-                        let table: any[][] = Array(Array(formAnswer.length).fill(""))
+                        console.log(formAnswer)
+                        let table: any[][] = [[]]
                         for (const [index, formAnswerElement] of formAnswer.entries()) {
                             table[0][index] = formAnswerElement._id.name
                             for (const [index2, formAnswerValues] of formAnswerElement.values.entries()) {
-                                if (!table[index2 + 1]) table[index2 + 1] = []
-                                table[index2 + 1][index + 1] = formAnswerValues ? formAnswerValues : ""
+                                if (!table[index2+1]) table[index2+1] = []
+                                table[index2+1][index] = formAnswerValues
                             }
                         }
                         console.log(table)
