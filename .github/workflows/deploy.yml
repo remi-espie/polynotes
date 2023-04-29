@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+      with:
+        ref: form
     - name: Create .env file
       run: |
         echo "SECRETKEY=$SECRETKEY" >> .env
