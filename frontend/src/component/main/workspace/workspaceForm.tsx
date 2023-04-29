@@ -117,7 +117,7 @@ export default function WorkspaceForm(props: {
                     ) :
                         props.user.id === workspace?.owner ? (
                             <FormOwnerView workspace={workspace!} editable={editable} pageContent={pageContent}
-                                           setPageContent={setPageContent} id={id!}
+                                           setPageContent={setPageContent}
                                            setErrorMessage={setErrorMessage} setOpen={setOpen}
                                            getWorkspaces={props.getWorkspaces}/>
                         ) : (

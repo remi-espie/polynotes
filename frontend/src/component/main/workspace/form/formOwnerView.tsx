@@ -15,7 +15,6 @@ export default function FormOwnerView(props: {
     editable: boolean,
     pageContent: any[],
     setPageContent: React.Dispatch<React.SetStateAction<any[]>>,
-    id: string,
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
     getWorkspaces: () => void,
@@ -48,7 +47,7 @@ export default function FormOwnerView(props: {
                                      getWorkspaces={props.getWorkspaces}/>
                 </TabPanel>
                 <TabPanel value={"result"}>
-                    <FormResultPanel workspace={props.workspace}
+                    <FormResultPanel pageContent={props.pageContent}
                                      setErrorMessage={props.setErrorMessage} setOpen={props.setOpen}
                                      getWorkspaces={props.getWorkspaces}/>
                 </TabPanel>
