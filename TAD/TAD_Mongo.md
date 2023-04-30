@@ -21,7 +21,7 @@ A productivity and organization tool Platform
 **2023**
 </div>
 
-  
+   
    
    
 
@@ -92,6 +92,7 @@ The database diagram, with only form page and answer, is the following:
 title: Database Schema
 ---
 erDiagram
+  PAGE ||--o{ PAGE: parent
   PAGE ||--o{ FORM: answer
   PAGE {
     string _id PK
@@ -111,9 +112,11 @@ erDiagram
     formRows[] formRows
   }
 ```
----
-`formRows` is the following custom type:
 
+   
+   
+   
+`formRows` is the following custom type:
 ```typescript
 type formRows = {
   name: string;
