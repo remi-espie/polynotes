@@ -20,10 +20,10 @@ import { AllowAnyGuard } from '../auth/allow-any.guard';
 export class PageController {
   constructor(private readonly service: PageService) {}
 
-  // @Get('/all')
-  // async getAll() {
-  //   return await this.service.getAll();
-  // }
+  @Get('/all')
+  async getAll() {
+    return await this.service.getAll();
+  }
 
   @Get(':id')
   @UseGuards(AllowAnyGuard)
