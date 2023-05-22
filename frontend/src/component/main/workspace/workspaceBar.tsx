@@ -195,8 +195,6 @@ export default function WorkspaceBar(props: {
             url += `/${workspace.parentId}`;
         }
 
-        console.log(url)
-
         fetch(url, {
             method: "POST",
             mode: "cors",
