@@ -1,20 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 
 @Injectable()
 export class AllowAnyGuard extends AuthGuard('jwt') {
-  canActivate(): boolean | Promise<boolean> | Observable<boolean> {
-    // const f = super.canActivate(context) as Promise<boolean>;
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const f = super.canActivate(context) as Promise<boolean>;
 
-    return true;
-
-    // return f
-    //   .then(() => {
-    //     return true;
-    //   })
-    //   .catch(() => {
-    //     return true;
-    //   });
+    return f
+      .then(() => {
+        return true;
+      })
+      .catch(() => {
+        return true;
+      });
   }
 }
