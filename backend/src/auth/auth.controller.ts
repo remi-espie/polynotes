@@ -40,6 +40,6 @@ export class AuthController {
     @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<any> {
     await this.authService.confirm(reply);
-    reply.redirect('http://localhost:5173/login');
+    reply.redirect('https://polynotes.cluster-2022-2.dopolytech.fr/login');
   }
 }
